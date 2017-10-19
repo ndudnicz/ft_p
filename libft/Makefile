@@ -50,11 +50,11 @@ $(NAME): $(OBJ)
 	ar rc $@ $(OBJ)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	ln -fs libftasm/libfts.a libftasm.a
 	$(CPP) $(FLAGS) -c $< -o $@ -I includes
 
 libasm:
 	make -C libftasm
+	ln -fs libftasm/libfts.a libftasm.a
 
 obj:
 	mkdir -p $(OBJ_DIR)
