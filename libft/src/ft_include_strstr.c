@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putbase_uint64.c                                :+:      :+:    :+:   */
+/*   ft_include_strstr.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/09/21 09:41:10 by ndudnicz          #+#    #+#             */
-/*   Updated: 2017/09/21 09:41:11 by ndudnicz         ###   ########.fr       */
+/*   Created: 2016/01/03 14:41:11 by ndudnicz          #+#    #+#             */
+/*   Updated: 2016/01/03 14:42:22 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftasm.h"
 
-void	ft_putbase_uint64(uint64_t nb, unsigned int const base)
+int		ft_include_strstr(char **array, char *str)
 {
-	if (nb >= base)
+	int		i;
+
+	i = 0;
+	while (array[i])
 	{
-		ft_putbase_uint64(nb % base, base);
-		ft_putbase_uint64(nb / base, base);
+		if (ft_strcmp(array[i], str) == 0)
+			return (i);
+		i++;
 	}
-	else
-		ft_putchar(nb > 9 ? 97 + (nb - 10) : 48 + nb);
+	return (-1);
 }
