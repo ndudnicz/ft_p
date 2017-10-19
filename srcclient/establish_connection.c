@@ -10,5 +10,6 @@
 int		establish_connection(char const *ip_str, char const *port_str)
 {
 	printf("Establishing connection to: %s:%s\n", ip_str, port_str);
+	printf("Connection done with: %s:%s\n", ip_str, port_str);
 	return (0);
 }
