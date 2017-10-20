@@ -14,9 +14,9 @@ OBJ_CLIENT_DIR = objclient
 
 OBJ_SERVEUR_DIR = objserveur
 
-PATH_CLIENT_INCLUDES = includes/client/
+PATH_CLIENT_INCLUDES = includes/includes_client/
 
-PATH_SERVEUR_INCLUDES = includes/serveur/
+PATH_SERVEUR_INCLUDES = includes/includes_serveur/
 
 SRC_CLIENT = main.c error.c user_input.c establish_connection.c
 
