@@ -14,9 +14,9 @@ OBJ_CLIENT_DIR = objclient
 
 OBJ_SERVEUR_DIR = objserveur
 
-PATH_CLIENT_INCLUDES = includes/includes_client/
+PATH_CLIENT_INCLUDES = includes/includes_client
 
-PATH_SERVEUR_INCLUDES = includes/includes_serveur/
+PATH_SERVEUR_INCLUDES = includes/includes_serveur
 
 SRC_CLIENT = main.c error.c user_input.c establish_connection.c
 
@@ -32,13 +32,13 @@ $(CLIENT): $(OBJ_CLIENT)
 	$(CC) -o $@ $(OBJ_CLIENT) -L. -lft -lftasm
 
 $(OBJ_CLIENT_DIR)/%.o: $(SRC_CLIENT_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_CLIENT_INCLUDES) -I libft/includes #-L. -lft -lftasm
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_CLIENT_INCLUDES) -I libft/includes -I includes/ #-L. -lft -lftasm
 
 $(SERVEUR): $(OBJ_SERVEUR)
 	$(CC) -o $@ $(OBJ_SERVEUR) -L. -lft -lftasm
 
 $(OBJ_SERVEUR_DIR)/%.o: $(SRC_SERVEUR_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I libft/includes #-L. -lft -lftasm
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I libft/includes -I includes/ #-L. -lft -lftasm
 
 obj:
 	mkdir -p $(OBJ_CLIENT_DIR) $(OBJ_SERVEUR_DIR)
