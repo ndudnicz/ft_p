@@ -1,1 +1,0 @@
-linux/ft_putstr_fd.s

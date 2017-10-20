@@ -1,1 +1,0 @@
-linux/ft_putchar.s

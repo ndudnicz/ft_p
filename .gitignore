@@ -2,3 +2,5 @@ a.out
 *.o
 client
 serveur
+libft.a
+libftasm.a
