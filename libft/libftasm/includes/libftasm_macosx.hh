@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftasm.h                                         :+:      :+:    :+:   */
+/*   libftasm_macosx.hh                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/30 11:10:44 by ndudnicz          #+#    #+#             */
-/*   Updated: 2017/09/30 11:10:47 by ndudnicz         ###   ########.fr       */
+/*   Updated: 2017/10/20 10:34:06 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFTASM_MACOSX_H
-# define LIBFTASM_MACOSX_H
+#ifndef LIBFTASM_H
+# define LIBFTASM_H
 # include <unistd.h>
 
 int				ft_isalpha(int c);
 int				ft_puts(char const *str);
-size_t		ft_strlen(char const *s);
+size_t			ft_strlen(char const *s);
 void			ft_bzero(char const *s, size_t n);
 int				ft_isdigit(int c);
 int				ft_isalnum(int c);
@@ -25,7 +25,8 @@ int				ft_isprint(int c);
 int				ft_tolower(int c);
 int				ft_toupper(int c);
 char			*ft_strcat(char *restrict s1, char const *restrict s2);
-void			*ft_memcpy(void *restrict dst, const void *restrict src, size_t n);
+void			*ft_memcpy(void *restrict dst, const void *restrict src,
+								size_t n);
 void			*ft_memset(void *b, int c, size_t len);
 char			*ft_strdup(const char *s);
 char			*ft_strchr(const char *s, int c);

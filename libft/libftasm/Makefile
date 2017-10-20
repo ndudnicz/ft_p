@@ -3,7 +3,7 @@ NAME = libfts.a
 ifeq ($(shell uname -s),Linux)
 	CC := nasm
 	FLAGS := -f elf64
-	HEADER := libftasm_linux.h
+	HEADER := libftasm_linux.hh
 	SRC :=	ft_puts.s ft_strlen.s ft_bzero.s ft_isalpha.s ft_isdigit.s \
 		ft_isalnum.s ft_isascii.s ft_isprint.s ft_isinrange.s \
 		ft_tolower.s ft_toupper.s ft_strcat.s ft_memcpy.s ft_memset.s \
@@ -13,7 +13,7 @@ ifeq ($(shell uname -s),Linux)
 else
 	CC := /Users/ndudnicz/.brew/bin/nasm
 	FLAGS := -f macho64
-	HEADER := libftasm_macosx.h
+	HEADER := libftasm_macosx.hh
 	SRC :=	ft_puts.s ft_strlen.s ft_bzero.s ft_isalpha.s ft_isdigit.s \
 		ft_isalnum.s ft_isascii.s ft_isprint.s ft_isinrange.s \
 		ft_tolower.s ft_toupper.s ft_strcat.s ft_memcpy.s ft_memset.s \

@@ -1,7 +1,9 @@
 #include "error.h"
 #include "libftasm.h"
 
-int		ft_error(char const *exec_name, char const *filename, char const *type)
+
+
+int		ft_error(char const *exec_name, char const *filename, char const *type, int ret)
 {
 	char	*joined_msg;
 
