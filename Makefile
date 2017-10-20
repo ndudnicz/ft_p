@@ -18,7 +18,8 @@ PATH_CLIENT_INCLUDES = includes/includes_client
 
 PATH_SERVEUR_INCLUDES = includes/includes_serveur
 
-SRC_CLIENT = main.c error.c user_input.c establish_connection.c
+SRC_CLIENT =	main.c error_master.c user_input.c establish_connection.c \
+ 				options_handling.c error_input.c
 
 SRC_SERVEUR = main.c
 

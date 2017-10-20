@@ -1,4 +1,4 @@
-#include "error.h"
+#include "error_master.h"
 #include <stdio.h>
 
 /*
@@ -7,9 +7,9 @@
 ** Display an error and return 1 if fails.
 */
 
-int		establish_connection(char const *ip_str, char const *port_str)
+int		establish_connection(char const *ip_str, char const *cmd_port_str)
 {
-	printf("Establishing connection to: %s:%s\n", ip_str, port_str);
-	printf("Connection done with: %s:%s\n", ip_str, port_str);
+	printf("Establishing connection to: %s:%s\n", ip_str, cmd_port_str);
+	printf("Connection done with: %s:%s\n", ip_str, cmd_port_str);
 	return (0);
 }
