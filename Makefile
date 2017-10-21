@@ -55,7 +55,7 @@ re: clean fclean all
 # CLIENT RULES ================================================================#
 
 $(CLIENT): $(LIBCOMMON) $(OBJ_CLIENT)
-	make -C libft
+	make -sC libft
 	$(CC) -o $@ $(OBJ_CLIENT) -L. -lft -lftasm -lcommon
 
 $(OBJ_CLIENT_DIR)/%.o: $(SRC_CLIENT_DIR)/%.c
@@ -64,7 +64,7 @@ $(OBJ_CLIENT_DIR)/%.o: $(SRC_CLIENT_DIR)/%.c
 # SERVEUR RULES ===============================================================#
 
 $(SERVEUR): $(LIBCOMMON) $(OBJ_SERVEUR)
-	make -C libft
+	make -sC libft
 	$(CC) -o $@ $(OBJ_SERVEUR) -L. -lft -lftasm -lcommon
 
 $(OBJ_SERVEUR_DIR)/%.o: $(SRC_SERVEUR_DIR)/%.c
@@ -73,7 +73,7 @@ $(OBJ_SERVEUR_DIR)/%.o: $(SRC_SERVEUR_DIR)/%.c
 # LIBCOMMON RULES =============================================================#
 
 $(LIBCOMMON): $(OBJ_COMMON)
-	make -C libft
+	make -sC libft
 	ar rc $(LIBCOMMON) $(OBJ_COMMON)
 
 $(OBJ_COMMON_DIR)/%.o: $(SRC_COMMON_DIR)/%.c

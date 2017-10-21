@@ -53,8 +53,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CPP) $(FLAGS) -c $< -o $@ -I includes
 
 libasm:
-	make -C libftasm
-	ln -fs libftasm/libfts.a libftasm.a
+	make -sC libftasm
+	ln -sf libftasm/libfts.a libftasm.a
+	ln -sf libft/libft.a ..
+	ln -sf libft/libftasm.a ..
 
 obj:
 	mkdir -p $(OBJ_DIR)
