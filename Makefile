@@ -77,5 +77,5 @@ $(LIBCOMMON): $(OBJ_COMMON)
 	ar rc $(LIBCOMMON) $(OBJ_COMMON)
 
 $(OBJ_COMMON_DIR)/%.o: $(SRC_COMMON_DIR)/%.c
-	make -C libft
+	make -sC libft
 	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/
