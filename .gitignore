@@ -4,3 +4,4 @@ client
 serveur
 libft.a
 libftasm.a
+libcommon.a

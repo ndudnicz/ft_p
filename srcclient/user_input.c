@@ -3,6 +3,9 @@
 #include "libftasm.h"
 #include "user_input.h"
 #include "error_input.h"
+#include "packet.h"
+#include <stdlib.h>
+#include "debug.h"//
 
 static int	treat_input(t_treated_input *input, char const *line)
 {
@@ -14,8 +17,8 @@ static int	treat_input(t_treated_input *input, char const *line)
 	}
 	else
 	{
-		for (int i = 0; array[i]; i++)
-			printf("%s\n", array[i]);
+		//for (int i = 0; array[i]; i++)
+			//printf("%s\n", array[i]);
 	}
 	return (1);
 }
@@ -25,15 +28,24 @@ static int	treat_input(t_treated_input *input, char const *line)
 ** CTRL-D
 */
 
-int		loop(void)
+int		user_input_loop(t_config *config)
 {
 	char				*line;
 	t_treated_input		input;
+	t_packet			*packet;
 
+	packet = (t_packet*)malloc(sizeof(t_packet));
 	line = NULL;
 	ft_putstr("ftp> ");
 	while (gnl(0, &line) > 0 && treat_input(&input, line))
 	{
+		forge_packet(ft_strlen(line) + HEADER_SIZE, 0, line, packet);
+		// packet->size = ft_strlen(line) + HEADER_SIZE;
+		// packet->type = 0;
+		// ft_memcpy(packet->data, line, packet->size - HEADER_SIZE);
+		print_forged_packet(packet, 1);
+		write(config->socket.cmd, packet, packet->size);
+		ft_bzero(packet->data, packet->size - HEADER_SIZE);
 		//puts(line);
 		ft_putstr("ftp> ");
 	}

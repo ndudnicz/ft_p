@@ -15,6 +15,11 @@
 #include "error_master.h"
 #include "libftasm.h"
 
+/*
+** Moves NULLs argv to the end of the array. Options are set in config
+** and doesn't exist anymore in argv.
+*/
+
 static void	del_null_params(int const ac, char **av)
 {
 	int		i;
@@ -54,6 +59,10 @@ static int	set_options(char *arg, t_config *config)
 	}
 	return (0);
 }
+
+/*
+** Parse argv and set argv[index] at NULL if an options was found.
+*/
 
 int			get_options(t_config *config, int *ac, char **av)
 {

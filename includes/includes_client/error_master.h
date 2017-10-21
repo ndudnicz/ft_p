@@ -6,6 +6,7 @@
 # define MMAP_FAILED "mmap() failed."
 # define CLOSE_FAILED "close() failed."
 # define UNKNOW_ARG "Unknown command line argument."
+# define CONNECT_ERROR "Connect() error."
 
 int	ft_error(char const *exec_name, char const *filename,
 				char const *type, int ret);

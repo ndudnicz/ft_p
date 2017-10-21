@@ -3,10 +3,11 @@
 #include "libftasm.h"
 #include "establish_connection.h"
 #include "user_input.h"
-#include "config.h"
 #include <stdlib.h>
 #include "error_master.h"
 #include "options_handling.h"
+
+// FLAGS DANS LE MAKEFILE!
 
 /*
 ** Display a usefull usage message.
@@ -39,8 +40,9 @@ int		main(int ac, char **av)
 	{
 		if (get_options(config, &ac, av) > 0)
 			return (1);
-		establish_connection(av[1], av[2]);
-		loop();
+		else if (establish_connection(config, av[1], av[2]))
+			return (1);
+		user_input_loop(config);
 	}
 	return (0);
 }
