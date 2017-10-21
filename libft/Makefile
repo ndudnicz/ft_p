@@ -44,11 +44,7 @@ OBJ_DIR = obj
 
 OBJ = $(SRC:%.c=obj/%.o)
 
-all: obj $(NAME)
-	make -C libftasm
-	ln -sf libftasm/libfts.a libftasm.a
-	ln -sf libft/libft.a ..
-	ln -sf libft/libftasm.a ..
+all: libasm obj $(NAME)
 
 $(NAME): $(OBJ)
 	ar rc $@ $(OBJ)
@@ -58,7 +54,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 libasm:
 	make -C libftasm
-	ln -sf libftasm/libfts.a libftasm.a
+	ln -fs libftasm/libfts.a libftasm.a
 
 obj:
 	mkdir -p $(OBJ_DIR)
