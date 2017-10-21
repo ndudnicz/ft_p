@@ -55,7 +55,10 @@ int		main(int ac, char **av)
 	{
 		packet = (t_packet*)buf;
 		unforge_packet(packet);
-		print_packet(packet, 1);
+		if (packet->type & T_MESSAGE && !(packet->type & MASK_CMD))
+			print_packet(packet, 1);
+		else
+			ft_putstr("DONE");
 		ft_bzero(buf, MAX_PACKET_SIZE);
 	}
 

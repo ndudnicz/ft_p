@@ -39,11 +39,7 @@ int		user_input_loop(t_config *config)
 	ft_putstr("ftp> ");
 	while (gnl(0, &line) > 0 && treat_input(&input, line))
 	{
-		forge_packet(ft_strlen(line) + HEADER_SIZE, 0, line, packet);
-		// packet->size = ft_strlen(line) + HEADER_SIZE;
-		// packet->type = 0;
-		// ft_memcpy(packet->data, line, packet->size - HEADER_SIZE);
-		print_forged_packet(packet, 1);
+		forge_packet(ft_strlen(line) + HEADER_SIZE, MASK_CMD | LS, line, packet);
 		write(config->socket.cmd, packet, packet->size);
 		ft_bzero(packet->data, packet->size - HEADER_SIZE);
 		//puts(line);

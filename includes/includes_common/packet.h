@@ -34,10 +34,8 @@ typedef struct	s_packet
 	char			data[MAX_DATA_SIZE];
 }				t_packet;
 
-void	forge_packet(unsigned short const size,
-					unsigned short const type,
-					char const* data,
-					t_packet *packet);
+void	forge_packet(unsigned short const size, unsigned short const type,
+					char const* data, t_packet *packet);
 
 void	unforge_packet(t_packet *packet);
 
