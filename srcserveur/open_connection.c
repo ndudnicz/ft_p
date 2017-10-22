@@ -4,6 +4,7 @@
 #include "error_master.h"
 #include "config.h"
 #include "libftasm.h"
+#include "libft.h"
 #include "constant_config_serveur.h"
 
 /*

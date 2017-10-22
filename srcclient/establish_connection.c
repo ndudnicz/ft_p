@@ -3,6 +3,7 @@
 #include "config.h"
 #include <arpa/inet.h>
 #include "libftasm.h"
+#include "libft.h"
 #include <netdb.h>
 
 /*
