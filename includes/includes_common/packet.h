@@ -11,10 +11,11 @@
 ** Define the packet sizes.
 */
 
-# define MAGIC_BYTE_SIZE	(sizeof(unsigned int))
-# define SIZE_BYTE_SIZE		(sizeof(unsigned short))
-# define TYPE_BYTE_SIZE		(sizeof(unsigned short))
-# define HEADER_SIZE		(MAGIC_BYTE_SIZE + SIZE_BYTE_SIZE + TYPE_BYTE_SIZE)
+# define MAGIC_SIZE			(sizeof(unsigned int))
+# define CHUNK_N_SIZE		(sizeof(unsigned long int))
+# define SIZE_SIZE			(sizeof(unsigned short))
+# define TYPE_SIZE			(sizeof(unsigned short))
+# define HEADER_SIZE		(MAGIC_SIZE + SIZE_SIZE + TYPE_SIZE + CHUNK_N_SIZE)
 # define MAX_PACKET_SIZE	65536
 # define MAX_DATA_SIZE		(MAX_PACKET_SIZE - HEADER_SIZE)
 
@@ -30,7 +31,7 @@
 # define T_MESSAGE	0x0001
 
 /*
-** Spec types
+** T_SPEC_TYPE
 */
 
 # define T_MASK_CMD	0x0100
@@ -52,14 +53,20 @@
 typedef struct	s_packet
 {
 	unsigned int	magic;
+	unsigned long	chunks_number;
 	unsigned short	size;
 	unsigned short	type;
 	char			data[MAX_DATA_SIZE];
 }				t_packet;
 
-void	forge_packet(unsigned short const size, unsigned short const type,
-					char const* data, t_packet *packet);
+void				forge_packet(unsigned short const size,
+								unsigned short const type,
+								char const* data, t_packet *packet,
+								unsigned long int st_size);
 
-void	unforge_packet(t_packet *packet);
+void				unforge_packet(t_packet *packet);
+
+unsigned long int	get_chunk_number(unsigned long int st_size);
+
 
 #endif

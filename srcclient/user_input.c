@@ -41,11 +41,11 @@ int		user_input_loop(t_config *config)
 	ft_putstr("ftp> ");
 	while (gnl(0, &line) > 0 && treat_input(&input, line))
 	{
-		forge_packet(ft_strlen(line) + HEADER_SIZE, (T_MASK_CMD | ST_LS), line, packet);
+		forge_packet(ft_strlen(line) + HEADER_SIZE, (T_MASK_CMD | ST_LS), line, packet, MAX_DATA_SIZE);
+		print_forged_packet(packet, 1);
 		send_packet(config, packet);
 		ft_bzero(packet->data, packet->size - HEADER_SIZE);
 		receive_cmd_packet(config);
-		//puts(line);
 		ft_putstr("ftp> ");
 	}
 	ft_putendl("Bye!");
