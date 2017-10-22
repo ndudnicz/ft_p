@@ -24,13 +24,13 @@ PATH_COMMON_INCLUDES = includes/includes_common
 
 # SOURCES LIST ================================================================#
 
-SRC_COMMON = debug.c packet.c
+SRC_COMMON = debug.c packet.c my_pipe.c error_master.c options_handling.c \
+			error_child.c config.c
 
-SRC_CLIENT = main.c error_master.c user_input.c \
-			establish_connection.c \
-			options_handling.c error_input.c config.c
+SRC_CLIENT = main.c user_input.c receive_packet.c \
+			establish_connection.c send_packet.c
 
-SRC_SERVEUR = main.c
+SRC_SERVEUR = main.c switch_packet_type.c open_connection.c waiting_loop.c
 
 # OBJECTS LIST ================================================================#
 

@@ -6,6 +6,7 @@ void	forge_packet(unsigned short const size, unsigned short const type,
 					char const *data, t_packet *packet)
 {
 	ft_bzero((char *)packet, MAX_PACKET_SIZE);
+	packet->magic = htonl(MAGIC);
 	packet->size = htons(size);
 	packet->type = htons(type);
 	ft_memcpy(packet->data, data, size);
@@ -13,6 +14,7 @@ void	forge_packet(unsigned short const size, unsigned short const type,
 
 void	unforge_packet(t_packet *packet)
 {
+	packet->magic = ntohl(packet->magic);
 	packet->size = ntohs(packet->size);
 	packet->type = ntohs(packet->type);
 }

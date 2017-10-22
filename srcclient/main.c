@@ -1,9 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "libft.h"
 #include "libftasm.h"
 #include "establish_connection.h"
 #include "user_input.h"
-#include <stdlib.h>
 #include "error_master.h"
 #include "options_handling.h"
 
@@ -40,9 +40,12 @@ int		main(int ac, char **av)
 	{
 		if (get_options(config, &ac, av) > 0)
 			return (1);
-		else if (establish_connection(config, av[1], av[2]))
+		else if (establish_connection(config, av[1], av[2]) > 0)
 			return (1);
-		user_input_loop(config);
+		else if (user_input_loop(config) > 0)
+			return (1);
+		else
+			return (0);
 	}
 	return (0);
 }

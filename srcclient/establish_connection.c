@@ -23,14 +23,20 @@ int		establish_connection(t_config *config, char const *ip_str,
 	{
 		return (-1);
 	}
+	/*CONFIG INIT*/
 	config->socket.cmd = socket(PF_INET, SOCK_STREAM, proto->p_proto);
+	config->inet_addr = inet_addr(ip_str);
+	config->port.cmd = htons(ft_atoi(cmd_port_str));//sin.sin_port;
+
+	/*SIN INIT*/
 	sin.sin_family = AF_INET;
-	sin.sin_port = htons(ft_atoi(cmd_port_str));
-	sin.sin_addr.s_addr = inet_addr(ip_str);
+	sin.sin_port = config->port.cmd;
+	sin.sin_addr.s_addr = config->inet_addr;
+
 	if (connect(config->socket.cmd, (const struct sockaddr*)&sin, sizeof(sin)) < 0)
 		return (ft_error("Client", "establish_connection()", CONNECT_ERROR, 1));
-	config->inet_addr = sin.sin_addr.s_addr;
-	config->port.cmd = sin.sin_port;
+	if (!(config->current_path = ft_strdup(".")))
+		return (ft_error("client", "", MALLOC_FAIL, 1));
 	printf("Connection done with: %s:%s\n", ip_str, cmd_port_str);
 	return (0);
 }

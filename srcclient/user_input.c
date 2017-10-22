@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include "libftasm.h"
 #include "user_input.h"
-#include "error_input.h"
+#include "error_child.h"
 #include "packet.h"
 #include <stdlib.h>
 #include "debug.h"//
+#include "send_packet.h"
+#include "receive_packet.h"
 
 static int	treat_input(t_treated_input *input, char const *line)
 {
@@ -39,9 +41,10 @@ int		user_input_loop(t_config *config)
 	ft_putstr("ftp> ");
 	while (gnl(0, &line) > 0 && treat_input(&input, line))
 	{
-		forge_packet(ft_strlen(line) + HEADER_SIZE, T_MESSAGE, line, packet);
-		write(config->socket.cmd, packet, packet->size);
+		forge_packet(ft_strlen(line) + HEADER_SIZE, (T_MASK_CMD | ST_LS), line, packet);
+		send_packet(config, packet);
 		ft_bzero(packet->data, packet->size - HEADER_SIZE);
+		receive_cmd_packet(config);
 		//puts(line);
 		ft_putstr("ftp> ");
 	}
