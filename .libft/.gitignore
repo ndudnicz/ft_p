@@ -1,8 +1,0 @@
-*.o
-*.a
-libftasm/includes/libftasm.h
-libftasm/src/ft_putchar.s
-libftasm/src/ft_putchar_fd.s
-libftasm/src/ft_puts.s
-libftasm/src/ft_putstr.s
-libftasm/src/ft_putstr_fd.s

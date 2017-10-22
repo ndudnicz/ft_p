@@ -1,7 +1,0 @@
-a.out
-*.o
-*.a
-test.s
-test.c
-ft_cat
-run_tests
