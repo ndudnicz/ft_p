@@ -1,27 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/24 14:50:10 by ndudnicz          #+#    #+#             */
-/*   Updated: 2016/01/19 15:11:06 by ndudnicz         ###   ########.fr       */
+/*   Created: 2015/11/24 18:32:59 by ndudnicz          #+#    #+#             */
+/*   Updated: 2016/01/19 14:57:00 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
 #include "libftasm.h"
-#include <stdlib.h>
 
-char	*ft_strdup(const char *s1)
+char	*ft_strtrim(char const *s)
 {
+	int		i;
+	int		n;
 	int		len;
 	char	*str;
 
-	len = ft_strlen(s1) + 1;
-	if ((str = (char*)malloc(sizeof(char) * len)) == NULL)
+	i = 0;
+	n = 0;
+	if (!s)
 		return (NULL);
-	ft_memcpy(str, s1, len);
+	len = ft_strlen(s) - 1;
+	while (s[i] == ' ' || s[i] == '\n' || s[i] == '\t')
+		i++;
+	while (s[len] == ' ' || s[len] == '\n' || s[len] == '\t')
+		len--;
+	if ((str = (char*)malloc(sizeof(char) * (len + 2))) == NULL)
+		return (NULL);
+	while (i < len + 1)
+	{
+		str[n] = s[i];
+		n++;
+		i++;
+	}
+	str[n] = '\0';
 	return (str);
 }

@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/24 14:50:10 by ndudnicz          #+#    #+#             */
-/*   Updated: 2016/01/19 15:11:06 by ndudnicz         ###   ########.fr       */
+/*   Created: 2015/11/24 07:35:51 by ndudnicz          #+#    #+#             */
+/*   Updated: 2015/11/26 21:03:15 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftasm.h"
-#include <stdlib.h>
 
-char	*ft_strdup(const char *s1)
+static void			ft_u_putnbr_fd(unsigned int n, int fd)
 {
-	int		len;
-	char	*str;
+	if (n >= 10)
+	{
+		ft_u_putnbr_fd(n / 10, fd);
+		ft_u_putnbr_fd(n % 10, fd);
+	}
+	else
+		ft_putchar_fd(n + 48, fd);
+}
 
-	len = ft_strlen(s1) + 1;
-	if ((str = (char*)malloc(sizeof(char) * len)) == NULL)
-		return (NULL);
-	ft_memcpy(str, s1, len);
-	return (str);
+void				ft_putnbr_fd(int n, int fd)
+{
+	if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		ft_u_putnbr_fd(-n, fd);
+	}
+	else
+		ft_u_putnbr_fd(n, fd);
 }

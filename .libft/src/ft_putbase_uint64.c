@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_putbase_uint64.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ndudnicz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/24 14:50:10 by ndudnicz          #+#    #+#             */
-/*   Updated: 2016/01/19 15:11:06 by ndudnicz         ###   ########.fr       */
+/*   Created: 2017/09/21 09:41:10 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/09/21 09:41:11 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftasm.h"
-#include <stdlib.h>
+#include <stdint.h>
 
-char	*ft_strdup(const char *s1)
+void	ft_putbase_uint64(uint64_t nb, unsigned int const base)
 {
-	int		len;
-	char	*str;
-
-	len = ft_strlen(s1) + 1;
-	if ((str = (char*)malloc(sizeof(char) * len)) == NULL)
-		return (NULL);
-	ft_memcpy(str, s1, len);
-	return (str);
+	if (nb >= base)
+	{
+		ft_putbase_uint64(nb % base, base);
+		ft_putbase_uint64(nb / base, base);
+	}
+	else
+		ft_putchar(nb > 9 ? 97 + (nb - 10) : 48 + nb);
 }

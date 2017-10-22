@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/24 14:50:10 by ndudnicz          #+#    #+#             */
-/*   Updated: 2016/01/19 15:11:06 by ndudnicz         ###   ########.fr       */
+/*   Created: 2015/11/25 11:17:10 by ndudnicz          #+#    #+#             */
+/*   Updated: 2016/01/19 15:02:05 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "libftasm.h"
-#include <stdlib.h>
+#include <unistd.h>
 
-char	*ft_strdup(const char *s1)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	int		len;
-	char	*str;
+	size_t				i;
+	unsigned char		*new_s;
+	unsigned char		new_c;
 
-	len = ft_strlen(s1) + 1;
-	if ((str = (char*)malloc(sizeof(char) * len)) == NULL)
-		return (NULL);
-	ft_memcpy(str, s1, len);
-	return (str);
+	i = 0;
+	new_c = (unsigned char)c;
+	new_s = (unsigned char*)s;
+	while (i < n)
+	{
+		if (new_s[i] == new_c)
+			return (new_s + i);
+		i++;
+	}
+	return (NULL);
 }

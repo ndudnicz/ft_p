@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/24 14:50:10 by ndudnicz          #+#    #+#             */
-/*   Updated: 2016/01/19 15:11:06 by ndudnicz         ###   ########.fr       */
+/*   Created: 2015/11/24 16:59:21 by ndudnicz          #+#    #+#             */
+/*   Updated: 2016/01/19 15:00:11 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "libft.h"
 #include "libftasm.h"
-#include <stdlib.h>
 
-char	*ft_strdup(const char *s1)
+char	*ft_strstr(const char *s1, const char *s2)
 {
-	int		len;
-	char	*str;
+	size_t		s2_len;
+	size_t		s1_len;
 
-	len = ft_strlen(s1) + 1;
-	if ((str = (char*)malloc(sizeof(char) * len)) == NULL)
-		return (NULL);
-	ft_memcpy(str, s1, len);
-	return (str);
+	s1_len = ft_strlen(s1);
+	if ((s2_len = ft_strlen(s2)) == 0)
+		return ((char*)s1);
+	while (s1_len >= s2_len && *s1)
+	{
+		s1_len--;
+		if (!ft_strncmp(s1, s2, s2_len))
+			return ((char*)s1);
+		s1++;
+	}
+	return (NULL);
 }

@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strnequ.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/24 14:50:10 by ndudnicz          #+#    #+#             */
-/*   Updated: 2016/01/19 15:11:06 by ndudnicz         ###   ########.fr       */
+/*   Created: 2015/11/25 17:10:41 by ndudnicz          #+#    #+#             */
+/*   Updated: 2016/01/19 14:58:49 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "libftasm.h"
-#include <stdlib.h>
+#include <unistd.h>
 
-char	*ft_strdup(const char *s1)
+int		ft_strnequ(char const *s1, char const *s2, size_t n)
 {
-	int		len;
-	char	*str;
-
-	len = ft_strlen(s1) + 1;
-	if ((str = (char*)malloc(sizeof(char) * len)) == NULL)
-		return (NULL);
-	ft_memcpy(str, s1, len);
-	return (str);
+	if (!s1 || !s2)
+		return (0);
+	if ((!*s1 && !*s2) || n == 0)
+		return (1);
+	else if (*s1 != *s2)
+		return (0);
+	else
+		return (ft_strnequ(s1 + 1, s2 + 1, n - 1));
 }

@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/24 14:50:10 by ndudnicz          #+#    #+#             */
-/*   Updated: 2016/01/19 15:11:06 by ndudnicz         ###   ########.fr       */
+/*   Created: 2015/11/25 12:02:59 by ndudnicz          #+#    #+#             */
+/*   Updated: 2016/01/19 15:01:36 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "libftasm.h"
-#include <stdlib.h>
+#include <unistd.h>
 
-char	*ft_strdup(const char *s1)
+int		ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	int		len;
-	char	*str;
+	char	*new_s1;
+	char	*new_s2;
 
-	len = ft_strlen(s1) + 1;
-	if ((str = (char*)malloc(sizeof(char) * len)) == NULL)
-		return (NULL);
-	ft_memcpy(str, s1, len);
-	return (str);
+	new_s1 = (char*)s1;
+	new_s2 = (char*)s2;
+	if (n == 0)
+		return (0);
+	if (n - 1 > 0 && *new_s1 == *new_s2)
+		return (ft_memcmp(s1 + 1, s2 + 1, n - 1));
+	else
+		return ((unsigned char)*new_s1 - (unsigned char)*new_s2);
 }
