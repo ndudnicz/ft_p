@@ -1,12 +1,14 @@
-#include "config.h"
-#include "libftasm.h"
 #include <stdlib.h>
+
+#include "libftasm.h"
+#include "config.h"
+#include "packet.h"
 
 /*
 ** Create and return a copy of c.
 */
 
-t_config	*configcpy(t_config *c)
+t_config	*configdup(t_config *c)
 {
 	t_config	*new;
 	size_t		size;
@@ -14,5 +16,9 @@ t_config	*configcpy(t_config *c)
 	size = sizeof(t_config);
 	if (!(new = (t_config*)malloc(size)))
 		return (NULL);
-	return (ft_memcpy(new, c, size));
+	ft_memcpy(new, c, size);
+	if (!(new->buf = (char*)malloc(MAX_PACKET_SIZE)))
+		return (NULL);
+	else
+		return (new);
 }

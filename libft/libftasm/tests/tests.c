@@ -265,6 +265,18 @@ void	test_strcmp(void)
 	printf("7:%s\n", strcmp("", "") == ft_strcmp("", "") ? "ok" : "nope");
 }
 
+void	test_strcmp_nocase(void)
+{
+	printf("%s\n", "ft_strcmp_nocase:");
+	printf("1:%s\n", strcmp("abc", "abc") == ft_strcmp_nocase("aBc", "aBc") ? "ok" : "nope");
+	printf("2:%s\n", strcmp("abc", "abc") == ft_strcmp_nocase("abc", "abc") ? "ok" : "nope");
+	printf("3:%s\n", strcmp("abc", "abcc") == ft_strcmp_nocase("abc", "abcc") ? "ok" : "nope");
+	printf("4:%s\n", strcmp("@bc", "@bc ") == ft_strcmp_nocase("@BC", "@bc ") ? "ok" : "nope");
+	printf("5:%s\n", strcmp("abc", "") == ft_strcmp_nocase("abc", "") ? "ok" : "nope");
+	printf("6:%s\n", strcmp("", "abcc") == ft_strcmp_nocase("", "abcC") ? "ok" : "nope");
+	printf("7:%s\n", strcmp("", "") == ft_strcmp_nocase("", "") ? "ok" : "nope");
+}
+
 int		main(int ac, char **av)
 {
 	test_isalpha();
@@ -289,5 +301,6 @@ int		main(int ac, char **av)
 	test_putchar();
 	test_putchar_fd();
 	test_strcmp();
+	test_strcmp_nocase();
 	return 0;
 }

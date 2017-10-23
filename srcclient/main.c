@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "libft.h"
 #include "libftasm.h"
+#include "packet.h"
 #include "establish_connection.h"
 #include "user_input.h"
 #include "error_master.h"
@@ -32,7 +34,8 @@ int		main(int ac, char **av)
 	{
 		return (usage(av[0]));
 	}
-	else if (!(config = (t_config*)malloc(sizeof(t_config))))
+	else if (!(config = (t_config*)malloc(sizeof(t_config))) ||
+	!(config->buf = (char*)malloc(MAX_PACKET_SIZE)))
 	{
 		return (ft_error(av[0], "", MALLOC_FAIL, 1));
 	}

@@ -8,7 +8,7 @@ ifeq ($(shell uname -s),Linux)
 		ft_isalnum.s ft_isascii.s ft_isprint.s ft_isinrange.s \
 		ft_tolower.s ft_toupper.s ft_strcat.s ft_memcpy.s ft_memset.s \
 		ft_strchr.s ft_atoi.s ft_atol.s ft_putstr.s \
-		ft_putstr_fd.s ft_putchar.s ft_putchar_fd.s ft_strcmp.s
+		ft_putstr_fd.s ft_putchar.s ft_putchar_fd.s ft_strcmp.s ft_strcmp_nocase.s
 	SUB_SRC := linux
 else
 	CC := /Users/ndudnicz/.brew/bin/nasm
@@ -18,7 +18,7 @@ else
 		ft_isalnum.s ft_isascii.s ft_isprint.s ft_isinrange.s \
 		ft_tolower.s ft_toupper.s ft_strcat.s ft_memcpy.s ft_memset.s \
 		ft_strdup.s ft_strchr.s ft_atoi.s ft_atol.s ft_putstr.s \
-		ft_putstr_fd.s ft_putchar.s ft_putchar_fd.s ft_strcmp.s
+		ft_putstr_fd.s ft_putchar.s ft_putchar_fd.s ft_strcmp.s ft_strcmp_nocase.s
 	SUB_SRC := macosx
 endif
 
@@ -47,7 +47,7 @@ symlinks:
 	@sh configure
 
 test:
-	gcc -o $(NAME_TEST) tests/tests.c -I include $(NAME)
+	gcc -o $(NAME_TEST) tests/tests.c -I includes $(NAME)
 	./$(NAME_TEST)
 
 clean:

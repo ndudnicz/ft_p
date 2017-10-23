@@ -27,9 +27,11 @@ PATH_COMMON_INCLUDES = includes/includes_common
 SRC_COMMON = debug.c packet.c my_pipe.c error_master.c options_handling.c \
 			error_child.c config.c receive_packet.c send_packet.c
 
-SRC_CLIENT = main.c user_input.c establish_connection.c
+SRC_CLIENT = main.c user_input.c establish_connection.c \
+			switch_packet_type_client.c display_message.c
 
-SRC_SERVEUR = main.c switch_packet_type.c open_connection.c waiting_loop.c
+SRC_SERVEUR = main.c switch_packet_type_server.c open_connection.c \
+			waiting_loop.c send_message.c
 
 # OBJECTS LIST ================================================================#
 
@@ -67,7 +69,7 @@ $(SERVEUR): $(LIBCOMMON) $(OBJ_SERVEUR)
 	$(CC) -o $@ $(OBJ_SERVEUR) -L. -lft -lcommon -lftasm
 
 $(OBJ_SERVEUR_DIR)/%.o: $(SRC_SERVEUR_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/ -I includes/includes_client ##################################################################################
 
 # LIBCOMMON RULES =============================================================#
 
@@ -76,4 +78,4 @@ $(LIBCOMMON): $(OBJ_COMMON)
 	ar rc $(LIBCOMMON) $(OBJ_COMMON)
 
 $(OBJ_COMMON_DIR)/%.o: $(SRC_COMMON_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/includes_client

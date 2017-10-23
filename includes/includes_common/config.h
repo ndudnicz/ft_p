@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
 # define CONFIG_H
 
+# define PROMPT "ftp> "
+
 # define	PARAMS_STR "e"
 
 /*
@@ -58,10 +60,11 @@ typedef struct	s_config
 	int				inet_addr;
 	char			*ip_addr_str;
 	char			*current_path;
+	char			*buf;
 	t_socket		socket;
 	t_port			port;
 }				t_config;
 
-t_config	*configcpy(t_config *c);
+t_config	*configdup(t_config *c);
 
 #endif

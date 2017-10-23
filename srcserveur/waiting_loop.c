@@ -8,28 +8,16 @@
 #include "libftasm.h"
 #include "libft.h"
 #include "debug.h"//
-#include "switch_packet_type.h"
+#include "switch_packet_type_server.h"
 #include "receive_packet.h"
 #include "send_packet.h"
+#include "send_message.h"
 #include "error_child.h"
 #include "error_master.h"
 
-static int	say_hello(t_config *config)
-{
-	t_packet	hello;
-	char const	*hi = "Serveur says hello !";
-	int const	size = (HEADER_SIZE + ft_strlen(hi)) << 16 | T_MESSAGE;
-
-	forge_packet(&hello, size, hi, 1);
-	// print_forged_packet(&hello, 1);
-	if (send_packet(config, &hello) > 0)
-		return (ft_error("Serveur", "say_hello", CANT_ESTABLISH_CONNECTION, 1));
-	else
-	{
-		// ft_putendl("c b");
-		return (0);
-	}
-}
+/*
+** Send a welcome msg to the new client and wait for commands.
+*/
 
 static int	child_waiting_loop(t_config *config)
 {
@@ -39,26 +27,27 @@ static int	child_waiting_loop(t_config *config)
 	int		pid;
 
 	pid = 0;
-	// ft_putendl("s a");
-	// receive_cmd_packet(config);
-	// ft_putendl("s b");
-	say_hello(config);
+	send_message(config, "Serveur says: Hello !", "Server");
 	ft_putendl("NEW CONNECTION ESTABLISHED!");
 	while ((r = read(config->socket.cmd, buf, MAX_PACKET_SIZE)) > 0)
 	{
 		packet = (t_packet*)buf;
-		// print_packet(packet, 1);
 		if ((pid = fork()) < 0)
 			ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
 		else if (pid == 0)
-			switch_packet_type(config->socket.cmd, packet);
-		// else
-		// 	ft_putstr("DONE");
+			switch_packet_type_server(config, packet);
 		ft_bzero(buf, MAX_PACKET_SIZE);
 	}
 	close(config->socket.cmd);
 	return (0);
 }
+
+/*
+** Master loop, waiting for new input connection.
+** fork(), copy *config and launch child_waiting_loop() when it gets
+** a new connection
+** Return 1 and display an error message if fails
+*/
 
 int			master_waiting_loop(t_config *config)
 {
@@ -77,7 +66,7 @@ int			master_waiting_loop(t_config *config)
 		}
 		if (pid == 0)
 		{
-			if (!(fork_config = configcpy(config)))
+			if (!(fork_config = configdup(config)))
 				return (ft_error("master_waiting_loop", "configcpy", MALLOC_FAIL, 1));
 			else
 			{

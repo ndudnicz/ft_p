@@ -35,6 +35,7 @@
 # define ft_putchar _ft_putchar
 # define ft_putchar_fd _ft_putchar_fd
 # define ft_strcmp _ft_strcmp
+# define ft_strcmp_nocase _ft_strcmp_nocase
 
 int				_ft_isalpha(int c);
 int				_ft_puts(char const *str);
@@ -57,5 +58,6 @@ int				_ft_putstr_fd(const char *s, int fd);
 int				_ft_putchar(int c);
 int				_ft_putchar_fd(int c, int fd);
 int				_ft_strcmp(const char *s1, const char *s2);
+int				_ft_strcmp_nocase(const char *s1, const char *s2);
 
 #endif

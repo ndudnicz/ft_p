@@ -12,6 +12,8 @@
 # define INET_ADDR_FAILED "inet_addr(), malformed requests."
 # define SOCKET_FAILED "socket() failed."
 # define CANT_ESTABLISH_CONNECTION "Unable to reach the client."
+# define BAD_PACKET "Bad packet format: wrong magic number."
+# define BAD_TYPE "Bad packet format: wrong type number."
 
 int	ft_error(char const *exec_name, char const *filename,
 				char const *type, int ret);

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <stdlib.h>//
 
 #include "error_master.h"
 #include "config.h"
@@ -9,6 +10,8 @@
 #include "packet.h"
 #include "receive_packet.h"
 #include "send_packet.h"
+#include "switch_packet_type_client.h"
+#include "debug.h"//
 
 /*
 ** Say hello through the new established connection and wait for an answer.
@@ -34,6 +37,7 @@ static int	say_hello(t_config *config)
 /*
 ** Try to establish a connection through the ip:port given as parameters.
 ** Set connection->socket if success.
+** Return 0 if success
 ** Display an error and return 1 if fails.
 */
 
@@ -42,7 +46,9 @@ int			establish_connection(t_config *config, char const *ip_str,
 {
 	struct protoent		*proto;
 	struct sockaddr_in	sin;
+	t_packet			*packet;
 
+	packet = (t_packet*)malloc(sizeof(t_packet));//
 	printf("Establishing connection to: %s:%s\n", ip_str, cmd_port_str);
 	if ((proto = getprotobyname("tcp")) == 0)
 		return (ft_error("Client", "", GETPROTOBYNAME_FAIL, 1));
@@ -62,8 +68,12 @@ int			establish_connection(t_config *config, char const *ip_str,
 		return (ft_error("Client", "establish_connection()", CONNECT_ERROR, 1));
 	if (!(config->current_path = ft_strdup(".")))
 		return (ft_error("Client", "", MALLOC_FAIL, 1));
-	if (receive_cmd_packet(config))
+	if (receive_cmd_packet(config, packet))
 		return (1);
+	// print_packet(packet, 1);
+	if (switch_packet_type_client(config, packet) > 0)
+		return (1);
+	free(packet);
 	printf("Connection done with: %s:%s\n", ip_str, cmd_port_str);
 	return (0);
 }

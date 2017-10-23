@@ -36,9 +36,9 @@ void	forge_packet(t_packet *packet, unsigned int size_type,
 
 	size = (unsigned short)((size_type) >> 16);
 	type = (unsigned short)(size_type);
-	printf("size_type:%08x\n", size_type);
-	printf("size:%hu\n", size);
-	printf("type:%hu\n", type);
+	// printf("size_type:%08x\n", size_type);
+	// printf("size:%hu\n", size);
+	// printf("type:%hu\n", type);
 	ft_bzero((char *)packet, MAX_PACKET_SIZE);
 	packet->magic = htonl(MAGIC);
 	if (packet->magic == htonl(MAGIC))

@@ -37,5 +37,6 @@ int				ft_putstr_fd(const char *s, int fd);
 int				ft_putchar(int c);
 int				ft_putchar_fd(int c, int fd);
 int				ft_strcmp(const char *s1, const char *s2);
+int				ft_strcmp_nocase(const char *s1, const char *s2);
 
 #endif

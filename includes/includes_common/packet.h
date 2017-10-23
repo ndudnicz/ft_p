@@ -27,28 +27,30 @@
 /*
 ** Generic types
 */
-
-# define T_MESSAGE	0x0001
-
+# define T_MESSAGE				0x0001
+# define T_DATA					0x0002
+# define T_CLOSE_CONNECTION		0x0003
 /*
 ** T_SPEC_TYPE
 */
-
-# define T_MASK_CMD	0x0100
-
+# define T_MASK_CMD		0x01ff
+# define T_MASK_DATA	0x02ff
 /*
 ** T_MASK_CMD subtypes
 */
-
-# define ST_LS		0x0001
-# define ST_CD		0x0002
-# define ST_GET		0x0004
-# define ST_PUT		0x0008
-# define ST_PWD		0x0010
-# define ST_LLS		0x0020
-# define ST_LCD		0x0040
-# define ST_LPWD	0x0080
-
+# define ST_LS		0x0101
+# define ST_CD		0x0102
+# define ST_GET		0x0104
+# define ST_PUT		0x0108
+# define ST_PWD		0x0110
+# define ST_LLS		0x0120
+# define ST_LCD		0x0140
+# define ST_LPWD	0x0180
+/*
+** T_MASK_DATA subtypes
+*/
+# define ASK_NEW_DATA_CONNECTION	0x0201
+# define SEND_NEW_DATA_CONNECTION	0x0202
 
 typedef struct	s_packet
 {
@@ -65,6 +67,5 @@ void				forge_packet(t_packet *packet, unsigned int size_type,
 void				unforge_packet(t_packet *packet);
 
 unsigned long int	get_chunk_number(unsigned long int st_size);
-
 
 #endif
