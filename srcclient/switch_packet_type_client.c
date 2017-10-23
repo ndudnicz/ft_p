@@ -4,6 +4,7 @@
 #include "libftasm.h"
 #include "display_message.h"
 #include "error_master.h"
+#include "debug.h"//
 
 static int	cmd_handling(t_config *config, t_packet *packet)
 {
@@ -20,7 +21,11 @@ static int	data_handling(t_config *config, t_packet *packet)
 int		switch_packet_type_client(t_config *config, t_packet *packet)
 {
 	if (packet->magic != MAGIC)
-		return (ft_error("Client", "switch_received_packet()", BAD_PACKET, 1));
+	{
+		ft_putendl(config->buf);
+		return (0);
+	}
+		// return (ft_error("Client", "switch_received_packet()", BAD_PACKET, 1));
 	else if (packet->type == T_MESSAGE)
 	{
 		return display_message_from_packet(packet);
@@ -41,5 +46,9 @@ int		switch_packet_type_client(t_config *config, t_packet *packet)
 	else if (packet->type & T_MASK_DATA)
 		return (data_handling(config, packet));
 	else
-		return (ft_error("Client", "switch_received_packet()", BAD_TYPE, 1));
+	{
+		ft_putendl(config->buf);
+		return (0);
+	}
+		// return (ft_error("Client", "switch_received_packet()", BAD_TYPE, 1));
 }

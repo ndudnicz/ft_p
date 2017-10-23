@@ -54,13 +54,14 @@ typedef struct	s_socket
 	int		server_master;
 }				t_socket;
 
-typedef struct	s_config
+typedef struct	s_config // malloc
 {
 	unsigned char	options;
 	int				inet_addr;
 	char			*ip_addr_str;
-	char			*current_path;
-	char			*buf;
+	char			*current_path; // malloc
+	char			*buf;  // malloc
+	char			*tmp_file_str;  // malloc
 	t_socket		socket;
 	t_port			port;
 }				t_config;

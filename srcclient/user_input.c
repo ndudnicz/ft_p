@@ -88,12 +88,13 @@ int		user_input_loop(t_config *config)
 	while (gnl(0, &line) > 0)
 	{
 		treat_input(&input, line);
-		print_input(&input);
-		// send_message(config, line, "client");
+		forge_packet(packet, HEADER_SIZE << 16 | input.cmd, "", 1);
+		// print_forged_packet(packet, 1);
+		send_packet(config, packet);
 		ft_bzero((char*)packet, packet->size);
-		// receive_cmd_packet(config, packet);
-		// if (switch_packet_type_client(config, packet) > 0)
-			// return (1);
+		receive_cmd_packet(config, packet);
+		if (switch_packet_type_client(config, packet) > 0)
+			return (1);
 		ft_putstr("ftp> ");
 	}
 	ft_putendl("Bye!");

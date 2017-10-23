@@ -61,5 +61,6 @@ int			ft_numberlen(long int number, int base);
 int			gnl(int const fd, char **line);
 int			ft_atoi_base(char *str, int base);
 char		*ft_strdup(char const *s);
+char		*ft_ltoa(long int n);
 
 #endif

@@ -30,14 +30,27 @@ void	print_packet(t_packet *packet, int print_data)
 	printf("------------------------------------\n\n");
 }
 
+static unsigned long int	my_swap64(unsigned long int n)
+{
+	return ((n & 0x00000000000000ff) << 56 |
+		(n & 0x000000000000ff00) << 40 |
+		(n & 0x0000000000ff0000) << 24 |
+		(n & 0x00000000ff000000) << 8 |
+		(n & 0x000000ff00000000) >> 8 |
+		(n & 0x0000ff0000000000) >> 24 |
+		(n & 0x00ff000000000000) >> 40 |
+		(n & 0xff00000000000000) >> 56);
+}
+
 void	print_forged_packet(t_packet *packet, int print_data)
 {
-	unsigned long int const		left = ntohl(packet->chunks_number >> 32);
-	int const					right = ntohl((int)packet->chunks_number);
+
+	if (packet->magic != ntohl(MAGIC))
+		packet->chunks_number = my_swap64(packet->chunks_number);
 
 	printf("\n------------------------------------\n");
 	printf("magic:%x\n", ntohl(packet->magic));
-	printf("chunks number:%lu\n", (left << 32) + (unsigned long)right);
+	printf("chunks number:%lu\n", packet->chunks_number);
 	printf("size:%hd\n", ntohs(packet->size));
 	printf("type:%04hx\n", ntohs(packet->type));
 	if (print_data)

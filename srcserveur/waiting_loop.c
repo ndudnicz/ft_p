@@ -26,12 +26,13 @@ static int	child_waiting_loop(t_config *config)
 	t_packet			*packet;
 	int		pid;
 
-	pid = 0;
 	send_message(config, "Serveur says: Hello !", "Server");
 	ft_putendl("NEW CONNECTION ESTABLISHED!");
 	while ((r = read(config->socket.cmd, buf, MAX_PACKET_SIZE)) > 0)
 	{
+		pid = 0;
 		packet = (t_packet*)buf;
+		// print_packet(packet, 1);
 		if ((pid = fork()) < 0)
 			ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
 		else if (pid == 0)
@@ -57,21 +58,32 @@ int			master_waiting_loop(t_config *config)
 	unsigned int		cslen;
 	t_config			*fork_config;
 
-	pid = 0;
 	while ((config->socket.cmd = accept(config->socket.server_master, (struct sockaddr*)&csin, &cslen)) > 0)
 	{
+		pid = 0;
 		if ((pid = fork()) < 0)
 		{
 			ft_error_child("master_waiting_loop", "fork()", FORK_FAIL);
 		}
 		if (pid == 0)
 		{
+			// while (config->pid == 0)
+				// ft_putendl("wait");
 			if (!(fork_config = configdup(config)))
 				return (ft_error("master_waiting_loop", "configcpy", MALLOC_FAIL, 1));
 			else
 			{
+				fork_config->tmp_file_str = ft_ltoa((long)fork_config);
+				// printf("fork:  %s\n", );
 				child_waiting_loop(fork_config);
 			}
+		}
+		else
+		{
+			// printf("parent:%s\n", ft_ltoa((long)config));
+
+			//  config->pid = pid;
+				// printf("parent:%d\n", config->pid);
 		}
 
 	}

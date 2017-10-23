@@ -16,7 +16,7 @@ ifeq ($(shell uname -s),Linux)
 		ft_strsplit.c ft_itoa.c ft_putnbr_fd.c ft_putnstr.c get_next_line.c \
 		ft_putnbr_endl.c ft_strdupchr.c ft_strlenchr.c ft_strndup.c \
 		ft_itoa_base.c ft_putbase.c ft_include_int.c ft_atoi_base.c \
-		ft_putbase_uint64.c ft_strcpy.c ft_strdup.c ft_memccpy.c
+		ft_putbase_uint64.c ft_strcpy.c ft_strdup.c ft_memccpy.c ft_ltoa.c
 else
 	CC := /Users/ndudnicz/.brew/bin/nasm
 	FLAGS := -f macho64
@@ -31,7 +31,7 @@ else
 		ft_strsplit.c ft_itoa.c ft_putnbr_fd.c ft_putnstr.c get_next_line.c \
 		ft_putnbr_endl.c ft_strdupchr.c ft_strlenchr.c ft_strndup.c \
 		ft_itoa_base.c ft_putbase.c ft_include_int.c ft_atoi_base.c \
-		ft_putbase_uint64.c ft_strcpy.c ft_memccpy.c
+		ft_putbase_uint64.c ft_strcpy.c ft_memccpy.c ft_ltoa.c
 endif
 
 CPP = gcc
