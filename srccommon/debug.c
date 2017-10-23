@@ -52,6 +52,6 @@ void	print_command_type(t_packet *packet)
 
 void print_input(t_input *input)
 {
-	printf("cmd:%hhx\n", input->cmd);
+	printf("cmd:%04hx\n", input->cmd);
 	printf("arg:%s\n", input->arg);
 }

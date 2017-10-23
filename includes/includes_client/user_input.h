@@ -3,7 +3,7 @@
 
 typedef struct		s_input
 {
-	unsigned char	cmd;
+	unsigned short	cmd;
 	char			*arg;
 }					t_input;
 

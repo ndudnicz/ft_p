@@ -15,21 +15,21 @@
 
 static unsigned short get_type(char const *str)
 {
-	if (!ft_strcmp("ls", str) || !ft_strcmp("LS", str))
+	if (!ft_strcmp_nocase("ls", str))
 		return (ST_LS);
-	else if (!ft_strcmp("cd", str) || !ft_strcmp("CD", str))
+	else if (!ft_strcmp_nocase("cd", str))
 		return (ST_CD);
-	else if (!ft_strcmp("get", str) || !ft_strcmp("GET", str))
+	else if (!ft_strcmp_nocase("get", str))
 		return (ST_GET);
-	else if (!ft_strcmp("put", str) || !ft_strcmp("PUT", str))
+	else if (!ft_strcmp_nocase("put", str))
 		return (ST_PUT);
-	else if (!ft_strcmp("pwd", str) || !ft_strcmp("PWD", str))
+	else if (!ft_strcmp_nocase("pwd", str))
 		return (ST_PWD);
-	else if (!ft_strcmp("lls", str) || !ft_strcmp("LLS", str))
+	else if (!ft_strcmp_nocase("lls", str))
 		return (ST_LLS);
-	else if (!ft_strcmp("lcd", str) || !ft_strcmp("LCD", str))
+	else if (!ft_strcmp_nocase("lcd", str))
 		return (ST_LCD);
-	else if (!ft_strcmp("lpwd", str) || !ft_strcmp("LPWD", str))
+	else if (!ft_strcmp_nocase("lpwd", str))
 		return (ST_LPWD);
 	else
 	{
