@@ -14,27 +14,6 @@
 #include "debug.h"//
 
 /*
-** Say hello through the new established connection and wait for an answer.
-** Return 0 if success.
-** Display an error message and return 1 if fail.
-*/
-
-static int	say_hello(t_config *config)
-{
-	t_packet	hello;
-
-	forge_packet(&hello, (HEADER_SIZE + 5) << 16 | T_MESSAGE, "hello", 1);
-	if (send_packet(config, &hello) > 0)
-		return (ft_error("Client", "say_hello", CANT_ESTABLISH_CONNECTION, 1));
-	else
-	{
-
-		ft_putendl("c b");
-		return (0);
-	}
-}
-
-/*
 ** Try to establish a connection through the ip:port given as parameters.
 ** Set connection->socket if success.
 ** Return 0 if success

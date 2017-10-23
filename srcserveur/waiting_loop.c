@@ -21,23 +21,22 @@
 
 static int	child_waiting_loop(t_config *config)
 {
-	char				buf[MAX_PACKET_SIZE] = {0};
+	// char				buf[MAX_PACKET_SIZE] = {0};
 	int					r;
 	t_packet			*packet;
 	int		pid;
 
 	send_message(config, "Server says: Hello !", "Server");
 	ft_putendl("NEW CONNECTION ESTABLISHED!");
-	while ((r = read(config->socket.cmd, buf, MAX_PACKET_SIZE)) > 0)
+	while ((r = read(config->socket.cmd, config->buf, MAX_PACKET_SIZE)) > 0)
 	{
 		pid = 0;
-		packet = (t_packet*)buf;
-		// print_packet(packet, 1);
+		packet = (t_packet*)config->buf;
 		if ((pid = fork()) < 0)
 			ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
 		else if (pid == 0)
 			switch_packet_type_server(config, packet);
-		ft_bzero(buf, MAX_PACKET_SIZE);
+		ft_bzero(config->buf, MAX_PACKET_SIZE);
 	}
 	close(config->socket.cmd);
 	return (0);
@@ -49,43 +48,43 @@ static int	child_waiting_loop(t_config *config)
 ** a new connection
 ** Return 1 and display an error message if fails
 */
-
+#include <errno.h>//
+#include <stdio.h>
 int			master_waiting_loop(t_config *config)
 {
 	int		client_socket;
 	int		pid;
 	struct sockaddr_in	csin;
-	unsigned int		cslen;
+	unsigned int		cslen = sizeof(csin);
 	t_config			*fork_config;
 
-	while ((config->socket.cmd = accept(config->socket.server_master, (struct sockaddr*)&csin, &cslen)) > 0)
+	while ((config->socket.cmd = accept(config->socket.server_master, (struct sockaddr*)&csin, &cslen))/* > 0*/)
 	{
 		pid = 0;
 		if ((pid = fork()) < 0)
-		{
 			ft_error_child("master_waiting_loop", "fork()", FORK_FAIL);
-		}
-		if (pid == 0)
+		if (config->socket.cmd > 0 && pid == 0)
 		{
-			// while (config->pid == 0)
-				// ft_putendl("wait");
 			if (!(fork_config = configdup(config)))
 				return (ft_error("master_waiting_loop", "configcpy", MALLOC_FAIL, 1));
 			else
 			{
-				fork_config->tmp_file_str = ft_ltoa((long)fork_config);
-				// printf("fork:  %s\n", );
+				ft_putendl("fork born");
+				// fork_config->tmp_file_str = ft_ltoa((long)fork_config);
 				child_waiting_loop(fork_config);
 			}
+			ft_putendl("fork die");
+			free(fork_config->current_path);
+			free(fork_config->buf);
+			// free(fork_config->tmp_file_str);
+			free(fork_config);
+			return (0);
 		}
-		else
+		if (config->socket.cmd < 0)
 		{
-			// printf("parent:%s\n", ft_ltoa((long)config));
-
-			//  config->pid = pid;
-				// printf("parent:%d\n", config->pid);
+			printf("Accept() error, exit.\n");
+			return 0;
 		}
-
 	}
 	close(config->socket.server_master);
 	return (0);

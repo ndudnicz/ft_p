@@ -38,12 +38,16 @@ static unsigned short get_type(char const *str)
 	}
 }
 
-static int	treat_input(t_input *input, char const *line)
+static int	treat_input(t_input *input, char *line)
 {
-	char const	**array = (char const**)ft_strsplit(ft_strtrim(line), ' ');
+	char const	*s = ft_strtrim(line);
+	char const	**array = (char const**)ft_strsplit(s, ' ');
 	int			i;
 
 	i = 0;
+	free(line);
+	// input->cmd = 0;
+	// input->arg = NULL;
 	if (!array)
 		return (0);
 	else
@@ -57,23 +61,9 @@ static int	treat_input(t_input *input, char const *line)
 		i++;
 	}
 	free((void*)array);
+	free(s);
 	return (1);
 }
-
-// static int		send_message(t_config *config, char const *msg, char const *side)
-// {
-// 	t_packet		hello;
-// 	size_t const	size = (HEADER_SIZE + ft_strlen(msg)) << 16 | T_DATA;
-//
-// 	forge_packet(&hello, size, msg, 1);
-// 	unforge_packet(&hello);
-// 	// print_packet(hello, 1);
-// 	forge_packet(&hello, size, msg, 1);
-// 	if (send_packet(config, &hello) > 0)
-// 		return (ft_error(side, "send_message()", CANT_ESTABLISH_CONNECTION, 1));
-// 	else
-// 		return (0);
-// }
 
 /*
 ** Loop and treat the input string while the user doesn't type 'quit' or press
@@ -86,7 +76,7 @@ int		user_input_loop(t_config *config)
 	t_packet	*packet;
 	t_input		input;
 
-	packet = (t_packet*)malloc(sizeof(t_packet));
+	packet = (t_packet*)malloc(sizeof(t_packet)); // check malloc ret
 	line = NULL;
 	ft_putstr("ftp> ");
 	while (gnl(0, &line) > 0)
@@ -100,9 +90,11 @@ int		user_input_loop(t_config *config)
 			ft_bzero((char*)packet, packet->size);
 			if (switch_packet_type_client(config, packet) > 0)
 				return (1);
+			free(input.arg);
 		}
 		ft_putstr("ftp> ");
 	}
+	free(packet);
 	ft_putendl("Bye!");
 	return (0);
 }
