@@ -13,10 +13,11 @@ int		receive_cmd_packet(t_config *config)
 	buf[0] = 0;
 	ret = read(config->socket.cmd, buf, MAX_PACKET_SIZE);
 	packet = (t_packet*)buf;
-	// unforge_packet(packet);
+	ft_putendl("receiving packet");
+	unforge_packet(packet);
 	if (packet->magic == MAGIC)
 	{
-		print_forged_packet(packet, 1);
+		print_packet(packet, 1);
 	}
 	else
 		ft_putendl(buf);

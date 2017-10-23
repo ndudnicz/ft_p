@@ -19,15 +19,14 @@ int		open_connection(t_config *config, char const *cmd_port_str)
 	struct sockaddr_in	sin;
 
 	printf("Opening connection on port: %s\n", cmd_port_str);
-	proto = getprotobyname("tcp");
-	if (proto == 0)
-	{
+	if ((proto = getprotobyname("tcp")) == 0)
 		return (ft_error("Serveur", "", GETPROTOBYNAME_FAIL, 1));
-	}
-	config->socket.server_master = socket(PF_INET, SOCK_STREAM, proto->p_proto);
+	if ((config->socket.server_master = socket(PF_INET, SOCK_STREAM, proto->p_proto)) < 0)
+		return (ft_error("Serveur", "open_connection:", SOCKET_FAILED, 1));
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(ft_atoi(cmd_port_str));
-	sin.sin_addr.s_addr = inet_addr("127.0.0.1");
+	if ((sin.sin_addr.s_addr = inet_addr("127.0.0.1")) == INADDR_NONE)
+		return (ft_error("Serveur", "open_connection:", INET_ADDR_FAILED, 1));
 	if (bind(config->socket.server_master, (const struct sockaddr*)&sin, sizeof(sin)) < 0)
 		return (ft_error("Serveur", "open_connection:", CONNECT_ERROR, 1));
 	if (listen(config->socket.server_master, LISTEN_MAX) < 0)
