@@ -41,18 +41,22 @@ static unsigned short get_type(char const *str)
 static int	treat_input(t_input *input, char const *line)
 {
 	char const	**array = (char const**)ft_strsplit(ft_strtrim(line), ' ');
+	int			i;
 
+	i = 0;
 	if (!array)
-	{
 		return (0);
-	}
 	else
 	{
 		input->cmd = get_type(array[0]);
-		input->arg = array[1] ? (char*)array[1] : ft_strdup("no arg");
-		//for (int i = 0; array[i]; i++)
-			//printf("%s\n", array[i]);
+		input->arg = array[1] ? ft_strdup((char*)array[1]) : ft_strdup("");
 	}
+	while (array[i])
+	{
+		free((void*)array[i]);
+		i++;
+	}
+	free((void*)array);
 	return (1);
 }
 
@@ -88,13 +92,15 @@ int		user_input_loop(t_config *config)
 	while (gnl(0, &line) > 0)
 	{
 		treat_input(&input, line);
-		forge_packet(packet, HEADER_SIZE << 16 | input.cmd, "", 1);
-		// print_forged_packet(packet, 1);
-		send_packet(config, packet);
-		ft_bzero((char*)packet, packet->size);
-		receive_cmd_packet(config, packet);
-		if (switch_packet_type_client(config, packet) > 0)
-			return (1);
+		if (input.cmd)
+		{
+			forge_packet(packet, HEADER_SIZE << 16 | input.cmd, "", 1);
+			send_packet(config, packet);
+			receive_cmd_packet(config, packet);
+			ft_bzero((char*)packet, packet->size);
+			if (switch_packet_type_client(config, packet) > 0)
+				return (1);
+		}
 		ft_putstr("ftp> ");
 	}
 	ft_putendl("Bye!");

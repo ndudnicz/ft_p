@@ -26,7 +26,7 @@ static int	child_waiting_loop(t_config *config)
 	t_packet			*packet;
 	int		pid;
 
-	send_message(config, "Serveur says: Hello !", "Server");
+	send_message(config, "Server says: Hello !", "Server");
 	ft_putendl("NEW CONNECTION ESTABLISHED!");
 	while ((r = read(config->socket.cmd, buf, MAX_PACKET_SIZE)) > 0)
 	{

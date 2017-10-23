@@ -22,7 +22,7 @@ int		switch_packet_type_client(t_config *config, t_packet *packet)
 {
 	if (packet->magic != MAGIC)
 	{
-		ft_putendl(config->buf);
+		ft_putstr(config->buf);
 		return (0);
 	}
 		// return (ft_error("Client", "switch_received_packet()", BAD_PACKET, 1));

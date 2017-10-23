@@ -5,5 +5,5 @@
 
 int		exec_cmd(t_config *config, t_packet *packet)
 {
-
+	if ()
 }
