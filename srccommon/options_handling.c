@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/syslimits.h>
+
 #include "config.h"
 #include "libft.h"
 #include "error_master.h"
@@ -60,6 +62,14 @@ static int	set_options(char *arg, t_config *config)
 	return (0);
 }
 
+static int	set_root(t_config *c)
+{
+	if (getcwd(c->root, PATH_MAX))
+		return (0);
+	else
+		return (ft_error("options_handling", "set_root()", GETCWD_FAILED, 1));
+}
+
 /*
 ** Parse argv and set argv[index] at NULL if an options was found.
 */
@@ -71,6 +81,8 @@ int			get_options(t_config *config, int *ac, char **av)
 
 	i = 1;
 	n = 0;
+	if (set_root(c))
+		return (1);
 	while (i < *ac)
 	{
 		if (av[i][0] == '-')

@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <arpa/inet.h>//
+#include <sys/socket.h>
 
 #include "config.h"
 #include "packet.h"
@@ -17,9 +18,7 @@ int		send_packet(t_config *config, t_packet *packet)
 {
 	int		ret;
 
-	// ft_putendl("sending:");
-	// print_forged_packet(packet, 1);
-	ret = write(config->socket.cmd, packet, packet->size);
+	ret = send(config->socket.cmd, packet, packet->size, 0);
 	if (ret < 0)
 		ft_error_child(config->ip_addr_str, "sendpacket()", SEND_FAIL);
 	return (ret < 0 ? 1 : 0);

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <sys/wait.h>
 
 #include "config.h"
 #include "packet.h"
@@ -17,25 +18,35 @@
 
 /*
 ** Send a welcome msg to the new client and wait for commands.
+** Fork a new process that will execute the command and wait4 until the
+** child process exits
 */
 
 static int	child_waiting_loop(t_config *config)
 {
 	// char				buf[MAX_PACKET_SIZE] = {0};
-	int					r;
-	t_packet			*packet;
-	int		pid;
+	int			r;
+	t_packet	*packet;
+	int			pid;
+	int			stat_loc;
 
 	send_message(config, "Server says: Hello !", "Server");
 	ft_putendl("NEW CONNECTION ESTABLISHED!");
-	while ((r = read(config->socket.cmd, config->buf, MAX_PACKET_SIZE)) > 0)
+	while ((r = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0)) > 0)
 	{
 		pid = 0;
 		packet = (t_packet*)config->buf;
+		unforge_packet(packet);
 		if ((pid = fork()) < 0)
 			ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
 		else if (pid == 0)
 			switch_packet_type_server(config, packet);
+		else
+		{
+			wait4(pid, &stat_loc, 0, NULL);
+			// if (WIFEXITED(stat_loc))
+				// ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
+		}
 		ft_bzero(config->buf, MAX_PACKET_SIZE);
 	}
 	close(config->socket.cmd);
@@ -52,8 +63,7 @@ static int	child_waiting_loop(t_config *config)
 #include <stdio.h>
 int			master_waiting_loop(t_config *config)
 {
-	int		client_socket;
-	int		pid;
+	int					pid;
 	struct sockaddr_in	csin;
 	unsigned int		cslen = sizeof(csin);
 	t_config			*fork_config;
@@ -69,11 +79,11 @@ int			master_waiting_loop(t_config *config)
 				return (ft_error("master_waiting_loop", "configcpy", MALLOC_FAIL, 1));
 			else
 			{
-				ft_putendl("fork born");
+				// ft_putendl("fork born");
 				// fork_config->tmp_file_str = ft_ltoa((long)fork_config);
 				child_waiting_loop(fork_config);
 			}
-			ft_putendl("fork die");
+			// ft_putendl("fork die");
 			free(fork_config->current_path);
 			free(fork_config->buf);
 			// free(fork_config->tmp_file_str);

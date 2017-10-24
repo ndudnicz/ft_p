@@ -12,6 +12,7 @@
 #include "receive_packet.h"
 #include "switch_packet_type_client.h"
 #include "error_master.h"//
+#include "exec_cmd_local.h"
 
 static unsigned short get_type(char const *str)
 {
@@ -73,8 +74,10 @@ static int	treat_input(t_input *input, char *line)
 int		user_input_loop(t_config *config)
 {
 	char		*line;
+	int			pid;
 	t_packet	*packet;
 	t_input		input;
+	int			stat_loc;
 
 	packet = (t_packet*)malloc(sizeof(t_packet)); // check malloc ret
 	line = NULL;
@@ -82,14 +85,26 @@ int		user_input_loop(t_config *config)
 	while (gnl(0, &line) > 0)
 	{
 		treat_input(&input, line);
-		if (input.cmd)
+		if (input.cmd && !(input.cmd & T_MASK_CMD_LOCAL))
 		{
-			forge_packet(packet, HEADER_SIZE << 16 | input.cmd, "", 1);
+			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 | input.cmd, input.arg, 1);
 			send_packet(config, packet);
 			receive_cmd_packet(config, packet);
-			ft_bzero((char*)packet, packet->size);
+			// print_packet(packet, 1);
 			if (switch_packet_type_client(config, packet) > 0)
 				return (1);
+			ft_bzero((char*)packet, packet->size);
+			free(input.arg);
+		}
+		else if (input.cmd)
+		{
+			pid = fork();
+			if (pid == 0)
+				exec_cmd_local(config, input.cmd);
+			else
+			{
+				wait4(pid, &stat_loc, 0, NULL);
+			}
 			free(input.arg);
 		}
 		ft_putstr("ftp> ");
