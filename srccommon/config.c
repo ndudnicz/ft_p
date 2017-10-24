@@ -19,6 +19,8 @@ t_config	*configdup(t_config *c)
 	ft_memcpy(new, c, size);
 	if (!(new->buf = (char*)malloc(MAX_PACKET_SIZE)))
 		return (NULL);
+	else if (!(new->current_path = ft_strdup(c->current_path)))
+		return (NULL);
 	else
 		return (new);
 }
