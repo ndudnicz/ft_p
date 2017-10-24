@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "libftasm.h"
+#include "libft.h"
 #include "config.h"
 #include "packet.h"
 

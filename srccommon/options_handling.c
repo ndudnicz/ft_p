@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/syslimits.h>
+#include <linux/limits.h>//
+// #include <sys/syslimits.h>
 
 #include "config.h"
 #include "libft.h"
@@ -81,7 +82,7 @@ int			get_options(t_config *config, int *ac, char **av)
 
 	i = 1;
 	n = 0;
-	if (set_root(c))
+	if (set_root(config))
 		return (1);
 	while (i < *ac)
 	{

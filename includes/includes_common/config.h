@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
 # define CONFIG_H
 
+# include <linux/limits.h>//
+
 # define PROMPT "ftp> "
 
 # define	PARAMS_STR "e"
