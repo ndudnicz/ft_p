@@ -61,7 +61,7 @@ static int	treat_input(t_input *input, char *line)
 		i++;
 	}
 	free((void*)array);
-	free(s);
+	free((void*)s);
 	return (1);
 }
 
