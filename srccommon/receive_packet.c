@@ -8,6 +8,7 @@
 #include "libft.h"
 #include "libftasm.h"
 #include "error_child.h"
+#include "error_message.h"
 
 int		receive_cmd_packet(t_config *config, t_packet *packet)
 {

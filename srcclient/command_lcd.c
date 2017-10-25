@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_cd.c                                       :+:      :+:    :+:   */
+/*   command_lcd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,11 +15,11 @@
 
 #include "config.h"
 #include "packet.h"
-#include "send_message.h"
 #include "debug.h"
 #include "libft.h"
 #include "libftasm.h"
 #include "error_message.h"
+#include "error_master.h"
 
 static int	array_length(char const **array)
 {
@@ -69,7 +69,7 @@ static int	valid_user_input(t_config *config, char const *root,
 
 	i = 0;
 	if (!array_root || !array_input || !array_cwd)
-		return (send_message(config, INTERNAL_ERROR, "serveur") || 1);
+		return (ft_error("LCD", INTERNAL_ERROR, "client", 0) || 1);
 	cursor = array_length(array_cwd);
 	while (array_input[i])
 	{
@@ -85,26 +85,26 @@ static int	valid_user_input(t_config *config, char const *root,
 		return (free_all_split(array_root, array_input, array_cwd));
 }
 
-int			cd(t_config *config, t_packet *packet)
+int			lcd(t_config *config, char *arg)
 {
 	char		*new_path;
 	char		cwd[PATH_MAX];
-	int const	data_len = ft_strlen(packet->data);
+	int const	data_len = ft_strlen(arg);
 
 	cwd[0] = 0;
 	if (getcwd(cwd, PATH_MAX) < 0)
-		return (send_message(config, INTERNAL_ERROR, "serveur"));
-	if (valid_user_input(config, config->root, packet->data, cwd) > 0)
-		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
+		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
+	if (valid_user_input(config, config->root, arg, cwd) > 0)
+		return (ft_error("LCD", CMD_CD_INVALID_PATH, "client", 0));
 	if (data_len == 0)
 		new_path = config->root;
 	else
-		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), packet->data, 1, 0);
+		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), arg, 1, 0);
 	if (chdir(new_path) < 0)
-		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
+		return (ft_error("LCD", CMD_CD_SUCCESS, "client", 0));
 	if (getcwd(cwd, PATH_MAX) < 0)
-		return (send_message(config, INTERNAL_ERROR, "serveur"));
+		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
 	if (data_len)
 		free(new_path);
-	return (send_message(config, CMD_CD_SUCCESS, "serveur"));
+	return (ft_error("LCD", CMD_CD_SUCCESS, "client", 0));
 }

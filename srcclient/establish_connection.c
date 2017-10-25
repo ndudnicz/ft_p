@@ -12,6 +12,7 @@
 #include "send_packet.h"
 #include "switch_packet_type_client.h"
 #include "debug.h"//
+#include "error_message.h"
 
 /*
 ** Try to establish a connection through the ip:port given as parameters.

@@ -7,6 +7,7 @@
 #include "config.h"
 #include "packet.h"
 #include "send_message.h"
+#include "error_message.h"
 
 /*
 ** Get the current working directory and send it to the client

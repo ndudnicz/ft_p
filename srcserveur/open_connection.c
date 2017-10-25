@@ -7,6 +7,7 @@
 #include "libftasm.h"
 #include "libft.h"
 #include "constant_config_serveur.h"
+#include "error_message.h"
 
 /*
 ** Try to open a connection on 127.0.0.1:<port>, port given as parameter

@@ -7,6 +7,7 @@
 #include "error_child.h"
 #include "debug.h"//
 #include "libft.h"//
+#include "error_message.h"
 
 /*
 ** Try to send the packet through the connection given in config.

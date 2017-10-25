@@ -70,6 +70,11 @@ static int	treat_input(t_input *input, char *line)
 	return (1);
 }
 
+static int	should_fork(unsigned short type)
+{
+	return (!(type == ST_LCD || type == ST_LPWD));
+}
+
 /*
 ** Loop and treat the input string while the user doesn't type 'quit' or press
 ** CTRL-D
@@ -94,7 +99,6 @@ int		user_input_loop(t_config *config)
 			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 | input.cmd, input.arg, 1);
 			send_packet(config, packet);
 			receive_cmd_packet(config, packet);
-			// print_packet(packet, 1);
 			if (switch_packet_type_client(config, packet) > 0)
 				return (1);
 			ft_bzero((char*)packet, packet->size);
@@ -102,12 +106,18 @@ int		user_input_loop(t_config *config)
 		}
 		else if (input.cmd)
 		{
-			pid = fork();
-			if (pid == 0)
-				exec_cmd_local(config, input.cmd);
+			if (should_fork(packet->type) > 1)
+			{
+				pid = fork();
+				if (pid == 0)
+					exec_cmd_local(config, input.cmd);
+				else
+					wait4(pid, &stat_loc, 0, NULL);
+			}
 			else
 			{
-				wait4(pid, &stat_loc, 0, NULL);
+				exec_cmd_local_no_fork(config, &input);
+
 			}
 			free(input.arg);
 		}

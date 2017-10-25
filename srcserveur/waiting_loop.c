@@ -15,6 +15,7 @@
 #include "send_message.h"
 #include "error_child.h"
 #include "error_master.h"
+#include "error_message.h"
 
 static int	should_fork(unsigned short type)
 {

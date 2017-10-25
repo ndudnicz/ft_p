@@ -6,6 +6,7 @@
 #include "packet.h"
 #include "error_child.h"
 #include "error_master.h"
+#include "error_message.h"
 
 /*
 ** Create and return a copy of c.

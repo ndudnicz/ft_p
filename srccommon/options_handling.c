@@ -19,6 +19,7 @@
 #include "error_master.h"
 #include "libftasm.h"
 #include "my_limits.h"
+#include "error_message.h"
 
 /*
 ** Moves NULLs argv to the end of the array. Options are set in config
