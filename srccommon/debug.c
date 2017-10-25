@@ -22,7 +22,7 @@ void	print_packet(t_packet *packet, int print_data)
 {
 	printf("\n------------------------------------\n");
 	printf("magic:%x\n", packet->magic);
-	printf("chunks number:%lu\n", packet->chunks_number);
+	printf("chunks number:%u\n", packet->chunks_number);
 	printf("size:%hd\n", packet->size);
 	printf("type:%04hx\n", packet->type);
 	if (print_data)
@@ -50,7 +50,7 @@ void	print_forged_packet(t_packet *packet, int print_data)
 
 	printf("\n------------------------------------\n");
 	printf("magic:%x\n", ntohl(packet->magic));
-	printf("chunks number:%lu\n", packet->chunks_number);
+	printf("chunks number:%u\n", packet->chunks_number);
 	printf("size:%hd\n", ntohs(packet->size));
 	printf("type:%04hx\n", ntohs(packet->type));
 	if (print_data)

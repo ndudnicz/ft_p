@@ -15,6 +15,9 @@
 # define BAD_PACKET "Bad packet format: wrong magic number."
 # define BAD_TYPE "Bad packet format: wrong type number."
 # define GETCWD_FAILED "Unable to set root working directory."
+# define CHDIR_FAILED "Invalid path."
+# define BIND_FAILED "Invalid bind ip."
+# define BAD_PORT "Invalid port number."
 
 int	ft_error(char const *exec_name, char const *filename,
 				char const *type, int ret);

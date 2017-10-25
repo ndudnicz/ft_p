@@ -20,7 +20,10 @@
 
 int		usage(char const *bin)
 {
-	printf("Usage: %s <port>\n", bin);
+	printf("Usage: %s [options] <port>\n\n", bin);
+	printf("Options:\n\n");
+	printf("\t-f <root_folder> : set a root folder\n");
+	printf("\t-b <ip>          : bind the connection on <ip>\n");
 	return (1);
 }
 
@@ -34,9 +37,8 @@ int		main(int ac, char **av)
 
 	if (ac < 2)
 		return (usage(av[0]));
-	else if (!(config = (t_config*)malloc(sizeof(t_config))) ||
-	!(config->buf = (char*)malloc(MAX_PACKET_SIZE)))
-		return (ft_error(av[0], "", MALLOC_FAIL, 1));
+	else if (!(config = create_config(av[0])))
+		return (1);
 	else
 	{
 		if (get_options(config, &ac, av) > 0)

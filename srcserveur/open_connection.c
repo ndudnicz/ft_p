@@ -19,14 +19,15 @@ int		open_connection(t_config *config, char const *cmd_port_str)
 	struct protoent		*proto;
 	struct sockaddr_in	sin;
 
-	printf("Opening connection on port: %s\n", cmd_port_str);
+	sin.sin_port = htons(ft_atoi(cmd_port_str));
+	printf("Opening connection on: %s:%d\n", config->ip_str, ntohs(sin.sin_port));
 	if ((proto = getprotobyname("tcp")) == 0)
 		return (ft_error("Serveur", "", GETPROTOBYNAME_FAIL, 1));
 	if ((config->socket.server_master = socket(PF_INET, SOCK_STREAM, proto->p_proto)) < 0)
 		return (ft_error("Serveur", "open_connection:", SOCKET_FAILED, 1));
+	// ft_putendl("a");
 	sin.sin_family = AF_INET;
-	sin.sin_port = htons(ft_atoi(cmd_port_str));
-	if ((sin.sin_addr.s_addr = inet_addr("127.0.0.1")) == INADDR_NONE)
+	if ((sin.sin_addr.s_addr = inet_addr(config->ip_str)) == INADDR_NONE)
 		return (ft_error("Serveur", "open_connection:", INET_ADDR_FAILED, 1));
 	if (bind(config->socket.server_master, (const struct sockaddr*)&sin, sizeof(sin)) < 0)
 		return (ft_error("Serveur", "open_connection:", CONNECT_ERROR, 1));
@@ -36,6 +37,6 @@ int		open_connection(t_config *config, char const *cmd_port_str)
 	config->port.cmd = sin.sin_port;
 	if (!(config->current_path = ft_strdup(".")))
 		return (ft_error("serveur", "", MALLOC_FAIL, 1));
-	printf("Connection opened on port: %s\n", cmd_port_str);
+	printf("Connection opened on: %s:%d\n", config->ip_str, ntohs(config->port.cmd));
 	return (0);
 }

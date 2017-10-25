@@ -20,6 +20,6 @@ int		send_packet(t_config *config, t_packet *packet)
 
 	ret = send(config->socket.cmd, packet, packet->size, 0);
 	if (ret < 0)
-		ft_error_child(config->ip_addr_str, "sendpacket()", SEND_FAIL);
+		ft_error_child(config->ip_str, "sendpacket()", SEND_FAIL);
 	return (ret < 0 ? 1 : 0);
 }

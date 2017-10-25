@@ -1,19 +1,29 @@
 #ifndef CONFIG_H
 # define CONFIG_H
 
-# include <linux/limits.h>//
+// # include <linux/limits.h>//
+#include <sys/syslimits.h>
 
-# define PROMPT "ftp> "
+# define PROMPT				"ftp> "
+# define DEFAULT_IP_BIND	"127.0.0.1"
 
-# define	PARAMS_STR "e"
+/*
+** Options
+*/
+
+# define BIND_IP		0x01
+# define ROOT_FOLDER	0x02
+
+# define BIND_IP_CHAR		'b'
+# define ROOT_FOLDER_CHAR	'f'
+
+# define PARAMS_STR		"bf"
 
 /*
 **
 */
 
 # define LS_PATH	"/bin/ls"
-# define LS_BIN		"ls"
-# define CD_PATH	"/usr/bin/cd"
 
 /*
 ** ========= S_PORT ============================================================
@@ -60,16 +70,16 @@ typedef struct	s_config // malloc
 {
 	unsigned char	options;
 	int				inet_addr;
-	char			*ip_addr_str;
+	char			*ip_str;
 	char			*current_path; // malloc
 	char			*buf;  // malloc
 	char			*tmp_file_str;  // malloc
 	char			root[PATH_MAX];
-	char			*root2[PATH_MAX];
 	t_socket		socket;
 	t_port			port;
 }				t_config;
 
 t_config	*configdup(t_config *c);
+t_config	*create_config(char const*exec_name);
 
 #endif

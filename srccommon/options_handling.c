@@ -10,30 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <linux/limits.h>//
-// #include <sys/syslimits.h>
+// #include <linux/limits.h>//
+#include <sys/syslimits.h>
+#include <unistd.h>
 
 #include "config.h"
 #include "libft.h"
 #include "error_master.h"
 #include "libftasm.h"
+#include "my_limits.h"
 
 /*
 ** Moves NULLs argv to the end of the array. Options are set in config
 ** and doesn't exist anymore in argv.
 */
 
-static void	del_null_params(int const ac, char **av)
+static void	del_null_params(int *ac, char **av, int offset)
 {
 	int		i;
 	int		n;
 	char	*tmp;
 
 	n = 1;
-	while (n < ac)
+	while (n < *ac)
 	{
 		i = 1;
-		while (i < ac - 1)
+		while (i < *ac - 1)
 		{
 			if (av[i] == NULL)
 			{
@@ -45,27 +47,86 @@ static void	del_null_params(int const ac, char **av)
 		}
 		n++;
 	}
+	*ac -= offset;
 }
 
-static int	set_options(char *arg, t_config *config)
+static int	switch_set_options(char *exec_name, char *arg, char *param,
+						t_config *config)
 {
-	arg += arg ? 1 : 0;
+	if (!arg)
+		return (0);
+	else
+		arg++;
 	while (arg && *arg)
 	{
 		if (*arg && ft_strchr(PARAMS_STR, (int)(*arg)))
 		{
-			// config->options |= *arg == SORT_NUM_CHAR ? SORT_NUM : 0x00;
+			if (*arg == BIND_IP_CHAR)
+			{
+				config->options |= BIND_IP;
+				if (!param)
+					return ft_error(exec_name, "-b", BIND_FAILED, 1);
+				else if (!(config->ip_str = ft_strdup(param)))
+					return ft_error(exec_name, "", MALLOC_FAIL, 1);
+				else
+					return (0);
+			}
+			else if (*arg == ROOT_FOLDER_CHAR)
+			{
+				config->options |= ROOT_FOLDER;
+				if (chdir(param) < 0)
+					return ft_error(exec_name, "-f", CHDIR_FAILED, 1);
+				else
+					return (0);
+			}
+			else
+				return (ft_error(exec_name, "", UNKNOW_ARG, 1));
 		}
 		else
-			return (1);
+			return (ft_error(exec_name, "", UNKNOW_ARG, 1));
 		arg++;
 	}
 	return (0);
 }
 
-static int	set_root(t_config *c)
+/*
+** Check the port_str
+** Return 0 if port number is valid
+** Display an error message and return 1 if the port number is not valid
+** Invalid: port > SHORTMAX || port < 0 || non digit char
+*/
+
+static int	valid_port_number(char const *exec_name, int *ac, char **av)
 {
-	if (getcwd(c->root, PATH_MAX))
+	int		i;
+	char	*port_str;
+
+	if (*ac == 2 || *ac == 3)
+		port_str = av[*ac - 1];
+	else
+		return (ft_error(exec_name, "", BAD_PORT, 1));
+	i = 0;
+	if (ft_strlen(port_str) > 5)
+		return (ft_error(exec_name, "", BAD_PORT, 1));
+	while (port_str && port_str[i])
+	{
+		if (ft_isdigit((int)port_str[i]))
+			i++;
+		else
+			return (ft_error(exec_name, "", BAD_PORT, 1));
+	}
+	if (ft_atoi(port_str) > USHORTMAX)
+		return (ft_error(exec_name, "", BAD_PORT, 1));
+	return (0);
+}
+
+/*
+** Get and set the current working directory in *config
+*/
+
+static int	set_root(t_config *config)
+{
+	if (getcwd(config->root, PATH_MAX))
 		return (0);
 	else
 		return (ft_error("options_handling", "set_root()", GETCWD_FAILED, 1));
@@ -82,20 +143,23 @@ int			get_options(t_config *config, int *ac, char **av)
 
 	i = 1;
 	n = 0;
-	if (set_root(config))
-		return (1);
 	while (i < *ac)
 	{
 		if (av[i][0] == '-')
 		{
-			if (set_options(av[i], config) > 0)
-				return (ft_error(av[0], "", UNKNOW_ARG, 1));
+			if (switch_set_options(av[0], av[i], av[i + 1], config) > 0)
+				return (1);
 			av[i] = NULL;
-			n++;
+			av[i + 1] = NULL;
+			n += 2;
+			i += 2;
 		}
-		i++;
+		else
+			i++;
 	}
-	del_null_params(*ac, av);
-	*ac -= n;
+	del_null_params(ac, av, n);
+	if (valid_port_number(av[0], ac, av) > 0 || set_root(config) > 0)
+		return (1);
+	config->ip_str = config->ip_str ? config->ip_str : DEFAULT_IP_BIND;
 	return (0);
 }

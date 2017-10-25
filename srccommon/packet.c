@@ -41,10 +41,11 @@ void	forge_packet(t_packet *packet, unsigned int size_type,
 	// printf("type:%hu\n", type);
 	ft_bzero((char *)packet, MAX_PACKET_SIZE);
 	packet->magic = htonl(MAGIC);
-	if (packet->magic == htonl(MAGIC))
-		packet->chunks_number = get_chunk_number(st_size);
-	else
-		packet->chunks_number = my_swap64(get_chunk_number(st_size));
+	// if (packet->magic == htonl(MAGIC))
+	// 	packet->chunks_number = get_chunk_number(st_size);
+	// else
+	// packet->chunks_number = my_swap64(get_chunk_number(st_size));
+	packet->chunks_number = htonl(get_chunk_number(st_size));
 	packet->size = htons(size);
 	packet->type = htons(type);
 	ft_memcpy(packet->data, data, size);
@@ -56,8 +57,9 @@ void	forge_packet(t_packet *packet, unsigned int size_type,
 
 void	unforge_packet(t_packet *packet)
 {
-	if (packet->magic != ntohl(MAGIC))
-		packet->chunks_number = my_swap64(packet->chunks_number);
+	// if (packet->magic != ntohl(MAGIC))
+		// packet->chunks_number = my_swap64(packet->chunks_number);
+	packet->chunks_number = ntohl(packet->chunks_number);
 	packet->magic = ntohl(packet->magic);
 	packet->size = ntohs(packet->size);
 	packet->type = ntohs(packet->type);

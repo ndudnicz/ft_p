@@ -12,7 +12,7 @@
 */
 
 # define MAGIC_SIZE			(sizeof(unsigned int))
-# define CHUNK_N_SIZE		(sizeof(unsigned long int))
+# define CHUNK_N_SIZE		(sizeof(unsigned int))
 # define SIZE_SIZE			(sizeof(unsigned short))
 # define TYPE_SIZE			(sizeof(unsigned short))
 # define HEADER_SIZE		(MAGIC_SIZE + SIZE_SIZE + TYPE_SIZE + CHUNK_N_SIZE)
@@ -56,7 +56,7 @@
 typedef struct	s_packet
 {
 	unsigned int	magic;
-	unsigned long	chunks_number;
+	unsigned int	chunks_number;
 	unsigned short	size;
 	unsigned short	type;
 	char			data[MAX_DATA_SIZE];
