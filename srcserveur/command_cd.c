@@ -30,7 +30,7 @@ static int	array_length(char const **array)
 	return (i);
 }
 
-static int	free_all_split(char const **aa, char const**bb, char const **cc)
+static int	free_all_split(char const **aa, char const **bb, char const **cc)
 {
 	int		i;
 	char	**a;
