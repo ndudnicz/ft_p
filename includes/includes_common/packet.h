@@ -61,6 +61,7 @@
 # define ST_LLS		(0x0120 | T_MASK_CMD_LOCAL)
 # define ST_LCD		(0x0140 | T_MASK_CMD_LOCAL)
 # define ST_LPWD	(0x0180 | T_MASK_CMD_LOCAL)
+# define ST_QUIT	0xffff
 
 /*
 ** T_MASK_DATA subtypes

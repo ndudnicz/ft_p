@@ -3,7 +3,9 @@
 
 # define INTERNAL_ERROR "ERROR: INTERNAL ERROR"
 # define CMD_CD_INVALID_PATH "ERROR: COMMAND CD: INVALID PATH"
+# define INVALID_PATH "INVALID PATH"
 # define CMD_CD_SUCCESS "SUCCESS: COMMAND CD"
+# define CMD_LCD_SUCCESS "SUCCESS: COMMAND LCD"
 # define SEND_FAIL ""
 # define FORK_FAIL "Unable to fork more process."
 # define READ_FAIL "Unable to read incoming data."
@@ -24,5 +26,6 @@
 # define CHDIR_FAILED "Invalid path."
 # define BIND_FAILED "Invalid bind ip."
 # define BAD_PORT "Invalid port number."
+# define UNKNOWN_CMD "UNKNOWN COMMAND"
 
 #endif

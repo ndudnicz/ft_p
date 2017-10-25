@@ -64,5 +64,6 @@ char		*ft_strdup(char const *s);
 char		*ft_ltoa(long int n);
 char		*ft_strjoin_free(char const *s1, char const *s2,
 								char const a, char const b);
+int			ft_array_length(char const **array);
 
 #endif

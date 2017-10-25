@@ -12,6 +12,7 @@
 
 #include <stdlib.h>
 #include <sys/syslimits.h>
+#include <stdio.h>//
 
 #include "config.h"
 #include "packet.h"
@@ -20,16 +21,6 @@
 #include "libftasm.h"
 #include "error_message.h"
 #include "error_master.h"
-
-static int	array_length(char const **array)
-{
-	int		i;
-
-	i = 0;
-	while (array && array[i])
-		i++;
-	return (i);
-}
 
 static int	free_all_split(char const **aa, char const **bb, char const **cc)
 {
@@ -44,11 +35,11 @@ static int	free_all_split(char const **aa, char const **bb, char const **cc)
 	i = 0;
 	while (a[i] || b[i] || c[i])
 	{
-		if (i < array_length(aa))
+		if (i < ft_array_length(aa))
 			free(a[i]);
-		if (i < array_length(bb))
+		if (i < ft_array_length(bb))
 			free(b[i]);
-		if (i < array_length(cc))
+		if (i < ft_array_length(cc))
 			free(c[i]);
 		i++;
 	}
@@ -70,7 +61,7 @@ static int	valid_user_input(t_config *config, char const *root,
 	i = 0;
 	if (!array_root || !array_input || !array_cwd)
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0) || 1);
-	cursor = array_length(array_cwd);
+	cursor = ft_array_length(array_cwd);
 	while (array_input[i])
 	{
 		if (!ft_strcmp(array_input[i], ".."))
@@ -79,7 +70,7 @@ static int	valid_user_input(t_config *config, char const *root,
 			cursor++;
 		i++;
 	}
-	if (cursor < array_length(array_root))
+	if (cursor < ft_array_length(array_root))
 		return (1);
 	else
 		return (free_all_split(array_root, array_input, array_cwd));
@@ -95,16 +86,17 @@ int			lcd(t_config *config, char *arg)
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
 	if (valid_user_input(config, config->root, arg, cwd) > 0)
-		return (ft_error("LCD", CMD_CD_INVALID_PATH, "client", 0));
+		return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
 	if (data_len == 0)
 		new_path = config->root;
 	else
 		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), arg, 1, 0);
 	if (chdir(new_path) < 0)
-		return (ft_error("LCD", CMD_CD_SUCCESS, "client", 0));
+		return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
 	if (data_len)
 		free(new_path);
-	return (ft_error("LCD", CMD_CD_SUCCESS, "client", 0));
+	printf("%s\n", CMD_LCD_SUCCESS);
+	return (0);
 }

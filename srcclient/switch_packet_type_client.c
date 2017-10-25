@@ -20,6 +20,7 @@ static int	data_handling(t_config *config, t_packet *packet)
 
 int		switch_packet_type_client_no_fork(t_config *config)
 {
+		return (0);
 
 }
 

@@ -17,10 +17,17 @@
 #include "switch_packet_type_client.h"
 #include "error_master.h"//
 #include "exec_cmd_local.h"
+#include "error_message.h"
 
-static unsigned short get_type(char const *str)
+static unsigned short get_type(char const *str, char const *arg)
 {
-	if (!ft_strcmp_nocase("ls", str))
+	unsigned int const	arg_len = ft_strlen(arg);
+
+	if (!str)
+		return ((unsigned short)ft_error("ERROR", "INPUT", UNKNOWN_CMD, 0));
+	else if (!ft_strcmp_nocase("quit", str) && arg_len == 0)
+		return (ST_QUIT);
+	else if (!ft_strcmp_nocase("ls", str) && arg_len == 0)
 		return (ST_LS);
 	else if (!ft_strcmp_nocase("cd", str))
 		return (ST_CD);
@@ -28,51 +35,57 @@ static unsigned short get_type(char const *str)
 		return (ST_GET);
 	else if (!ft_strcmp_nocase("put", str))
 		return (ST_PUT);
-	else if (!ft_strcmp_nocase("pwd", str))
+	else if (!ft_strcmp_nocase("pwd", str) && arg_len == 0)
 		return (ST_PWD);
-	else if (!ft_strcmp_nocase("lls", str))
+	else if (!ft_strcmp_nocase("lls", str) && arg_len == 0)
 		return (ST_LLS);
-	else if (!ft_strcmp_nocase("lcd", str))
+	else if (!ft_strcmp_nocase("lcd", str) && arg_len == 0)
 		return (ST_LCD);
-	else if (!ft_strcmp_nocase("lpwd", str))
+	else if (!ft_strcmp_nocase("lpwd", str) && arg_len == 0)
 		return (ST_LPWD);
 	else
-	{
-		ft_error_child("ERROR", "INPUT", "UNKNOWN COMMAND");
-		return (0);
-	}
+		return ((unsigned short)ft_error("ERROR", "INPUT", UNKNOWN_CMD, 0));
 }
 
-static int	treat_input(t_input *input, char *line)
+static unsigned short	treat_input(t_input *input, char *line)
 {
 	char const	*s = ft_strtrim(line);
 	char const	**array = (char const**)ft_strsplit(s, ' ');
 	int			i;
 
 	i = 0;
-	free(line);
-	// input->cmd = 0;
-	// input->arg = NULL;
+	input->arg = NULL;
+	if (line)
+		free(line);
 	if (!array)
 		return (0);
 	else
 	{
-		input->cmd = get_type(array[0]);
-		input->arg = array[1] ? ft_strdup((char*)array[1]) : ft_strdup("");
+		if (ft_array_length(array) > 1)
+			input->arg = (char*)array[1];
+		else
+			input->arg = ft_strdup("");
+		input->cmd = get_type(array[0], input->arg);
+		while (array[i])
+		{
+			if (i != 1)
+				free((void*)array[i]);
+			i++;
+		}
+		if (array)
+			free((void*)array);
+		if (s)
+			free((void*)s);
 	}
-	while (array[i])
-	{
-		free((void*)array[i]);
-		i++;
-	}
-	free((void*)array);
-	free((void*)s);
-	return (1);
+	return (input->cmd);
 }
 
 static int	should_fork(unsigned short type)
 {
-	return (!(type == ST_LCD || type == ST_LPWD));
+	if (type == ST_LCD || type == ST_LPWD)
+		return (0);
+	else
+		return (1);
 }
 
 /*
@@ -93,8 +106,9 @@ int		user_input_loop(t_config *config)
 	ft_putstr(PROMPT);
 	while (gnl(0, &line) > 0)
 	{
-		treat_input(&input, line);
-		if (input.cmd && !(input.cmd & T_MASK_CMD_LOCAL))
+		if (treat_input(&input, line) == ST_QUIT)
+			break ;
+		if (input.arg && input.cmd && !(input.cmd & T_MASK_CMD_LOCAL))
 		{
 			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 | input.cmd, input.arg, 1);
 			send_packet(config, packet);
@@ -102,11 +116,10 @@ int		user_input_loop(t_config *config)
 			if (switch_packet_type_client(config, packet) > 0)
 				return (1);
 			ft_bzero((char*)packet, packet->size);
-			free(input.arg);
 		}
 		else if (input.cmd)
 		{
-			if (should_fork(packet->type) > 1)
+			if (should_fork(input.cmd) > 0)
 			{
 				pid = fork();
 				if (pid == 0)
@@ -115,12 +128,10 @@ int		user_input_loop(t_config *config)
 					wait4(pid, &stat_loc, 0, NULL);
 			}
 			else
-			{
 				exec_cmd_local_no_fork(config, &input);
-
-			}
-			free(input.arg);
 		}
+		if (input.arg)
+			free(input.arg);
 		ft_putstr(PROMPT);
 	}
 	free(packet);

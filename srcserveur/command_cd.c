@@ -21,16 +21,6 @@
 #include "libftasm.h"
 #include "error_message.h"
 
-static int	array_length(char const **array)
-{
-	int		i;
-
-	i = 0;
-	while (array && array[i])
-		i++;
-	return (i);
-}
-
 static int	free_all_split(char const **aa, char const **bb, char const **cc)
 {
 	int		i;
@@ -44,11 +34,11 @@ static int	free_all_split(char const **aa, char const **bb, char const **cc)
 	i = 0;
 	while (a[i] || b[i] || c[i])
 	{
-		if (i < array_length(aa))
+		if (i < ft_array_length(aa))
 			free(a[i]);
-		if (i < array_length(bb))
+		if (i < ft_array_length(bb))
 			free(b[i]);
-		if (i < array_length(cc))
+		if (i < ft_array_length(cc))
 			free(c[i]);
 		i++;
 	}
@@ -70,7 +60,7 @@ static int	valid_user_input(t_config *config, char const *root,
 	i = 0;
 	if (!array_root || !array_input || !array_cwd)
 		return (send_message(config, INTERNAL_ERROR, "serveur") || 1);
-	cursor = array_length(array_cwd);
+	cursor = ft_array_length(array_cwd);
 	while (array_input[i])
 	{
 		if (!ft_strcmp(array_input[i], ".."))
@@ -79,7 +69,7 @@ static int	valid_user_input(t_config *config, char const *root,
 			cursor++;
 		i++;
 	}
-	if (cursor < array_length(array_root))
+	if (cursor < ft_array_length(array_root))
 		return (1);
 	else
 		return (free_all_split(array_root, array_input, array_cwd));
