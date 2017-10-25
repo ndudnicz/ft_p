@@ -16,8 +16,6 @@ void	switch_packet_type_server(t_config *config, t_packet *packet)
 	{
 		if (packet->type == ST_LS)
 			ls(config);
-		else if (packet->type == ST_CD)
-			cd(config, packet);
 		else if (packet->type == ST_PWD)
 			pwd(config, packet);
 		else
@@ -25,4 +23,13 @@ void	switch_packet_type_server(t_config *config, t_packet *packet)
 	}
 	else
 		exit(0);
+}
+
+void	switch_packet_type_server_no_fork(t_config *config, t_packet *packet)
+{
+	if (packet->type & T_MASK_CMD)
+	{
+		if (packet->type == ST_CD)
+			cd(config, packet);
+	}
 }

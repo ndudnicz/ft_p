@@ -62,5 +62,7 @@ int			gnl(int const fd, char **line);
 int			ft_atoi_base(char *str, int base);
 char		*ft_strdup(char const *s);
 char		*ft_ltoa(long int n);
+char		*ft_strjoin_free(char const *s1, char const *s2,
+								char const a, char const b);
 
 #endif

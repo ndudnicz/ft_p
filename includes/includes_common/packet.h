@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   packet.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/10/25 11:41:21 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/10/25 11:41:22 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PACKET_H
 # define PACKET_H
 
@@ -30,12 +42,14 @@
 # define T_MESSAGE				0x0001
 # define T_DATA					0x0002
 # define T_CLOSE_CONNECTION		0x0003
+
 /*
 ** T_SPEC_TYPE
 */
 # define T_MASK_CMD			0x01ff
 # define T_MASK_CMD_LOCAL	0x0001
 # define T_MASK_DATA		0x02ff
+
 /*
 ** T_MASK_CMD subtypes
 */
@@ -47,23 +61,24 @@
 # define ST_LLS		(0x0120 | T_MASK_CMD_LOCAL)
 # define ST_LCD		(0x0140 | T_MASK_CMD_LOCAL)
 # define ST_LPWD	(0x0180 | T_MASK_CMD_LOCAL)
+
 /*
 ** T_MASK_DATA subtypes
 */
 # define ASK_NEW_DATA_CONNECTION	0x0201
 # define SEND_NEW_DATA_CONNECTION	0x0202
 
-typedef struct	s_packet
+typedef struct		s_packet
 {
 	unsigned int	magic;
 	unsigned int	chunks_number;
 	unsigned short	size;
 	unsigned short	type;
 	char			data[MAX_DATA_SIZE];
-}				t_packet;
+}					t_packet;
 
 void				forge_packet(t_packet *packet, unsigned int size_type,
-								char const* data, unsigned long int st_size);
+								char const *data, unsigned long int st_size);
 
 void				unforge_packet(t_packet *packet);
 

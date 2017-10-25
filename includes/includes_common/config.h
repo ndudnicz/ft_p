@@ -4,8 +4,18 @@
 // # include <linux/limits.h>//
 #include <sys/syslimits.h>
 
-# define PROMPT				"ftp> "
+# define PROMPT				"\033[90mftp>\033[39m "
 # define DEFAULT_IP_BIND	"127.0.0.1"
+
+/*
+** Ephemeral port range,
+** suggested by the Internet Assigned Numbers Authority (IANA).
+** 49152 <= port <= 65535
+** Used for data port definition.
+*/
+
+# define LOW_BOUND_PORT_RANGE	49152
+# define HIGH_BOUND_PORT_RANGE	65535
 
 /*
 ** Options

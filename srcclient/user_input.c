@@ -85,7 +85,7 @@ int		user_input_loop(t_config *config)
 
 	packet = (t_packet*)malloc(sizeof(t_packet)); // check malloc ret
 	line = NULL;
-	ft_putstr("ftp> ");
+	ft_putstr(PROMPT);
 	while (gnl(0, &line) > 0)
 	{
 		treat_input(&input, line);
@@ -111,7 +111,7 @@ int		user_input_loop(t_config *config)
 			}
 			free(input.arg);
 		}
-		ft_putstr("ftp> ");
+		ft_putstr(PROMPT);
 	}
 	free(packet);
 	ft_putendl("Bye!");

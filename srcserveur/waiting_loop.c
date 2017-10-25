@@ -16,6 +16,11 @@
 #include "error_child.h"
 #include "error_master.h"
 
+static int	should_fork(unsigned short type)
+{
+	return (!(type == ST_CD));
+}
+
 /*
 ** Send a welcome msg to the new client and wait for commands.
 ** Fork a new process that will execute the command and wait4 until the
@@ -37,16 +42,21 @@ static int	child_waiting_loop(t_config *config)
 		pid = 0;
 		packet = (t_packet*)config->buf;
 		unforge_packet(packet);
-		if ((pid = fork()) < 0)
-			ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
-		else if (pid == 0)
-			switch_packet_type_server(config, packet);
-		else
+		if (should_fork(packet->type))
 		{
-			wait4(pid, &stat_loc, 0, NULL);
-			// if (WIFEXITED(stat_loc))
-				// ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
+			if ((pid = fork()) < 0)
+				ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
+			else if (pid == 0)
+				switch_packet_type_server(config, packet);
+			else
+			{
+				wait4(pid, &stat_loc, 0, NULL);
+				// if (WIFEXITED(stat_loc))
+					// ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
+			}
 		}
+		else
+			switch_packet_type_server_no_fork(config, packet);
 		ft_bzero(config->buf, MAX_PACKET_SIZE);
 	}
 	close(config->socket.cmd);
