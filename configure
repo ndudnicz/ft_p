@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [ "$(uname -s)" = "Darwin" ]
+then
+  HEADER=syslimits_macosx.hh
+else
+  HEADER=syslimits_linux.hh
+fi
+cd includes/dcommon/
+ln -sf "$HEADER" my_syslimits.h
+exit 0

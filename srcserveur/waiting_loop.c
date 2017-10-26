@@ -3,6 +3,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
+#include <stdio.h>
 
 #include "config.h"
 #include "packet.h"
@@ -30,7 +31,6 @@ static int	should_fork(unsigned short type)
 
 static int	child_waiting_loop(t_config *config)
 {
-	// char				buf[MAX_PACKET_SIZE] = {0};
 	int			r;
 	t_packet	*packet;
 	int			pid;
@@ -50,11 +50,7 @@ static int	child_waiting_loop(t_config *config)
 			else if (pid == 0)
 				switch_packet_type_server(config, packet);
 			else
-			{
 				wait4(pid, &stat_loc, 0, NULL);
-				// if (WIFEXITED(stat_loc))
-					// ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
-			}
 		}
 		else
 			switch_packet_type_server_no_fork(config, packet);
@@ -70,42 +66,41 @@ static int	child_waiting_loop(t_config *config)
 ** a new connection
 ** Return 1 and display an error message if fails
 */
-#include <errno.h>//
-#include <stdio.h>
 int			master_waiting_loop(t_config *config)
 {
 	int					pid;
 	struct sockaddr_in	csin;
 	unsigned int		cslen = sizeof(csin);
 	t_config			*fork_config;
+	int					stat_loc;
 
-	while ((config->socket.cmd = accept(config->socket.server_master, (struct sockaddr*)&csin, &cslen))/* > 0*/)
+	while ((config->socket.cmd = accept(config->socket.server_master, (struct sockaddr*)&csin, &cslen)))
 	{
 		pid = 0;
 		if ((pid = fork()) < 0)
 			ft_error_child("master_waiting_loop", "fork()", FORK_FAIL);
 		if (config->socket.cmd > 0 && pid == 0)
 		{
-			if (!(fork_config = configdup(config)))
-				return (ft_error("master_waiting_loop", "configcpy", MALLOC_FAIL, 1));
-			else
+			if (!fork())
 			{
-				// ft_putendl("fork born");
-				// fork_config->tmp_file_str = ft_ltoa((long)fork_config);
-				child_waiting_loop(fork_config);
+				if (!(fork_config = configdup(config)))
+				{
+					ft_error_child("master_waiting_loop", "configcpy", MALLOC_FAIL);
+					exit(0);
+				}
+				else
+					child_waiting_loop(fork_config);
+				free_config(config);
+				exit(0);
 			}
-			// ft_putendl("fork die");
-			free(fork_config->current_path);
-			free(fork_config->buf);
-			// free(fork_config->tmp_file_str);
-			free(fork_config);
-			return (0);
+			else
+				exit(0);
 		}
+		else if (config->socket.cmd > 0 && pid)
+			wait4(pid, &stat_loc, 0, NULL);
 		if (config->socket.cmd < 0)
-		{
 			printf("Accept() error, exit.\n");
-			return 0;
-		}
+		// return 0;
 	}
 	close(config->socket.server_master);
 	return (0);

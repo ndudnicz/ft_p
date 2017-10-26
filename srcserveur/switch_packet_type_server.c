@@ -12,12 +12,15 @@
 
 void	switch_packet_type_server(t_config *config, t_packet *packet)
 {
-	if (packet->type & T_MASK_CMD)
+	print_packet(packet, 1);
+	if (packet->type & T_MASK_CMD || packet->type & T_MASK_DATA)
 	{
 		if (packet->type == ST_LS)
 			ls(config);
 		else if (packet->type == ST_PWD)
 			pwd(config, packet);
+		else if (packet->type == ASK_NEW_DATA_CONNECTION)
+			put(config, packet);
 		else
 			exit(0);
 	}

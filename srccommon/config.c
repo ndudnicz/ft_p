@@ -46,3 +46,11 @@ t_config	*create_config(char const*exec_name)
 	}
 	return (new);
 }
+
+int			free_config(t_config *config)
+{
+	free(config->buf);
+	free(config->current_path);
+	free(config);
+	return (0);
+}

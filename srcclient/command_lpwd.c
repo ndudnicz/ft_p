@@ -1,7 +1,5 @@
 #include <stdlib.h>
-#include <sys/syslimits.h>
 #include <stdio.h>
-// #include <linux/limits.h>//
 
 #include "libftasm.h"
 #include "libft.h"//
@@ -9,6 +7,7 @@
 #include "packet.h"
 #include "error_message.h"
 #include "error_child.h"
+#include "my_syslimits.h"
 
 /*
 ** Get the current working directory and send it to the client

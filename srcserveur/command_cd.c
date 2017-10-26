@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <sys/syslimits.h>
 
 #include "config.h"
 #include "packet.h"
@@ -20,6 +19,7 @@
 #include "libft.h"
 #include "libftasm.h"
 #include "error_message.h"
+#include "my_syslimits.h"
 
 static int	free_all_split(char const **aa, char const **bb, char const **cc)
 {

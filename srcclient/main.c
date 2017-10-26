@@ -43,11 +43,6 @@ int		main(int ac, char **av)
 		else if (user_input_loop(config) > 0)
 			return (1);
 		else
-		{
-			free(config->buf);
-			free(config->current_path);
-			free(config);
-			return (0);
-		}
+			return (free_config(config));
 	}
 }

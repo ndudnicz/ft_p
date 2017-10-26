@@ -2,7 +2,7 @@
 #include <arpa/inet.h>//
 #include <sys/socket.h>
 
-#include "config.h"
+#include "config.h"//
 #include "packet.h"
 #include "error_child.h"
 #include "debug.h"//
@@ -15,12 +15,12 @@
 ** Display an error message and return 1 if fails.
 */
 
-int		send_packet(t_config *config, t_packet *packet)
+int		send_packet(int const socket, t_packet *packet)
 {
 	int		ret;
 
-	ret = send(config->socket.cmd, packet, packet->size, 0);
+	ret = send(socket, packet, packet->size, 0);
 	if (ret < 0)
-		ft_error_child(config->ip_str, "sendpacket()", SEND_FAIL);
+		ft_error_child("send_cmd_packet", "sendpacket()", SEND_FAIL);
 	return (ret < 0 ? 1 : 0);
 }

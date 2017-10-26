@@ -19,33 +19,26 @@ static unsigned long int	my_swap64(unsigned long int n)
 ** that need to be sent
 */
 
-unsigned long int	get_chunk_number(unsigned long int st_size)
+unsigned int	get_chunk_number(unsigned long int st_size)
 {
-	return ((st_size / (MAX_DATA_SIZE + 1)) + 1);
+	return ((unsigned int)((st_size / (MAX_DATA_SIZE + 1)) + 1));
 }
 
 /*
 ** Normalize host values to network values
 */
 
-void	forge_packet(t_packet *packet, unsigned int size_type,
-								char const* data, unsigned long int st_size)
+void			forge_packet(t_packet *packet, unsigned int size_type,
+								char const* data, unsigned int chunks)
 {
 	unsigned short size;
 	unsigned short type;
 
 	size = (unsigned short)((size_type) >> 16);
 	type = (unsigned short)(size_type);
-	// printf("size_type:%08x\n", size_type);
-	// printf("size:%hu\n", size);
-	// printf("type:%hu\n", type);
 	ft_bzero((char *)packet, MAX_PACKET_SIZE);
 	packet->magic = htonl(MAGIC);
-	// if (packet->magic == htonl(MAGIC))
-	// 	packet->chunks_number = get_chunk_number(st_size);
-	// else
-	// packet->chunks_number = my_swap64(get_chunk_number(st_size));
-	packet->chunks_number = htonl(get_chunk_number(st_size));
+	packet->chunks_number = htonl(chunks);
 	packet->size = htons(size);
 	packet->type = htons(type);
 	ft_memcpy(packet->data, data, size);
@@ -57,8 +50,6 @@ void	forge_packet(t_packet *packet, unsigned int size_type,
 
 void	unforge_packet(t_packet *packet)
 {
-	// if (packet->magic != ntohl(MAGIC))
-		// packet->chunks_number = my_swap64(packet->chunks_number);
 	packet->chunks_number = ntohl(packet->chunks_number);
 	packet->magic = ntohl(packet->magic);
 	packet->size = ntohs(packet->size);

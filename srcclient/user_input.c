@@ -34,7 +34,7 @@ static unsigned short get_type(char const *str, char const *arg)
 	else if (!ft_strcmp_nocase("get", str))
 		return (ST_GET);
 	else if (!ft_strcmp_nocase("put", str))
-		return (ST_PUT);
+		return (ASK_NEW_DATA_CONNECTION);
 	else if (!ft_strcmp_nocase("pwd", str) && arg_len == 0)
 		return (ST_PWD);
 	else if (!ft_strcmp_nocase("lls", str) && arg_len == 0)
@@ -110,8 +110,10 @@ int		user_input_loop(t_config *config)
 			break ;
 		if (input.arg && input.cmd && !(input.cmd & T_MASK_CMD_LOCAL))
 		{
+		// print_input(&input);
 			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 | input.cmd, input.arg, 1);
-			send_packet(config, packet);
+			// print_forged_packet(packet, 1);
+			send_packet(config->socket.cmd, packet);
 			receive_cmd_packet(config, packet);
 			if (switch_packet_type_client(config, packet) > 0)
 				return (1);

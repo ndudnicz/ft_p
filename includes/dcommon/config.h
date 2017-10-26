@@ -1,8 +1,7 @@
 #ifndef CONFIG_H
 # define CONFIG_H
 
-// # include <linux/limits.h>//
-#include <sys/syslimits.h>
+#include "my_syslimits.h"
 
 # define PROMPT				"\033[90mftp>\033[39m "
 # define DEFAULT_IP_BIND	"127.0.0.1"
@@ -91,5 +90,6 @@ typedef struct	s_config // malloc
 
 t_config	*configdup(t_config *c);
 t_config	*create_config(char const*exec_name);
+int			free_config(t_config *config);
 
 #endif

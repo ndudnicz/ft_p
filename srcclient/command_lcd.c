@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <sys/syslimits.h>
 #include <stdio.h>//
 
 #include "config.h"
@@ -21,6 +20,7 @@
 #include "libftasm.h"
 #include "error_message.h"
 #include "error_master.h"
+#include "my_syslimits.h"
 
 static int	free_all_split(char const **aa, char const **bb, char const **cc)
 {

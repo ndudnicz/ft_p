@@ -18,9 +18,9 @@ OBJ_COMMON_DIR = objcommon
 
 # INCLUDES FOLDERS ============================================================#
 
-PATH_CLIENT_INCLUDES = includes/includes_client
-PATH_SERVEUR_INCLUDES = includes/includes_serveur
-PATH_COMMON_INCLUDES = includes/includes_common
+PATH_CLIENT_INCLUDES = includes/dclient
+PATH_SERVEUR_INCLUDES = includes/dserver
+PATH_COMMON_INCLUDES = includes/dcommon
 
 # SOURCES LIST ================================================================#
 
@@ -32,7 +32,8 @@ SRC_CLIENT = main.c user_input.c establish_connection.c exec_cmd_local.c \
 			command_lpwd.c
 
 SRC_SERVEUR = main.c switch_packet_type_server.c open_connection.c \
-			waiting_loop.c send_message.c command_ls.c command_cd.c command_pwd.c
+			waiting_loop.c send_message.c command_ls.c command_cd.c \
+			command_pwd.c command_put.c
 
 # OBJECTS LIST ================================================================#
 
@@ -70,7 +71,7 @@ $(SERVEUR): $(LIBCOMMON) $(OBJ_SERVEUR)
 	$(CC) -o $@ $(OBJ_SERVEUR) -L. -lft -lcommon -lftasm
 
 $(OBJ_SERVEUR_DIR)/%.o: $(SRC_SERVEUR_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/ -I includes/includes_client ##################################################################################
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/ -I includes/dclient ##################################################################################
 
 # LIBCOMMON RULES =============================================================#
 
@@ -79,4 +80,4 @@ $(LIBCOMMON): $(OBJ_COMMON)
 	ar rc $(LIBCOMMON) $(OBJ_COMMON)
 
 $(OBJ_COMMON_DIR)/%.o: $(SRC_COMMON_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/includes_client
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/dclient

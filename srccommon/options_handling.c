@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 // #include <linux/limits.h>//
-#include <sys/syslimits.h>
+// #include <sys/syslimits.h>
 #include <unistd.h>
 
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "libftasm.h"
 #include "my_limits.h"
 #include "error_message.h"
+#include "my_syslimits.h"
 
 /*
 ** Moves NULLs argv to the end of the array. Options are set in config

@@ -66,7 +66,7 @@
 /*
 ** T_MASK_DATA subtypes
 */
-# define ASK_NEW_DATA_CONNECTION	0x0201
+# define ASK_NEW_DATA_CONNECTION	0x0200
 # define SEND_NEW_DATA_CONNECTION	0x0202
 
 typedef struct		s_packet
@@ -79,10 +79,10 @@ typedef struct		s_packet
 }					t_packet;
 
 void				forge_packet(t_packet *packet, unsigned int size_type,
-								char const *data, unsigned long int st_size);
+								char const *data, unsigned int chunks);
 
 void				unforge_packet(t_packet *packet);
 
-unsigned long int	get_chunk_number(unsigned long int st_size);
+unsigned int		get_chunk_number(unsigned long int st_size);
 
 #endif

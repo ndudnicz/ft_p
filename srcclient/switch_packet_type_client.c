@@ -8,13 +8,13 @@
 
 static int	cmd_handling(t_config *config, t_packet *packet)
 {
-	ft_putstr("COMMAND HANDLING\n");
+	print_packet(packet, 1);
 	return (0);
 }
 
 static int	data_handling(t_config *config, t_packet *packet)
 {
-	ft_putstr("DATA HANDLING\n");
+	print_packet(packet, 1);
 	return (0);
 }
 
