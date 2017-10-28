@@ -1,6 +1,6 @@
-#ifndef ERROR_MESSAGES_H
-# define ERROR_MESSAGES_H
+#ifndef ERROR_H
 
+# define ERROR_H
 # define INTERNAL_ERROR "ERROR: INTERNAL ERROR"
 # define CMD_CD_INVALID_PATH "ERROR: COMMAND CD: INVALID PATH"
 # define INVALID_PATH "INVALID PATH"
@@ -27,5 +27,12 @@
 # define BIND_FAILED "Invalid bind ip."
 # define BAD_PORT "Invalid port number."
 # define UNKNOWN_CMD "UNKNOWN COMMAND"
+
+
+int		ft_error(char const *exec_name, char const *filename,
+				char const *type, int ret);
+void	ft_error_child(char const *cmd, char const *filename, char const *type);
+int		error_handler_socket(t_config *config, char const *function, char const *msg);
+int		error_handler_local(t_config *config, char const *function, char const *msg);
 
 #endif

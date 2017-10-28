@@ -4,9 +4,7 @@
 #include "libft.h"
 #include "config.h"
 #include "packet.h"
-#include "error_child.h"
-#include "error_master.h"
-#include "error_message.h"
+#include "error.h"
 
 /*
 ** Create and return a copy of c.
@@ -21,6 +19,7 @@ t_config	*configdup(t_config *c)
 	if (!(new = (t_config*)malloc(size)))
 		return (NULL);
 	ft_memcpy(new, c, size);
+	new->options |= DUPED;
 	if (!(new->buf = (char*)malloc(MAX_PACKET_SIZE)))
 		return (NULL);
 	else if (!(new->current_path = ft_strdup(c->current_path)))

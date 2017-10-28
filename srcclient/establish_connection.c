@@ -3,7 +3,6 @@
 #include <arpa/inet.h>
 #include <stdlib.h>//
 
-#include "error_master.h"
 #include "config.h"
 #include "libftasm.h"
 #include "libft.h"
@@ -12,11 +11,11 @@
 #include "send_packet.h"
 #include "switch_packet_type_client.h"
 #include "debug.h"//
-#include "error_message.h"
+#include "error.h"
 
 /*
-** Try to establish a connection through the ip:port given as parameters.
-** Set connection->socket if success.
+** Try to establish a command connection through the ip:port
+** given as parameters.
 ** Return 0 if success
 ** Display an error and return 1 if fails.
 */
@@ -35,7 +34,7 @@ int			establish_connection(t_config *config, char const *ip_str,
 	/*CONFIG INIT*/
 	if ((config->socket.cmd = socket(PF_INET, SOCK_STREAM, proto->p_proto)) < 0)
 		return (ft_error("Client", "open_connection:", SOCKET_FAILED, 1));
-	if ((config->inet_addr = inet_addr("127.0.0.1")) == INADDR_NONE)
+	if ((config->inet_addr = inet_addr(ip_str)) == INADDR_NONE)
 		return (ft_error("Client", "open_connection:", INET_ADDR_FAILED, 1));
 	config->port.cmd = htons(ft_atoi(cmd_port_str));
 
@@ -48,10 +47,10 @@ int			establish_connection(t_config *config, char const *ip_str,
 		return (ft_error("Client", "establish_connection()", CONNECT_ERROR, 1));
 	if (!(config->current_path = ft_strdup(".")))
 		return (ft_error("Client", "", MALLOC_FAIL, 1));
-	if (receive_cmd_packet(config, packet))
+	if (receive_packet(config, config->socket.cmd, packet))
 		return (1);
 	// print_packet(packet, 1);
-	if (switch_packet_type_client(config, packet) > 0)
+	if (switch_packet_type_client(config, packet, NULL) > 0)
 		return (1);
 	free(packet);
 	printf("Connection done with: %s:%s\n", ip_str, cmd_port_str);

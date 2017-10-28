@@ -8,7 +8,7 @@
 #include "packet.h"
 #include "config.h"
 #include "switch_packet_type_server.h"
-#include "error_master.h"
+#include "error.h"
 #include "options_handling.h"
 #include "open_connection.h"
 #include "debug.h"//

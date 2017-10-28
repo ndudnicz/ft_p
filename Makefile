@@ -24,16 +24,18 @@ PATH_COMMON_INCLUDES = includes/dcommon
 
 # SOURCES LIST ================================================================#
 
-SRC_COMMON = debug.c packet.c my_pipe.c error_master.c options_handling.c \
-			error_child.c config.c receive_packet.c send_packet.c
+SRC_COMMON = debug.c packet.c my_pipe.c error.c options_handling.c \
+			config.c receive_packet.c send_packet.c send_data.c \
+			receive_data.c send_data.c establish_data_connection.c \
+			open_data_connection.c
 
 SRC_CLIENT = main.c user_input.c establish_connection.c exec_cmd_local.c \
 			switch_packet_type_client.c display_message.c command_lcd.c \
-			command_lpwd.c
+			command_lpwd.c command_put.c
 
 SRC_SERVEUR = main.c switch_packet_type_server.c open_connection.c \
 			waiting_loop.c send_message.c command_ls.c command_cd.c \
-			command_pwd.c command_put.c
+			command_pwd.c command_put.c valid_filename.c command_get.c
 
 # OBJECTS LIST ================================================================#
 
@@ -68,7 +70,7 @@ $(OBJ_CLIENT_DIR)/%.o: $(SRC_CLIENT_DIR)/%.c
 
 $(SERVEUR): $(LIBCOMMON) $(OBJ_SERVEUR)
 	make -sC libft
-	$(CC) -o $@ $(OBJ_SERVEUR) -L. -lft -lcommon -lftasm
+	$(CC) -o $@ $(OBJ_SERVEUR) -L. -lft -lcommon -lftasm libft.a
 
 $(OBJ_SERVEUR_DIR)/%.o: $(SRC_SERVEUR_DIR)/%.c
 	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/ -I includes/dclient ##################################################################################

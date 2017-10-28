@@ -1,6 +1,8 @@
+#include <arpa/inet.h>
+
 #include "packet.h"
 #include "libftasm.h"
-#include <arpa/inet.h>
+#include "libft.h"
 
 static unsigned long int	my_swap64(unsigned long int n)
 {
@@ -34,7 +36,7 @@ void			forge_packet(t_packet *packet, unsigned int size_type,
 	unsigned short size;
 	unsigned short type;
 
-	size = (unsigned short)((size_type) >> 16);
+	size = (unsigned short)(size_type >> 16);
 	type = (unsigned short)(size_type);
 	ft_bzero((char *)packet, MAX_PACKET_SIZE);
 	packet->magic = htonl(MAGIC);

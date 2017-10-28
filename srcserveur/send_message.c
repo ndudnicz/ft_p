@@ -4,9 +4,8 @@
 #include "config.h"
 #include "packet.h"
 #include "send_packet.h"
-#include "error_master.h"
 #include "debug.h"//
-#include "error_message.h"
+#include "error.h"
 
 int		send_message(t_config *config, char const *msg, char const *side)
 {

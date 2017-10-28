@@ -7,16 +7,14 @@
 #include "debug.h"//
 #include "libft.h"
 #include "libftasm.h"
-#include "error_child.h"
-#include "error_message.h"
+#include "error.h"
 
-int		receive_cmd_packet(t_config *config, t_packet *packet)
+int		receive_packet(t_config *config, int socket, t_packet *packet)
 {
 	int			ret;
 
 	ft_bzero(config->buf, MAX_PACKET_SIZE);
-	// if ((ret = read(config->socket.cmd, config->buf, MAX_PACKET_SIZE)) < 0)
-	if ((ret = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0)) < 0)
+	if ((ret = recv(socket, config->buf, MAX_PACKET_SIZE, 0)) < 0)
 		ft_error_child("receive_cmd_packet", "read()", READ_FAIL);
 	ft_memcpy(packet, config->buf, ret);
 	unforge_packet(packet);

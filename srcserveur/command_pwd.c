@@ -6,7 +6,7 @@
 #include "config.h"
 #include "packet.h"
 #include "send_message.h"
-#include "error_message.h"
+#include "error.h"
 #include "my_syslimits.h"
 
 /*

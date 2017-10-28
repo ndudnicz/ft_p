@@ -6,7 +6,7 @@
 #include "packet.h"
 #include "establish_connection.h"
 #include "user_input.h"
-#include "error_master.h"
+#include "error.h"
 #include "options_handling.h"
 
 // FLAGS DANS LE MAKEFILE!

@@ -28,7 +28,7 @@
 # define SIZE_SIZE			(sizeof(unsigned short))
 # define TYPE_SIZE			(sizeof(unsigned short))
 # define HEADER_SIZE		(MAGIC_SIZE + SIZE_SIZE + TYPE_SIZE + CHUNK_N_SIZE)
-# define MAX_PACKET_SIZE	65536
+# define MAX_PACKET_SIZE	0xffff
 # define MAX_DATA_SIZE		(MAX_PACKET_SIZE - HEADER_SIZE)
 
 /*
@@ -48,32 +48,33 @@
 */
 # define T_MASK_CMD			0x01ff
 # define T_MASK_CMD_LOCAL	0x0001
-# define T_MASK_DATA		0x02ff
+# define T_MASK_DATA		0x3fff
+
+/*
+** T_MASK_DATA subtypes
+*/
+# define ASK_NEW_DATA_CONNECTION	0x1000
+# define SEND_NEW_DATA_CONNECTION	0x2000
 
 /*
 ** T_MASK_CMD subtypes
 */
 # define ST_LS		0x0100
 # define ST_CD		0x0102
-# define ST_GET		0x0104
-# define ST_PUT		0x0108
+# define ST_GET		(0x0104 | ASK_NEW_DATA_CONNECTION)
+# define ST_PUT		(0x0108 | ASK_NEW_DATA_CONNECTION)
 # define ST_PWD		0x0110
 # define ST_LLS		(0x0120 | T_MASK_CMD_LOCAL)
 # define ST_LCD		(0x0140 | T_MASK_CMD_LOCAL)
 # define ST_LPWD	(0x0180 | T_MASK_CMD_LOCAL)
 # define ST_QUIT	0xffff
 
-/*
-** T_MASK_DATA subtypes
-*/
-# define ASK_NEW_DATA_CONNECTION	0x0200
-# define SEND_NEW_DATA_CONNECTION	0x0202
 
 typedef struct		s_packet
 {
 	unsigned int	magic;
 	unsigned int	chunks_number;
-	unsigned short	size;
+	unsigned short	size; // header + data
 	unsigned short	type;
 	char			data[MAX_DATA_SIZE];
 }					t_packet;

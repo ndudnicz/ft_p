@@ -18,8 +18,7 @@
 #include "debug.h"
 #include "libft.h"
 #include "libftasm.h"
-#include "error_message.h"
-#include "error_master.h"
+#include "error.h"
 #include "my_syslimits.h"
 
 static int	free_all_split(char const **aa, char const **bb, char const **cc)
@@ -85,8 +84,8 @@ int			lcd(t_config *config, char *arg)
 	cwd[0] = 0;
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
-	if (valid_user_input(config, config->root, arg, cwd) > 0)
-		return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
+	// if (valid_user_input(config, config->root, arg, cwd) > 0)
+		// return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
 	if (data_len == 0)
 		new_path = config->root;
 	else

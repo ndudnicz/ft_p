@@ -9,15 +9,13 @@
 #include "libftasm.h"
 #include "config.h"
 #include "user_input.h"
-#include "error_child.h"
 #include "packet.h"
 #include "debug.h"//
 #include "send_packet.h"
 #include "receive_packet.h"
 #include "switch_packet_type_client.h"
-#include "error_master.h"//
+#include "error.h"//
 #include "exec_cmd_local.h"
-#include "error_message.h"
 
 static unsigned short get_type(char const *str, char const *arg)
 {
@@ -32,14 +30,14 @@ static unsigned short get_type(char const *str, char const *arg)
 	else if (!ft_strcmp_nocase("cd", str))
 		return (ST_CD);
 	else if (!ft_strcmp_nocase("get", str))
-		return (ST_GET);
+		return (ASK_NEW_DATA_CONNECTION | ST_GET);
 	else if (!ft_strcmp_nocase("put", str))
-		return (ASK_NEW_DATA_CONNECTION);
+		return (ASK_NEW_DATA_CONNECTION | ST_PUT);
 	else if (!ft_strcmp_nocase("pwd", str) && arg_len == 0)
 		return (ST_PWD);
 	else if (!ft_strcmp_nocase("lls", str) && arg_len == 0)
 		return (ST_LLS);
-	else if (!ft_strcmp_nocase("lcd", str) && arg_len == 0)
+	else if (!ft_strcmp_nocase("lcd", str))
 		return (ST_LCD);
 	else if (!ft_strcmp_nocase("lpwd", str) && arg_len == 0)
 		return (ST_LPWD);
@@ -110,12 +108,11 @@ int		user_input_loop(t_config *config)
 			break ;
 		if (input.arg && input.cmd && !(input.cmd & T_MASK_CMD_LOCAL))
 		{
-		// print_input(&input);
 			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 | input.cmd, input.arg, 1);
-			// print_forged_packet(packet, 1);
 			send_packet(config->socket.cmd, packet);
-			receive_cmd_packet(config, packet);
-			if (switch_packet_type_client(config, packet) > 0)
+			receive_packet(config, config->socket.cmd, packet);
+			// print_packet(packet, 1);
+			if (switch_packet_type_client(config, packet, input.arg) > 0)
 				return (1);
 			ft_bzero((char*)packet, packet->size);
 		}

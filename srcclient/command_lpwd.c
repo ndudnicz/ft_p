@@ -5,12 +5,11 @@
 #include "libft.h"//
 #include "config.h"
 #include "packet.h"
-#include "error_message.h"
-#include "error_child.h"
+#include "error.h"
 #include "my_syslimits.h"
 
 /*
-** Get the current working directory and send it to the client
+** Get the current working directory and display it on stdout
 */
 
 int		lpwd(void)

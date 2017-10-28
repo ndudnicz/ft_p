@@ -14,9 +14,7 @@
 #include "receive_packet.h"
 #include "send_packet.h"
 #include "send_message.h"
-#include "error_child.h"
-#include "error_master.h"
-#include "error_message.h"
+#include "error.h"
 
 static int	should_fork(unsigned short type)
 {
@@ -35,6 +33,7 @@ static int	child_waiting_loop(t_config *config)
 	t_packet	*packet;
 	int			pid;
 	int			stat_loc;
+	t_config	*fork_config;
 
 	send_message(config, "Server says: Hello !", "Server");
 	ft_putendl("NEW CONNECTION ESTABLISHED!");
@@ -45,10 +44,10 @@ static int	child_waiting_loop(t_config *config)
 		unforge_packet(packet);
 		if (should_fork(packet->type))
 		{
-			if ((pid = fork()) < 0)
+			if ((pid = fork()) < 0 || !(fork_config = configdup(config)))
 				ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
 			else if (pid == 0)
-				switch_packet_type_server(config, packet);
+				switch_packet_type_server(fork_config, packet);
 			else
 				wait4(pid, &stat_loc, 0, NULL);
 		}

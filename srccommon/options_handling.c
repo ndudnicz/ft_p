@@ -16,10 +16,9 @@
 
 #include "config.h"
 #include "libft.h"
-#include "error_master.h"
+#include "error.h"
 #include "libftasm.h"
 #include "my_limits.h"
-#include "error_message.h"
 #include "my_syslimits.h"
 
 /*
