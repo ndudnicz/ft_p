@@ -8,7 +8,7 @@
 #include "error.h"
 #include "receive_data.h"
 #include "my_syslimits.h"
-#include "establish_data_connection.h"
+#include "establish_connection.h"
 #include "libft.h"
 #include "libftasm.h"
 
@@ -34,7 +34,7 @@ int		get_check_local_file(char const *filename)
 int		get(t_config *config, t_packet *packet, char const *filename,
 			char const *remote_filename)
 {
-	config->port.data = ft_atoi(packet->data);
-	establish_data_connection(config, filename, &receive_data, &error_handler_local);
+	config->port.data = ft_atoi(packet->data); //valid port string
+	establish_data_connection(config, filename, &receive_data);
 	return (0);
 }

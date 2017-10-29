@@ -3,10 +3,9 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
-#include "packet.h"
 #include "libftasm.h"
-#include "packet.h"
 #include "config.h"
+#include "packet.h"
 #include "switch_packet_type_server.h"
 #include "error.h"
 #include "options_handling.h"

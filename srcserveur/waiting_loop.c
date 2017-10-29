@@ -29,25 +29,31 @@ static int	should_fork(unsigned short type)
 
 static int	child_waiting_loop(t_config *config)
 {
-	int			r;
 	t_packet	*packet;
+	t_packet	*fork_packet;
 	int			pid;
 	int			stat_loc;
 	t_config	*fork_config;
 
 	send_message(config, "Server says: Hello !", "Server");
 	ft_putendl("NEW CONNECTION ESTABLISHED!");
-	while ((r = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0)) > 0)
+	while (recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0) > 0)
 	{
 		pid = 0;
 		packet = (t_packet*)config->buf;
 		unforge_packet(packet);
 		if (should_fork(packet->type))
 		{
-			if ((pid = fork()) < 0 || !(fork_config = configdup(config)))
+			if (!(fork_config = configdup(config)) ||
+			!(fork_packet = packetdup(fork_config)) || (pid = fork()) < 0)
 				ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
 			else if (pid == 0)
-				switch_packet_type_server(fork_config, packet);
+			{
+				if (!fork())
+					switch_packet_type_server(fork_config, packet);
+				else
+					exit(0);
+			}
 			else
 				wait4(pid, &stat_loc, 0, NULL);
 		}
@@ -89,7 +95,7 @@ int			master_waiting_loop(t_config *config)
 				}
 				else
 					child_waiting_loop(fork_config);
-				free_config(config);
+				// free_config(config);
 				exit(0);
 			}
 			else

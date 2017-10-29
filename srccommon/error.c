@@ -12,8 +12,8 @@
 
 // #include "error.h"
 #include "libftasm.h"
-#include "packet.h"
 #include "config.h"
+#include "packet.h"
 #include "send_packet.h"
 
 /*

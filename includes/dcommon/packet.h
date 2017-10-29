@@ -28,7 +28,7 @@
 # define SIZE_SIZE			(sizeof(unsigned short))
 # define TYPE_SIZE			(sizeof(unsigned short))
 # define HEADER_SIZE		(MAGIC_SIZE + SIZE_SIZE + TYPE_SIZE + CHUNK_N_SIZE)
-# define MAX_PACKET_SIZE	0xffff
+# define MAX_PACKET_SIZE	0x1000
 # define MAX_DATA_SIZE		(MAX_PACKET_SIZE - HEADER_SIZE)
 
 /*
@@ -41,7 +41,7 @@
 */
 # define T_MESSAGE				0x0001
 # define T_DATA					0x0002
-# define T_CLOSE_CONNECTION		0x0003
+# define T_PING_PONG			0x0004
 
 /*
 ** T_SPEC_TYPE
@@ -85,5 +85,7 @@ void				forge_packet(t_packet *packet, unsigned int size_type,
 void				unforge_packet(t_packet *packet);
 
 unsigned int		get_chunk_number(unsigned long int st_size);
+
+t_packet			*packetdup(t_config *config);
 
 #endif

@@ -1,6 +1,9 @@
 #include <arpa/inet.h>
+#include <stdlib.h>
 
+#include "config.h"//
 #include "packet.h"
+#include "debug.h"//
 #include "libftasm.h"
 #include "libft.h"
 
@@ -56,4 +59,15 @@ void	unforge_packet(t_packet *packet)
 	packet->magic = ntohl(packet->magic);
 	packet->size = ntohs(packet->size);
 	packet->type = ntohs(packet->type);
+}
+
+t_packet	*packetdup(t_config *config)
+{
+	// ft_putendl("packetdup");
+	// if (!(new = (t_packet*)malloc(sizeof(t_packet))))
+	// 	return (NULL);
+	// ft_memcpy(new, packet, sizeof(MAX_PACKET_SIZE));
+	// print_packet(packet, 1);
+	// print_packet(new, 1);
+	return ((t_packet*)config);
 }

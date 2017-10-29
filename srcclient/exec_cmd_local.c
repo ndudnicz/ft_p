@@ -1,8 +1,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "packet.h"
 #include "config.h"
+#include "packet.h"
 #include "user_input.h"
 #include "commands.h"
 // #include "my_pipe.h"

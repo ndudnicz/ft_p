@@ -21,5 +21,6 @@ void	pwd(t_config *config, t_packet *packet)
 		send_message(config, pwd, "Server");
 	else
 		send_message(config, INTERNAL_ERROR, "Server");
+	free(config);
 	exit(0);
 }

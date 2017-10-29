@@ -26,8 +26,7 @@ PATH_COMMON_INCLUDES = includes/dcommon
 
 SRC_COMMON = debug.c packet.c my_pipe.c error.c options_handling.c \
 			config.c receive_packet.c send_packet.c send_data.c \
-			receive_data.c send_data.c establish_data_connection.c \
-			open_data_connection.c
+			receive_data.c send_data.c
 
 SRC_CLIENT = main.c user_input.c establish_connection.c exec_cmd_local.c \
 			switch_packet_type_client.c display_message.c command_lcd.c \

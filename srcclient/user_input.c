@@ -129,7 +129,12 @@ int		user_input_loop(t_config *config)
 			{
 				pid = fork();
 				if (pid == 0)
-					exec_cmd_local(config, input.cmd);
+				{
+					if (!fork())
+						exec_cmd_local(config, input.cmd);
+					else
+						exit(0);
+				}
 				else
 					wait4(pid, &stat_loc, 0, NULL);
 			}

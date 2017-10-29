@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 
 #include "my_syslimits.h"
 #include "config.h"
@@ -58,13 +59,16 @@ static int	valid_path(char const *cwd, char const *input)
 static int	ret_close(int const fd, char const in)
 {
 	int const	ret = (in && fd < 0) || (!in && fd > 0) ? 1 : 0;
+	struct stat stat;
 
+	if (fstat(fd, &stat) < 0)
+		return (1);
 	if (fd > 0)
 		close(fd);
-	return (ret);
+	return ((stat.st_mode & S_IFREG) && ret);
 }
 
-int		valid_filename(char const *filename, char const in)
+int			valid_filename(char const *filename, char const in)
 {
 	char	cwd[PATH_MAX];
 	char	*path_file;
@@ -75,7 +79,8 @@ int		valid_filename(char const *filename, char const in)
 	if (valid_path(cwd, filename) > 0)
 		return (1);
 	path_file = ft_strjoin_free(ft_strjoin(cwd, "/"), filename, 1, 0);
+	if (!path_file)
+		return (1);
 	fd = open(path_file, O_RDONLY);
-	// printf("%s\nfd:%d\n", path_file, fd);
 	return (ret_close(fd, in));
 }

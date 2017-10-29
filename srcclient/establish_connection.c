@@ -56,3 +56,36 @@ int			establish_connection(t_config *config, char const *ip_str,
 	printf("Connection done with: %s:%s\n", ip_str, cmd_port_str);
 	return (0);
 }
+
+/*
+** Try to establish a data connection through the new port
+** given as parameters, by the server.
+** Return 0 if success
+** Display an error and return 1 if fails.
+*/
+
+int			establish_data_connection(t_config *config, char const *filename,
+				int (*transfert)(t_config*, char const*))
+{
+	struct protoent		*proto;
+	struct sockaddr_in	sin;
+
+	if ((proto = getprotobyname("tcp")) == 0)
+		return (ft_error("ERROR", "establish_data_connection()", GETPROTOBYNAME_FAIL, 0));
+	/*CONFIG INIT*/
+
+	if ((config->socket.data = socket(PF_INET, SOCK_STREAM, proto->p_proto)) < 0)
+		return (ft_error("ERROR", "establish_data_connection()", SOCKET_FAILED, 0));
+	config->port.data = htons(config->port.data);
+
+	/*SIN INIT*/
+	sin.sin_family = AF_INET;
+	sin.sin_port = config->port.data;
+	sin.sin_addr.s_addr = config->inet_addr;
+	printf("data connecting ...\n");
+	if (connect(config->socket.data, (const struct sockaddr*)&sin, sizeof(sin)) < 0)
+		return (ft_error("ERROR", "establish_connection()", CONNECT_ERROR, 0));
+	printf("data Connection done\n");
+	transfert(config, filename);
+	return (0);
+}

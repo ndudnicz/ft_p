@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 #include "config.h"
 #include "packet.h"
@@ -8,7 +9,7 @@
 #include "error.h"
 #include "send_data.h"
 #include "my_syslimits.h"
-#include "establish_data_connection.h"
+#include "establish_connection.h"
 #include "libft.h"
 #include "libftasm.h"
 
@@ -17,6 +18,7 @@ int		put_check_local_file(char const *filename)
 	char	cwd[PATH_MAX];
 	char	*path;
 	int		fd;
+	struct stat stat;
 
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (ft_error("ERROR", "PUT", "GETCWD()", 1));
@@ -26,6 +28,10 @@ int		put_check_local_file(char const *filename)
 		free(path);
 		return (ft_error("ERROR", "PUT", INVALID_PATH, 1));
 	}
+	if (fstat(fd, &stat) < 0)
+		return (ft_error("ERROR", "PUT", FSTAT_FAILED, 1));
+	if (!(stat.st_mode & S_IFREG))
+		return (ft_error("ERROR", "PUT", INVALID_FILE, 1));
 	free(path);
 	close(fd);
 	return (0);
@@ -34,7 +40,7 @@ int		put_check_local_file(char const *filename)
 int		put(t_config *config, t_packet *packet, char const *filename,
 			char const *remote_filename)
 {
-	config->port.data = ft_atoi(packet->data);
-	establish_data_connection(config, filename, &send_data, &error_handler_local);
+	config->port.data = ft_atoi(packet->data); // valid port string
+	establish_data_connection(config, filename, &send_data);
 	return (0);
 }

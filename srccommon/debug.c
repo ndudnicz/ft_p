@@ -14,8 +14,8 @@
 #include <arpa/inet.h>
 
 #include "libft.h"
-#include "packet.h"
 #include "config.h"
+#include "packet.h"
 #include "user_input.h"
 
 void	print_packet(t_packet *packet, int print_data)

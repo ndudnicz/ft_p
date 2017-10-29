@@ -8,6 +8,8 @@
 #include "receive_data.h"
 #include "open_data_connection.h"
 #include "error.h"
+#include "libft.h"//
+#include "libftasm.h"
 
 int		put(t_config *config, t_packet *packet)
 {
@@ -15,5 +17,6 @@ int		put(t_config *config, t_packet *packet)
 		send_message(config, "ERROR: PUT: FILE ALREADY EXISTS.", "server");
 	else
 		open_data_connection(config, packet, &receive_data, &error_handler_socket);
+	// free(config);
 	exit(0);
 }
