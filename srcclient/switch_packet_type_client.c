@@ -20,10 +20,11 @@ static int	cmd_handling(t_config *config, t_packet *packet)
 static int	data_handling(t_config *config, t_packet *packet, char const *filename)
 {
 	ft_putendl("data handling");
-	if (packet->type & ST_PUT)
+	print_packet(packet, 1);
+	if ((packet->type & 0x0fff) == (ST_PUT & 0x0fff))
 		return put(config, packet, filename, "");
-	// else if (packet->type & ST_GET)
-		// get(config, packet, filename, "");
+	else if ((packet->type & 0x0fff) == (ST_GET & 0x0fff))
+		return get(config, packet, filename);
 	else
 		return (0);
 }
@@ -47,8 +48,6 @@ int		switch_packet_type_client(t_config *config, t_packet *packet, char const *a
 		return 0;
 	else if (packet->type == T_CLOSE_CONNECTION)
 		return 0;
-	// else if (packet->type & T_MASK_CMD)
-		// return (cmd_handling(config, packet));
 	else if (packet->type & SEND_NEW_DATA_CONNECTION)
 		return (data_handling(config, packet, arg));
 	else

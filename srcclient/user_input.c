@@ -109,16 +109,12 @@ int		user_input_loop(t_config *config)
 			break ;
 		if (input.arg && input.cmd && !(input.cmd & T_MASK_CMD_LOCAL))
 		{
-			if ((input.cmd & 0x0fff) == ST_PUT)
+			if ((input.cmd == ST_PUT && put_check_local_file(input.arg) > 0) || (input.cmd == ST_GET && get_check_local_file(input.arg) > 0))
 			{
-				// print_input(&input);
-				if (check_local_file(input.arg) > 0)
-				{
-					if (input.arg)
-						free(input.arg);
-					ft_putstr(PROMPT);
-					continue ;
-				}
+				if (input.arg)
+					free(input.arg);
+				ft_putstr(PROMPT);
+				continue ;
 			}
 			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 | input.cmd, input.arg, 1);
 			send_packet(config->socket.cmd, packet);

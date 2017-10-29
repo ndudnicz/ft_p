@@ -33,7 +33,7 @@ unsigned int	get_chunk_number(unsigned long int st_size)
 void			forge_packet(t_packet *packet, unsigned int size_type,
 								char const* data, unsigned int chunks)
 {
-	unsigned short size;
+	int size;
 	unsigned short type;
 
 	size = (unsigned short)(size_type >> 16);

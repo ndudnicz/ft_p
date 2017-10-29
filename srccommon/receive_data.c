@@ -27,14 +27,16 @@ int		receive_data(t_config *config, char const *filename)
 		ft_putendl("Open() error");
 		return (1);
 	}
-	// while ((r = recv(config->socket.data, config->buf, MAX_PACKET_SIZE, MSG_PEEK)) > 0)
-	while ((r = read(config->socket.data, config->buf, MAX_PACKET_SIZE)) > 0)
+	ft_bzero(config->buf, MAX_DATA_SIZE);
+	while ((r = recv(config->socket.data, config->buf, MAX_PACKET_SIZE, 0)) > 0)
+	// while ((r = read(config->socket.data, config->buf, MAX_PACKET_SIZE)) > 0)
 	{
 		packet = (t_packet*)config->buf;
 		unforge_packet(packet);
 		print_packet(packet, 0);
 		if (packet->magic == MAGIC && packet->type == T_DATA)
 		{
+			ft_putnbr_endl(packet->size);
 			write(fd, packet->data, packet->size - HEADER_SIZE);
 		}
 	}
