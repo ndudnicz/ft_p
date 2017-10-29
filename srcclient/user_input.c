@@ -16,6 +16,7 @@
 #include "switch_packet_type_client.h"
 #include "error.h"//
 #include "exec_cmd_local.h"
+#include "commands.h"
 
 static unsigned short get_type(char const *str, char const *arg)
 {
@@ -108,10 +109,20 @@ int		user_input_loop(t_config *config)
 			break ;
 		if (input.arg && input.cmd && !(input.cmd & T_MASK_CMD_LOCAL))
 		{
+			if ((input.cmd & 0x0fff) == ST_PUT)
+			{
+				// print_input(&input);
+				if (check_local_file(input.arg) > 0)
+				{
+					if (input.arg)
+						free(input.arg);
+					ft_putstr(PROMPT);
+					continue ;
+				}
+			}
 			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 | input.cmd, input.arg, 1);
 			send_packet(config->socket.cmd, packet);
 			receive_packet(config, config->socket.cmd, packet);
-			// print_packet(packet, 1);
 			if (switch_packet_type_client(config, packet, input.arg) > 0)
 				return (1);
 			ft_bzero((char*)packet, packet->size);

@@ -12,7 +12,7 @@
 int		put(t_config *config, t_packet *packet)
 {
 	if (!valid_filename(packet->data, 1))
-		return (send_message(config, "ERROR: FILE ALREADY EXISTS.", "server"));
+		send_message(config, "ERROR: PUT: FILE ALREADY EXISTS.", "server");
 	else
 		open_data_connection(config, packet, &receive_data, &error_handler_socket);
 	exit(0);

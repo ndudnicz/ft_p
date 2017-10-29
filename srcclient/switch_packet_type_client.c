@@ -19,17 +19,13 @@ static int	cmd_handling(t_config *config, t_packet *packet)
 
 static int	data_handling(t_config *config, t_packet *packet, char const *filename)
 {
-	// int			pid;
-	// t_config	*fork_config;
-	// int			stat_loc;
-
-
 	ft_putendl("data handling");
 	if (packet->type & ST_PUT)
-		put(config, packet, filename, "");
-	if (packet->type & ST_GET)
-		put(config, packet, filename, "");
-	return (0);
+		return put(config, packet, filename, "");
+	// else if (packet->type & ST_GET)
+		// get(config, packet, filename, "");
+	else
+		return (0);
 }
 
 int		switch_packet_type_client_no_fork(t_config *config)
