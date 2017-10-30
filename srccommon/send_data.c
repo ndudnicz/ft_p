@@ -31,12 +31,14 @@ static int	ping_pong(t_config *config, t_packet *packet_ping,
 		printf("%d / %d\n", packet_number, swap32(packet_ping->chunks_number));
 	i = send_packet(config->socket.data, packet_ping);
 	receive_packet(config, config->socket.data, packet_pong);
-	while (i >= 0 && i < 100 && packet_pong->type != T_PING_PONG)
-	{
-		i++;
-		send_packet(config->socket.data, packet_ping);
-		receive_packet(config, config->socket.data, packet_pong);
-	}
+	// while (i >= 0 && i < 100 && packet_pong->type != T_PING_PONG)
+	// {
+	// 	i++;
+	// 	if (!(config->options & IAMSERVER))
+	// 		printf("%d / %d\n", packet_number, swap32(packet_ping->chunks_number));
+	// 	send_packet(config->socket.data, packet_ping);
+	// 	receive_packet(config, config->socket.data, packet_pong);
+	// }
 	return (i);
 }
 
