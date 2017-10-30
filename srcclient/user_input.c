@@ -161,6 +161,7 @@ int		user_input_loop(t_config *config)
 			break ;
 		if (input.arg && input.cmd && !(input.cmd & ST_CMD_LOCAL))
 		{
+			ft_putendl("non local");
 			if ((input.cmd == ST_PUT && put_check_local_file(input.arg) > 0) ||
 			(input.cmd == ST_GET && get_check_local_file(input.arg) > 0))
 				continue ;
@@ -173,7 +174,11 @@ int		user_input_loop(t_config *config)
 			ft_bzero((char*)packet, packet->size);
 		}
 		else if (input.cmd)
+		{
+			ft_putendl("local");
 			fork_and_run(config, &input);
+
+		}
 	}
 	free(packet);
 	ft_putendl("Bye!");
