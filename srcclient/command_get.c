@@ -12,7 +12,7 @@
 #include "libft.h"
 #include "libftasm.h"
 
-int		get_check_local_file(char const *filename)
+int			get_check_local_file(char const *filename)
 {
 	char	cwd[PATH_MAX];
 	char	*path;

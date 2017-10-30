@@ -41,11 +41,8 @@ int		open_cmd_connection(t_config *config, char const *cmd_port_str)
 		return (ft_error("Serveur", "open_connection:", BIND_ERROR, 1));
 	config->inet_addr = sin.sin_addr.s_addr;
 	config->port.cmd = sin.sin_port;
-	if (!(config->current_path = ft_strdup(".")))
-		return (ft_error("serveur", "", MALLOC_FAIL, 1));
 	printf("Connection opened on: %s:%d\n", config->ip_str,
 	ntohs(config->port.cmd));
-	// free(proto);
 	return (0);
 }
 
@@ -86,6 +83,19 @@ static unsigned short	get_available_port(t_config *config,
 	return (1);
 }
 
+
+static int	open_data_norme(t_config *config, struct sockaddr_in *sin)
+{
+	if ((sin->sin_addr.s_addr = inet_addr(config->ip_str)) == INADDR_NONE)
+		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
+	if (get_available_port(config, sin))
+		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
+	if (listen(config->socket.data, 1) < 0)
+		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
+	config->inet_addr = sin->sin_addr.s_addr;
+	return (0);
+}
+
 /*
 ** Try to open a data connection on an available port, and send the new port
 ** to the client
@@ -93,8 +103,8 @@ static unsigned short	get_available_port(t_config *config,
 ** Display an error message and return 1 if fail
 */
 
-int		open_data_connection(t_config *config, t_packet *packet,
-					int (*transfert)(t_config*, char const*))
+int			open_data_connection(t_config *config, t_packet *packet,
+								int (*transfert)(t_config*, char const*))
 {
 	struct protoent		*proto;
 	struct sockaddr_in	sin;
@@ -108,16 +118,8 @@ int		open_data_connection(t_config *config, t_packet *packet,
 	< 0)
 		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
 	sin.sin_family = AF_INET;
-	if ((sin.sin_addr.s_addr = inet_addr(config->ip_str)) == INADDR_NONE)
-		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
-
-	// HANDLE NO PORT AVAILABLE !
-	if (get_available_port(config, &sin))
-		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
-
-	if (listen(config->socket.data, 1) < 0)
-		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
-	config->inet_addr = sin.sin_addr.s_addr;
+	if (open_data_norme(config, &sin))
+		return (1);
 	if (!(new_port = ft_itoa((int)config->port.data)))
 		return (send_message(config, "open_data_connection()", MALLOC_FAIL));
 	size_type = (HEADER_SIZE | (unsigned short)ft_strlen(new_port)) << 16 |

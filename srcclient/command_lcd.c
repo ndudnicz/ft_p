@@ -54,7 +54,7 @@ static int	valid_user_input(t_config *config, char const *root,
 	int			cursor;
 	int			i;
 	char const	**array_root = (char const**)ft_strsplit(root, '/');
-	char const	**array_input = (char const**)ft_strsplit(input, '/');
+	char const	**array_input = (char const**)ft_strsplit(input , '/');
 	char const	**array_cwd = (char const**)ft_strsplit(cwd, '/');
 
 	i = 0;
@@ -82,12 +82,13 @@ int			lcd(t_config *config, char *arg)
 	int const	data_len = ft_strlen(arg);
 
 	cwd[0] = 0;
+	ft_putendl(arg);
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
-	// if (valid_user_input(config, config->root, arg, cwd) > 0)
-		// return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
 	if (data_len == 0)
 		new_path = config->root;
+	else if (arg[0] == '/')
+		new_path = ft_strdup(arg);
 	else
 		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), arg, 1, 0);
 	if (chdir(new_path) < 0)

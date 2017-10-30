@@ -4,5 +4,5 @@
 
 void	lls(t_config *config)
 {
-	execl(LS_PATH, LS_PATH, "-p", config->current_path, NULL);
+	execl(LS_PATH, LS_PATH, "-p", ".", NULL);
 }

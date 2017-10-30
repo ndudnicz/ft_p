@@ -61,11 +61,11 @@ static int	ret_close(int const fd, char const in)
 	int const	ret = (in && fd < 0) || (!in && fd > 0) ? 1 : 0;
 	struct stat stat;
 
-	if (fstat(fd, &stat) < 0)
-		return (1);
+	if (fd > 0 && fstat(fd, &stat) < 0)
+		return (-1);
 	if (fd > 0)
 		close(fd);
-	return ((stat.st_mode & S_IFREG) && ret);
+	return (((stat.st_mode & S_IFREG) && ret && in) || (ret));
 }
 
 int			valid_filename(char const *filename, char const in)
@@ -75,12 +75,12 @@ int			valid_filename(char const *filename, char const in)
 	int		fd;
 
 	if (getcwd(cwd, PATH_MAX) < 0)
-		return (1);
+		return (-1);
 	if (valid_path(cwd, filename) > 0)
-		return (1);
+		return (-1);
 	path_file = ft_strjoin_free(ft_strjoin(cwd, "/"), filename, 1, 0);
 	if (!path_file)
-		return (1);
+		return (-1);
 	fd = open(path_file, O_RDONLY);
 	return (ret_close(fd, in));
 }

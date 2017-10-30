@@ -20,6 +20,6 @@ int		send_packet(int const socket, t_packet *packet)
 
 	ret = send(socket, packet, MAX_PACKET_SIZE, 0);
 	if (ret < 0)
-		ft_error_child("send_cmd_packet", "sendpacket()", SEND_FAIL);
+		ft_error_child("send_packet", "sendpacket()", SEND_FAIL);
 	return (ret < 0 ? 1 : 0);
 }

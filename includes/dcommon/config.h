@@ -35,6 +35,7 @@
 # define LS_PATH	"/bin/ls"
 
 # define DUPED			0x04
+# define IAMSERVER		0x08
 
 /*
 ** ========= S_PORT ============================================================
@@ -82,7 +83,7 @@ typedef struct	s_config // malloc
 	unsigned char	options;
 	int				inet_addr;
 	char			*ip_str; //malloc
-	char			*current_path; // malloc
+	// char			*current_path; // malloc
 	char			*buf;  // malloc
 	// char			*tmp_file_str;  // malloc
 	char			root[PATH_MAX];

@@ -9,7 +9,7 @@
 /*
 ** Create and return a copy of c.
 */
-
+/*
 t_config	*configdup(t_config *c)
 {
 	t_config	*new;
@@ -22,14 +22,14 @@ t_config	*configdup(t_config *c)
 	new->options |= DUPED;
 	if (!(new->buf = (char*)malloc(MAX_PACKET_SIZE)))
 		return (NULL);
-	else if (!(new->current_path = ft_strdup(c->current_path)))
-		return (NULL);
+	// else if (!(new->current_path = ft_strdup(c->current_path)))
+		// return (NULL);
 	else if (!(new->ip_str = ft_strdup(c->ip_str)))
 		return (NULL);
 	else
 		return (new);
 }
-
+*/
 t_config	*create_config(char const*exec_name)
 {
 	t_config	*new;
@@ -50,9 +50,8 @@ t_config	*create_config(char const*exec_name)
 
 int			free_config(t_config *config)
 {
-	// free(config->buf);
-	// free(config->ip_str);
-	// free(config->current_path);
+	free(config->buf);
+	free(config->ip_str);
 	free(config);
 	return (0);
 }

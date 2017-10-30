@@ -19,6 +19,6 @@ int		lpwd(void)
 	if (getcwd(pwd, PATH_MAX))
 		printf("%s\n", pwd);
 	else
-		ft_error_child(INTERNAL_ERROR, "", "");
+		ft_error_child("LPWD", INTERNAL_ERROR, "FILE PERMISSION ?");
 	return (0);
 }

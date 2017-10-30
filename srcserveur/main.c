@@ -40,6 +40,7 @@ int		main(int ac, char **av)
 		return (1);
 	else
 	{
+		config->options |= IAMSERVER;
 		if (get_options(config, &ac, av) > 0)
 			return (1);
 		else if (open_cmd_connection(config, av[1]) > 0)

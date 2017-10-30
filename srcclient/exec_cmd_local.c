@@ -6,6 +6,7 @@
 #include "user_input.h"
 #include "commands.h"
 // #include "my_pipe.h"
+#include "libft.h"//
 
 void	exec_cmd_local(t_config *config, unsigned short cmd)
 {

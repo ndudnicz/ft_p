@@ -3,6 +3,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/socket.h>
+#include <stdio.h>
 
 #include "config.h"
 #include "error.h"
@@ -12,19 +13,27 @@
 #include "libft.h"//
 #include "receive_packet.h"
 
+static unsigned int	swap32(unsigned int const n)
+{
+	return (n << 24 |
+		((n << 8) & 0x00ff0000) |
+		((n >> 8) & 0x0000ff00) |
+		n >> 24);
+}
+
 static int	ping_pong(t_config *config, t_packet *packet_ping,
-	t_packet *packet_pong)
+	t_packet *packet_pong, int const packet_number)
 {
 	int		i;
 
 	i = 0;
-	ft_putendl("PING");
-	send_packet(config->socket.data, packet_ping);
+	if (!(config->options & IAMSERVER))
+		printf("%d / %d\n", packet_number, swap32(packet_ping->chunks_number));
+	i = send_packet(config->socket.data, packet_ping);
 	receive_packet(config, config->socket.data, packet_pong);
-	while (i < 100 && packet_pong->type != T_PING_PONG)
+	while (i >= 0 && i < 100 && packet_pong->type != T_PING_PONG)
 	{
 		i++;
-		ft_putendl("PING");
 		send_packet(config->socket.data, packet_ping);
 		receive_packet(config, config->socket.data, packet_pong);
 	}
@@ -51,8 +60,8 @@ static int	chunk_data(t_config *config, char *data, int const chunks_number,
 			size = MAX_PACKET_SIZE;
 		forge_packet(packet_ping, ((size << 16) + T_DATA)
 		,&data[i * MAX_DATA_SIZE], chunks_number);
-		if (ping_pong(config, packet_ping, packet_pong) > 99)
-			return (ft_error("Error", "send_data", MALLOC_FAIL, 1));
+		if (ping_pong(config, packet_ping, packet_pong, i + 1) > 99)
+			return (ft_error("Error", "send_data", "FILE PERMISSION ?", 1));
 		i++;
 	}
 	free(packet_ping);
@@ -85,5 +94,4 @@ int			send_data(t_config *config, char const *filename)
 	}
 	close(config->socket.data);
 	return (0);
-
 }

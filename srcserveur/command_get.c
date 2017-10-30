@@ -11,9 +11,9 @@
 
 int		get(t_config *config, t_packet *packet)
 {
-	if (!valid_filename(packet->data, 0))
+	if (valid_filename(packet->data, 0) < 1)
 		send_message(config, "ERROR: GET: FILE DOES NOT EXIST.", "server");
 	else
-		open_data_connection(config, packet, &send_data, &error_handler_socket);
+		open_data_connection(config, packet, &send_data);
 	exit(0);
 }

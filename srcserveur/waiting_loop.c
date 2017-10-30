@@ -46,17 +46,7 @@ static int	child_waiting_loop(t_config *config)
 			if ((pid = fork()) < 0)
 				ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
 			else if (pid == 0)
-			{
-				// if (!fork())
-				// {
-				// send_message(config, "ok", "server");
 				switch_packet_type_server(config, packet);
-				// }
-				// else
-				// {
-					// exit(0);
-				// }
-			}
 			else
 				wait4(pid, &stat_loc, 0, NULL);
 		}
