@@ -47,7 +47,6 @@
 ** T_SPEC_TYPE
 */
 # define T_MASK_CMD			0x01ff
-# define T_MASK_CMD_LOCAL	0x0001
 # define T_MASK_DATA		0x3fff
 
 /*
@@ -59,15 +58,17 @@
 /*
 ** T_MASK_CMD subtypes
 */
-# define ST_LS		0x0100
-# define ST_CD		0x0102
-# define ST_GET		(0x0104 | ASK_NEW_DATA_CONNECTION)
-# define ST_PUT		(0x0108 | ASK_NEW_DATA_CONNECTION)
-# define ST_PWD		0x0110
-# define ST_LLS		(0x0120 | T_MASK_CMD_LOCAL)
-# define ST_LCD		(0x0140 | T_MASK_CMD_LOCAL)
-# define ST_LPWD	(0x0180 | T_MASK_CMD_LOCAL)
-# define ST_QUIT	0xffff
+# define ST_CMD_LOCAL	0x0001
+# define ST_MASK		0x0fff
+# define ST_LS			0x0100
+# define ST_CD			0x0102
+# define ST_GET			(0x0104 | ASK_NEW_DATA_CONNECTION)
+# define ST_PUT			(0x0108 | ASK_NEW_DATA_CONNECTION)
+# define ST_PWD			0x0110
+# define ST_LLS			(0x0120 | ST_CMD_LOCAL)
+# define ST_LCD			(0x0140 | ST_CMD_LOCAL)
+# define ST_LPWD		(0x0180 | ST_CMD_LOCAL)
+# define ST_QUIT		0xffff
 
 
 typedef struct		s_packet

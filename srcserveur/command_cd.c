@@ -82,15 +82,13 @@ int			cd(t_config *config, t_packet *packet)
 	int const	data_len = ft_strlen(packet->data);
 
 	cwd[0] = 0;
+	new_path = NULL;
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (send_message(config, INTERNAL_ERROR, "serveur"));
 	if (valid_user_input(config, config->root, packet->data, cwd) > 0)
-	{
-		ft_putendl("a");
 		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
-	}
 	if (data_len == 0)
-		new_path = config->root;
+		new_path = ft_strdup(config->root);
 	else
 		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), packet->data, 1, 0);
 	if (chdir(new_path) < 0)
@@ -98,14 +96,9 @@ int			cd(t_config *config, t_packet *packet)
 		free(new_path);
 		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
 	}
-	else if (getcwd(cwd, PATH_MAX) < 0)
-	{
-		free(new_path);
+	free(new_path);
+	if (getcwd(cwd, PATH_MAX) < 0)
 		return (send_message(config, INTERNAL_ERROR, "serveur"));
-	}
 	else
-	{
-		free(new_path);
 		return (send_message(config, CMD_CD_SUCCESS, "serveur"));
-	}
 }

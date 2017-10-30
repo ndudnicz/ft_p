@@ -161,6 +161,6 @@ int			get_options(t_config *config, int *ac, char **av)
 	del_null_params(ac, av, n);
 	if (valid_port_number(av[0], ac, av) > 0 || set_root(config) > 0)
 		return (1);
-	config->ip_str = config->ip_str ? config->ip_str : DEFAULT_IP_BIND;
+	config->ip_str = config->ip_str ? config->ip_str : ft_strdup(DEFAULT_IP_BIND);
 	return (0);
 }

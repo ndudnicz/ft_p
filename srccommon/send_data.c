@@ -55,6 +55,8 @@ static int	chunk_data(t_config *config, char *data, int const chunks_number,
 			return (ft_error("Error", "send_data", MALLOC_FAIL, 1));
 		i++;
 	}
+	free(packet_ping);
+	free(packet_pong);
 	return (0);
 }
 

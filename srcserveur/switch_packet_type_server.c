@@ -13,9 +13,9 @@ void	switch_packet_type_server(t_config *config, t_packet *packet)
 {
 	if (packet->type & T_MASK_CMD || packet->type & T_MASK_DATA)
 	{
-		if (packet->type == ST_LS)
+		if ((packet->type & ST_MASK) == ST_LS)
 			ls(config);
-		else if (packet->type == ST_PWD)
+		else if ((packet->type & ST_MASK) == ST_PWD)
 			pwd(config, packet);
 		else if (packet->type == (ASK_NEW_DATA_CONNECTION | ST_PUT))
 			put(config, packet);
@@ -36,9 +36,6 @@ void	switch_packet_type_server(t_config *config, t_packet *packet)
 
 void	switch_packet_type_server_no_fork(t_config *config, t_packet *packet)
 {
-	if (packet->type & T_MASK_CMD)
-	{
-		if (packet->type == ST_CD)
-			cd(config, packet);
-	}
+	if ((packet->type & ST_MASK) == ST_CD)
+		cd(config, packet);
 }

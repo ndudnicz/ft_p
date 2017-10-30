@@ -9,8 +9,8 @@
 
 void	exec_cmd_local(t_config *config, unsigned short cmd)
 {
-	if (cmd == ST_LLS)
-		execl(LS_PATH, LS_PATH, "-p", config->current_path, NULL);
+	if ((cmd & ST_MASK) == ST_LLS)
+		lls();
 	else
 		exit(0);
 }

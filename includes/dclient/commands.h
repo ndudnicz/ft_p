@@ -9,4 +9,6 @@ int		put_check_local_file(char const *filename);
 int		get(t_config *config, t_packet *packet, char const *filename);
 int		get_check_local_file(char const *filename);
 
+void	lls(void);
+
 #endif

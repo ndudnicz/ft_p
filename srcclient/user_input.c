@@ -107,7 +107,7 @@ int		user_input_loop(t_config *config)
 	{
 		if (treat_input(&input, line) == ST_QUIT)
 			break ;
-		if (input.arg && input.cmd && !(input.cmd & T_MASK_CMD_LOCAL))
+		if (input.arg && input.cmd && !(input.cmd & ST_CMD_LOCAL))
 		{
 			if ((input.cmd == ST_PUT && put_check_local_file(input.arg) > 0) || (input.cmd == ST_GET && get_check_local_file(input.arg) > 0))
 			{
@@ -119,6 +119,7 @@ int		user_input_loop(t_config *config)
 			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 | input.cmd, input.arg, 1);
 			send_packet(config->socket.cmd, packet);
 			receive_packet(config, config->socket.cmd, packet);
+			// print_input(&input);
 			if (switch_packet_type_client(config, packet, input.arg) > 0)
 				return (1);
 			ft_bzero((char*)packet, packet->size);
@@ -130,10 +131,10 @@ int		user_input_loop(t_config *config)
 				pid = fork();
 				if (pid == 0)
 				{
-					if (!fork())
+					// if (!fork())
 						exec_cmd_local(config, input.cmd);
-					else
-						exit(0);
+					// else
+						// exit(0);
 				}
 				else
 					wait4(pid, &stat_loc, 0, NULL);

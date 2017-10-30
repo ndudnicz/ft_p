@@ -81,7 +81,7 @@ typedef struct	s_config // malloc
 {
 	unsigned char	options;
 	int				inet_addr;
-	char			*ip_str;
+	char			*ip_str; //malloc
 	char			*current_path; // malloc
 	char			*buf;  // malloc
 	char			*tmp_file_str;  // malloc
