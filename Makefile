@@ -64,8 +64,7 @@ $(CLIENT): $(LIBCOMMON) $(OBJ_CLIENT)
 	$(CC) -o $@ $(OBJ_CLIENT) -L. -lft -lcommon -lftasm
 
 $(OBJ_CLIENT_DIR)/%.o: $(SRC_CLIENT_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_CLIENT_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/
-
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_CLIENT_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/ -I libft/libftasm/includes/
 # SERVEUR RULES ===============================================================#
 
 $(SERVEUR): $(LIBCOMMON) $(OBJ_SERVEUR)
@@ -73,7 +72,7 @@ $(SERVEUR): $(LIBCOMMON) $(OBJ_SERVEUR)
 	$(CC) -o $@ $(OBJ_SERVEUR) -L. -lft -lcommon -lftasm libft.a
 
 $(OBJ_SERVEUR_DIR)/%.o: $(SRC_SERVEUR_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/ -I includes/dclient ##################################################################################
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/ -I includes/dclient -I libft/libftasm/includes/ ##################################################################################
 
 # LIBCOMMON RULES =============================================================#
 
@@ -82,4 +81,4 @@ $(LIBCOMMON): $(OBJ_COMMON)
 	ar rc $(LIBCOMMON) $(OBJ_COMMON)
 
 $(OBJ_COMMON_DIR)/%.o: $(SRC_COMMON_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/dclient
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/dclient -I libft/libftasm/includes/

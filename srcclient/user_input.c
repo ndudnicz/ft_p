@@ -169,6 +169,8 @@ int		user_input_loop(t_config *config)
 			input.cmd, input.arg, 1);
 			send_packet(config->socket.cmd, packet);
 			receive_packet(config, config->socket.cmd, packet);
+			while (((char*)packet)[0] == 0)
+				receive_packet(config, config->socket.cmd, packet);
 			if (switch_packet_type_client(config, packet, input.arg) > 0)
 				return (1);
 			ft_bzero((char*)packet, packet->size);
