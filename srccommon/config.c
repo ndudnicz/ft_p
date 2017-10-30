@@ -24,6 +24,8 @@ t_config	*configdup(t_config *c)
 		return (NULL);
 	else if (!(new->current_path = ft_strdup(c->current_path)))
 		return (NULL);
+	else if (!(new->ip_str = ft_strdup(c->ip_str)))
+		return (NULL);
 	else
 		return (new);
 }
@@ -48,9 +50,9 @@ t_config	*create_config(char const*exec_name)
 
 int			free_config(t_config *config)
 {
-	free(config->buf);
-	free(config->ip_str);
-	free(config->current_path);
+	// free(config->buf);
+	// free(config->ip_str);
+	// free(config->current_path);
 	free(config);
 	return (0);
 }

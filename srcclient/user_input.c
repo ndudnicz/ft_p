@@ -46,6 +46,14 @@ static unsigned short get_type(char const *str, char const *arg)
 		return ((unsigned short)ft_error("ERROR", "INPUT", UNKNOWN_CMD, 0));
 }
 
+static void				sub_free(void *p1, void *p2)
+{
+	if (p1)
+		free(p1);
+	if (p2)
+		free(p2);
+}
+
 static unsigned short	treat_input(t_input *input, char *line)
 {
 	char const	*s = ft_strtrim(line);
@@ -58,40 +66,27 @@ static unsigned short	treat_input(t_input *input, char *line)
 		free(line);
 	if (!array)
 		return (0);
+	if (ft_array_length(array) > 1)
+		input->arg = (char*)array[1];
 	else
+		input->arg = ft_strdup("");
+	input->cmd = get_type(array[0], input->arg);
+	while (array[i])
 	{
-		if (ft_array_length(array) > 1)
-			input->arg = (char*)array[1];
-		else
-			input->arg = ft_strdup("");
-		input->cmd = get_type(array[0], input->arg);
-		while (array[i])
-		{
-			if (i != 1)
-				free((void*)array[i]);
-			i++;
-		}
-		if (array)
-			free((void*)array);
-		if (s)
-			free((void*)s);
+		if (i != 1)
+			free((void*)array[i]);
+		i++;
 	}
+	sub_free((void*)array, (void*)s);
 	return (input->cmd);
 }
 
-static int	should_fork(unsigned short type)
-{
-	if (type == ST_LCD || type == ST_LPWD)
-		return (0);
-	else
-		return (1);
-}
 
 /*
 ** Loop and treat the input string while the user doesn't type 'quit' or press
 ** CTRL-D
 */
-
+/*
 int		user_input_loop(t_config *config)
 {
 	char		*line;
@@ -100,26 +95,26 @@ int		user_input_loop(t_config *config)
 	t_input		input;
 	int			stat_loc;
 
-	packet = (t_packet*)malloc(sizeof(t_packet)); // check malloc ret
+	if (!(packet = (t_packet*)malloc(sizeof(t_packet))))
+		return (ft_error("Error", "user_input_loop()", MALLOC_FAIL, 1));
 	line = NULL;
-	ft_putstr(PROMPT);
-	while (gnl(0, &line) > 0)
+	while (ft_putstr(PROMPT) && gnl(0, &line) > 0)
 	{
 		if (treat_input(&input, line) == ST_QUIT)
 			break ;
 		if (input.arg && input.cmd && !(input.cmd & ST_CMD_LOCAL))
 		{
-			if ((input.cmd == ST_PUT && put_check_local_file(input.arg) > 0) || (input.cmd == ST_GET && get_check_local_file(input.arg) > 0))
+			if ((input.cmd == ST_PUT && put_check_local_file(input.arg) > 0) ||
+			(input.cmd == ST_GET && get_check_local_file(input.arg) > 0))
 			{
 				if (input.arg)
 					free(input.arg);
-				ft_putstr(PROMPT);
 				continue ;
 			}
-			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 | input.cmd, input.arg, 1);
+			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 |
+			input.cmd, input.arg, 1);
 			send_packet(config->socket.cmd, packet);
 			receive_packet(config, config->socket.cmd, packet);
-			// print_input(&input);
 			if (switch_packet_type_client(config, packet, input.arg) > 0)
 				return (1);
 			ft_bzero((char*)packet, packet->size);
@@ -130,12 +125,7 @@ int		user_input_loop(t_config *config)
 			{
 				pid = fork();
 				if (pid == 0)
-				{
-					// if (!fork())
-						exec_cmd_local(config, input.cmd);
-					// else
-						// exit(0);
-				}
+					exec_cmd_local(config, input.cmd);
 				else
 					wait4(pid, &stat_loc, 0, NULL);
 			}
@@ -144,7 +134,46 @@ int		user_input_loop(t_config *config)
 		}
 		if (input.arg)
 			free(input.arg);
-		ft_putstr(PROMPT);
+	}
+	free(packet);
+	ft_putendl("Bye!");
+	return (0);
+}
+*/
+
+int		user_input_loop(t_config *config)
+{
+	char		*line;
+	int			pid;
+	t_packet	*packet;
+	t_input		input;
+	int			stat_loc;
+
+	if (!(packet = (t_packet*)malloc(sizeof(t_packet))))
+		return (ft_error("Error", "user_input_loop()", MALLOC_FAIL, 1));
+	line = NULL;
+	input.arg = NULL;
+	while (ft_putstr(PROMPT) && gnl(0, &line) > 0)
+	{
+		if (input.arg)
+			free(input.arg);
+		if (treat_input(&input, line) == ST_QUIT)
+			break ;
+		if (input.arg && input.cmd && !(input.cmd & ST_CMD_LOCAL))
+		{
+			if ((input.cmd == ST_PUT && put_check_local_file(input.arg) > 0) ||
+			(input.cmd == ST_GET && get_check_local_file(input.arg) > 0))
+				continue ;
+			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 |
+			input.cmd, input.arg, 1);
+			send_packet(config->socket.cmd, packet);
+			receive_packet(config, config->socket.cmd, packet);
+			if (switch_packet_type_client(config, packet, input.arg) > 0)
+				return (1);
+			ft_bzero((char*)packet, packet->size);
+		}
+		else if (input.cmd)
+			fork_and_run(config, &input);
 	}
 	free(packet);
 	ft_putendl("Bye!");

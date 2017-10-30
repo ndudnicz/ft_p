@@ -19,7 +19,6 @@
 int		usage(char const *bin)
 {
 	printf("Usage: %s [options] <ip> <port>\n", bin);
-	printf("Options:\n\t-z : toto\n\t-n : lol\n");
 	return (1);
 }
 

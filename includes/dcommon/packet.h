@@ -32,11 +32,6 @@
 # define MAX_DATA_SIZE		(MAX_PACKET_SIZE - HEADER_SIZE)
 
 /*
-** Packet type is defined as follow:
-** (T_GENERIC_TYPE) || (T_SPEC_TYPE | T_SPEC_SUBTYPE)
-*/
-
-/*
 ** Generic types
 */
 # define T_MESSAGE				0x0001
@@ -50,7 +45,7 @@
 # define T_MASK_DATA		0x3fff
 
 /*
-** T_MASK_DATA subtypes
+** T_DATA subtypes
 */
 # define ASK_NEW_DATA_CONNECTION	0x1000
 # define SEND_NEW_DATA_CONNECTION	0x2000
@@ -58,8 +53,8 @@
 /*
 ** T_MASK_CMD subtypes
 */
-# define ST_CMD_LOCAL	0x0001
 # define ST_MASK		0x0fff
+# define ST_CMD_LOCAL	0x0001
 # define ST_LS			0x0100
 # define ST_CD			0x0102
 # define ST_GET			(0x0104 | ASK_NEW_DATA_CONNECTION)

@@ -10,7 +10,7 @@
 void	exec_cmd_local(t_config *config, unsigned short cmd)
 {
 	if ((cmd & ST_MASK) == ST_LLS)
-		lls();
+		lls(config);
 	else
 		exit(0);
 }

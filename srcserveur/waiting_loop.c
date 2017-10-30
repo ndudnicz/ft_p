@@ -33,7 +33,6 @@ static int	child_waiting_loop(t_config *config)
 	t_packet	*fork_packet;
 	int			pid;
 	int			stat_loc;
-	t_config	*fork_config;
 
 	send_message(config, "Server says: Hello !", "Server");
 	ft_putendl("NEW CONNECTION ESTABLISHED!");
@@ -44,15 +43,19 @@ static int	child_waiting_loop(t_config *config)
 		unforge_packet(packet);
 		if (should_fork(packet->type))
 		{
-			if (!(fork_config = configdup(config)) ||
-			!(fork_packet = packetdup(fork_config)) || (pid = fork()) < 0)
+			if ((pid = fork()) < 0)
 				ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
 			else if (pid == 0)
 			{
-				if (!fork())
-					switch_packet_type_server(fork_config, packet);
-				else
-					exit(0);
+				// if (!fork())
+				// {
+				// send_message(config, "ok", "server");
+				switch_packet_type_server(config, packet);
+				// }
+				// else
+				// {
+					// exit(0);
+				// }
 			}
 			else
 				wait4(pid, &stat_loc, 0, NULL);
@@ -61,8 +64,7 @@ static int	child_waiting_loop(t_config *config)
 			switch_packet_type_server_no_fork(config, packet);
 		ft_bzero(config->buf, MAX_PACKET_SIZE);
 	}
-	close(config->socket.cmd);
-	return (0);
+	exit(0);
 }
 
 /*
@@ -71,15 +73,16 @@ static int	child_waiting_loop(t_config *config)
 ** a new connection
 ** Return 1 and display an error message if fails
 */
+
 int			master_waiting_loop(t_config *config)
 {
 	int					pid;
 	struct sockaddr_in	csin;
 	unsigned int		cslen = sizeof(csin);
-	t_config			*fork_config;
 	int					stat_loc;
 
-	while ((config->socket.cmd = accept(config->socket.server_master, (struct sockaddr*)&csin, &cslen)))
+	while ((config->socket.cmd = accept(config->socket.server_master,
+	(struct sockaddr*)&csin, &cslen)))
 	{
 		pid = 0;
 		if ((pid = fork()) < 0)
@@ -87,17 +90,7 @@ int			master_waiting_loop(t_config *config)
 		if (config->socket.cmd > 0 && pid == 0)
 		{
 			if (!fork())
-			{
-				if (!(fork_config = configdup(config)))
-				{
-					ft_error_child("master_waiting_loop", "configcpy", MALLOC_FAIL);
-					exit(0);
-				}
-				else
-					child_waiting_loop(fork_config);
-				// free_config(config);
-				exit(0);
-			}
+				child_waiting_loop(config);
 			else
 				exit(0);
 		}
@@ -105,7 +98,6 @@ int			master_waiting_loop(t_config *config)
 			wait4(pid, &stat_loc, 0, NULL);
 		if (config->socket.cmd < 0)
 			printf("Accept() error, exit.\n");
-		// return 0;
 	}
 	close(config->socket.server_master);
 	return (0);

@@ -30,7 +30,8 @@ SRC_COMMON = debug.c packet.c my_pipe.c error.c options_handling.c \
 
 SRC_CLIENT = main.c user_input.c establish_connection.c exec_cmd_local.c \
 			switch_packet_type_client.c display_message.c command_lcd.c \
-			command_lpwd.c command_put.c command_get.c command_lls.c
+			command_lpwd.c command_put.c command_get.c command_lls.c \
+			user_input_tools.c
 
 SRC_SERVEUR = main.c switch_packet_type_server.c open_connection.c \
 			waiting_loop.c send_message.c command_ls.c command_cd.c \

@@ -84,7 +84,7 @@ typedef struct	s_config // malloc
 	char			*ip_str; //malloc
 	char			*current_path; // malloc
 	char			*buf;  // malloc
-	char			*tmp_file_str;  // malloc
+	// char			*tmp_file_str;  // malloc
 	char			root[PATH_MAX];
 	t_socket		socket;
 	t_port			port;
