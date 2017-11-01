@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   waiting_loop.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:45:24 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:45:25 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <netdb.h>
@@ -30,7 +42,6 @@ static int	should_fork(unsigned short type)
 static int	child_waiting_loop(t_config *config)
 {
 	t_packet	*packet;
-	t_packet	*fork_packet;
 	int			pid;
 	int			stat_loc;
 

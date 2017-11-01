@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   command_get.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:41:57 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:41:59 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -31,8 +43,7 @@ int			get_check_local_file(char const *filename)
 	return (0);
 }
 
-int		get(t_config *config, t_packet *packet, char const *filename,
-			char const *remote_filename)
+int		get(t_config *config, t_packet *packet, char const *filename)
 {
 	config->port.data = ft_atoi(packet->data); //valid port string
 	print_packet(packet, 1);

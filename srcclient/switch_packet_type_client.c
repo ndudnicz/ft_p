@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   switch_packet_type_client.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:42:45 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:42:46 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 
 #include "config.h"
@@ -14,18 +26,18 @@ static int	data_handling(t_config *config, t_packet *packet,
 							char const *filename)
 {
 	if ((packet->type & 0x0fff) == (ST_PUT & ST_MASK))
-		return put(config, packet, filename, "");
+		return put(config, packet, filename);
 	else if ((packet->type & 0x0fff) == (ST_GET & ST_MASK))
 		return get(config, packet, filename);
 	else
 		return (0);
 }
 
-int		switch_packet_type_client_no_fork(t_config *config)
-{
-		return (0);
-
-}
+// int		switch_packet_type_client_no_fork(t_config *config)
+// {
+// 		return (0);
+//
+// }
 
 int		switch_packet_type_client(t_config *config, t_packet *packet,
 		char const *arg)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   send_data.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:44:04 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:44:05 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <stdlib.h>
 #include <sys/mman.h>
@@ -14,7 +26,7 @@
 #include "libftasm.h"//
 #include "receive_packet.h"
 
-static unsigned int	swap32(unsigned int const n)
+static unsigned int		swap32(unsigned int const n)
 {
 	return (n << 24 |
 		((n << 8) & 0x00ff0000) |
@@ -22,19 +34,21 @@ static unsigned int	swap32(unsigned int const n)
 		n >> 24);
 }
 
-static int	ping_pong(t_config *config, t_packet *packet_ping,
-	t_packet *packet_pong)
+static unsigned short	get_size(int const i, int const chunks_number,
+								unsigned long int const file_size)
 {
-	int		i;
+	if (i + 1 == chunks_number)
+		return (HEADER_SIZE + file_size % MAX_DATA_SIZE);
+	else
+		return (MAX_PACKET_SIZE);
+}
 
-	i = 0;
+static int				ping_pong(t_config *config, t_packet *packet_ping,
+									t_packet *packet_pong)
+{
 	send_packet(config->socket.data, packet_ping);
-	while (i < 1000 && packet_pong->type != T_PING_PONG)
-	{
-		i++;
-		receive_packet(config, config->socket.data, packet_pong, 0);
-	}
-	return (i);
+	receive_packet(config, config->socket.data, packet_pong, 0);
+	return (0);
 }
 
 static int	chunk_data(t_config *config, char *data, int const chunks_number,
@@ -51,18 +65,15 @@ static int	chunk_data(t_config *config, char *data, int const chunks_number,
 		return (ft_error("Error", "send_data", MALLOC_FAIL, 1));
 	i = 0;
 	size_type.type = T_DATA;
-	while (i <= chunks_number)
+	while (i < chunks_number)
 	{
 		ft_bzero((char*)packet_pong, sizeof(t_packet));
-		if (i + 1 == chunks_number)
-			size_type.size = HEADER_SIZE + file_size % MAX_DATA_SIZE;
-		else
-			size_type.size = MAX_PACKET_SIZE;
-		forge_packet(packet_ping, &size_type ,&data[i * MAX_DATA_SIZE], chunks_number);
+		size_type.size = get_size(i, chunks_number, file_size);
+		forge_packet(packet_ping, &size_type ,&data[i * MAX_DATA_SIZE],
+		chunks_number);
 		if (!(config->options & IAMSERVER))
 			printf("%d / %d\n", i + 1, swap32(packet_ping->chunks_number));
-		if (ping_pong(config, packet_ping, packet_pong) >= 100)
-			ft_error_child("ERROR", "DATA TRANSFERT", "CONNECTION LOST");
+		ping_pong(config, packet_ping, packet_pong);
 		i++;
 	}
 	my_free(51,packet_ping);
@@ -74,7 +85,6 @@ int			send_data(t_config *config, char const *filename)
 {
 	int const		fd = open(filename, O_RDONLY);
 	struct stat		stat;
-	int				i;
 	char			*data;
 
 	if (fd < 0)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   command_put.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:42:20 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:42:21 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -37,8 +49,7 @@ int		put_check_local_file(char const *filename)
 	return (0);
 }
 
-int		put(t_config *config, t_packet *packet, char const *filename,
-			char const *remote_filename)
+int		put(t_config *config, t_packet *packet, char const *filename)
 {
 	config->port.data = ft_atoi(packet->data); // valid port string
 	establish_data_connection(config, filename, &send_data);

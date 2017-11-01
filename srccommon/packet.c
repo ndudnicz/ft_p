@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   packet.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:43:41 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:43:42 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <arpa/inet.h>
 #include <stdlib.h>
 
@@ -6,18 +18,6 @@
 #include "debug.h"//
 #include "libftasm.h"
 #include "libft.h"
-
-static unsigned long int	my_swap64(unsigned long int n)
-{
-	return ((n & 0x00000000000000ff) << 56 |
-		(n & 0x000000000000ff00) << 40 |
-		(n & 0x0000000000ff0000) << 24 |
-		(n & 0x00000000ff000000) << 8 |
-		(n & 0x000000ff00000000) >> 8 |
-		(n & 0x0000ff0000000000) >> 24 |
-		(n & 0x00ff000000000000) >> 40 |
-		(n & 0xff00000000000000) >> 56);
-}
 
 /*
 ** Get st_size from struct stat (sys/stat.h) and return a number of chunk

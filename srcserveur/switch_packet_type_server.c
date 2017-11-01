@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   switch_packet_type_server.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:45:13 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:45:15 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <unistd.h>
 
 #include "config.h"
 #include "packet.h"
 #include "send_message.h"
-#include "exec_cmd.h"
 #include "libft.h"//
 #include "debug.h"//
 #include "commands.h"

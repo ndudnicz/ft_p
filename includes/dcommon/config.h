@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   config.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 18:00:06 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 18:00:08 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CONFIG_H
 # define CONFIG_H
 
-#include "my_syslimits.h"
+# include "my_syslimits.h"
 
 # define PROMPT				"\033[90mftp>\033[39m "
 # define DEFAULT_IP_BIND	"127.0.0.1"
@@ -27,10 +39,6 @@
 # define ROOT_FOLDER_CHAR	'f'
 
 # define PARAMS_STR		"bf"
-
-/*
-**
-*/
 
 # define LS_PATH	"/bin/ls"
 
@@ -78,21 +86,19 @@ typedef struct	s_socket
 	int		server_master;
 }				t_socket;
 
-typedef struct	s_config // malloc
+typedef struct	s_config
 {
 	unsigned char	options;
 	int				inet_addr;
-	char			*ip_str; //malloc
-	// char			*current_path; // malloc
-	char			*buf;  // malloc
-	// char			*tmp_file_str;  // malloc
+	char			*ip_str;
+	char			*buf;
 	char			root[PATH_MAX];
 	t_socket		socket;
 	t_port			port;
 }				t_config;
 
-t_config	*configdup(t_config *c);
-t_config	*create_config(char const*exec_name);
-int			free_config(t_config *config);
+t_config		*configdup(t_config *c);
+t_config		*create_config(char const*exec_name);
+int				free_config(t_config *config);
 
 #endif

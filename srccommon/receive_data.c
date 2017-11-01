@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   receive_data.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:43:50 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:43:51 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -53,23 +65,21 @@ int			receive_data(t_config *config, char const *filename)
 	{
 		if (ret <= 0)
 			break ;
-		print_packet(packet_ping, 0);
 		if (packet_ping->magic == MAGIC && packet_ping->type == T_DATA)
 		{
 			n = packet_ping->chunks_number;
-
 			write(fd, packet_ping->data, packet_ping->size - HEADER_SIZE);
 			if (!(config->options & IAMSERVER))
-				printf("%d / %d   size:%hu\n", i, packet_ping->chunks_number,packet_ping->size);
+				printf("%d / %d\n", i, packet_ping->chunks_number);
 			forge_and_send_pong(config, packet_pong);
 			i++;
 		}
 	}
-	if (i != n)
-	{
-		ft_error_child("ERROR", "DATA TRANSFERT", "CONNECTION LOST");
-		exit(0);
-	}
+	// if (i != n)
+	// {
+		// ft_error_child("ERROR", "DATA TRANSFERT", "CONNECTION LOST");
+		// exit(0);
+	// }
 	close(fd);
 	free(packet_ping);
 	free(packet_pong);

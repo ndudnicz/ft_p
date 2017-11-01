@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   open_connection.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:45:02 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:45:04 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
@@ -28,7 +40,7 @@ int		open_cmd_connection(t_config *config, char const *cmd_port_str)
 	printf("Opening connection on: %s:%d\n", config->ip_str,
 	ntohs(sin.sin_port));
 	if ((proto = getprotobyname("tcp")) == 0)
-		return (ft_error("Serveur", "", GETPROTOBYNAME_FAIL, 1));
+		return (ft_error("Serveur", "", GPBN_FAIL, 1));
 	if ((config->socket.server_master =
 	socket(PF_INET, SOCK_STREAM, proto->p_proto)) < 0)
 		return (ft_error("Serveur", "open_connection:", SOCKET_FAILED, 1));
@@ -125,9 +137,7 @@ int			open_data_connection(t_config *config, t_packet *packet,
 		return (send_message(config, "open_data_connection()", MALLOC_FAIL));
 	size_type.size = HEADER_SIZE + ft_strlen(new_port);
 	size_type.type = SEND_NEW_DATA_CONNECTION | (packet->type & ST_MASK);
-	ft_putendl(new_port);
 	forge_packet(&new_connection, &size_type, new_port, 1);
-	print_packet(packet, 1);
 	if (send_packet(config->socket.cmd, &new_connection) > 0)
 		return (1);
 	my_free(29,new_port);

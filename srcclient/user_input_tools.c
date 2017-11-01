@@ -1,22 +1,22 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>//
-#include <sys/time.h>//
-#include <sys/resource.h>//
-#include <sys/wait.h>//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   user_input_tools.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:42:59 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:43:00 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "libft.h"
-#include "libftasm.h"
+#include <sys/wait.h>
+#include <unistd.h>
+
 #include "config.h"
 #include "user_input.h"
 #include "packet.h"
-#include "debug.h"//
-#include "send_packet.h"
-#include "receive_packet.h"
-#include "switch_packet_type_client.h"
-#include "error.h"//
 #include "exec_cmd_local.h"
-#include "commands.h"
 
 static int	should_fork(unsigned short type)
 {

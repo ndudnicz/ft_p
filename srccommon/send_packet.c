@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   send_packet.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:44:10 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:44:11 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <arpa/inet.h>//
 #include <sys/socket.h>
@@ -19,9 +31,6 @@ int		send_packet(int const socket, t_packet *packet)
 	int		ret;
 
 	ret = send(socket, packet, ntohs(packet->size), 0);
-	// ft_putendl("send_packet ---->");
-	// print_forged_packet(packet, 0);
-	// ret = write(socket, packet, packet->size);
 	if (ret < 0)
 		ft_error_child("send_packet", "sendpacket()", SEND_FAIL);
 	return (ret < 0 ? 1 : 0);

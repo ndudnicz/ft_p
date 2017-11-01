@@ -6,12 +6,10 @@
 /*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/02 11:12:29 by ndudnicz          #+#    #+#             */
-/*   Updated: 2017/09/02 11:12:30 by ndudnicz         ###   ########.fr       */
+/*   Updated: 2017/11/01 17:43:37 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include <linux/limits.h>//
-// #include <sys/syslimits.h>
 #include <unistd.h>
 
 #include "config.h"

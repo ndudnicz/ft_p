@@ -47,22 +47,22 @@ void	ft_error_child(char const *cmd, char const *filename, char const *type)
 	ft_putstr_fd("\n", 2);
 }
 
-int		error_handler_socket(t_config *config, char const *function, char const *msg)
-{
-	t_packet			hello;
-	// size_t const		size = (HEADER_SIZE + ft_strlen(msg)) << 16 | T_MESSAGE;
-	t_size_type const	size_type = {HEADER_SIZE + ft_strlen(msg), T_MESSAGE};
-
-	forge_packet(&hello, &size_type, msg, 1);
-	if (send_packet(config->socket.cmd, &hello) > 0)
-		return (1);
-	else
-		return (0);
-}
-
-int		error_handler_local(t_config *config, char const *function, char const *msg)
-{
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (0);
-}
+// int		error_handler_socket(t_config *config, char const *function, char const *msg)
+// {
+// 	t_packet			hello;
+// 	// size_t const		size = (HEADER_SIZE + ft_strlen(msg)) << 16 | T_MESSAGE;
+// 	t_size_type const	size_type = {HEADER_SIZE + ft_strlen(msg), T_MESSAGE};
+//
+// 	forge_packet(&hello, &size_type, msg, 1);
+// 	if (send_packet(config->socket.cmd, &hello) > 0)
+// 		return (1);
+// 	else
+// 		return (0);
+// }
+//
+// int		error_handler_local(t_config *config, char const *function, char const *msg)
+// {
+// 	ft_putstr_fd(msg, 2);
+// 	ft_putstr_fd("\n", 2);
+// 	return (0);
+// }

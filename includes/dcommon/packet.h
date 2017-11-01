@@ -28,7 +28,8 @@
 # define CHUNK_N_SIZE		(sizeof(unsigned int))
 # define SIZE_SIZE			(sizeof(unsigned short))
 # define TYPE_SIZE			(sizeof(unsigned short))
-# define HEADER_SIZE		(MAGIC_SIZE + SIZE_SIZE + TYPE_SIZE + CHUNK_N_SIZE)
+# define HEADER_SIZE_NORME	(MAGIC_SIZE + SIZE_SIZE + TYPE_SIZE + CHUNK_N_SIZE)
+# define HEADER_SIZE		(unsigned short)HEADER_SIZE_NORME
 # define MAX_PACKET_SIZE	0x1000
 # define MAX_DATA_SIZE		(MAX_PACKET_SIZE - HEADER_SIZE)
 
@@ -66,12 +67,11 @@
 # define ST_LPWD		(0x0180 | ST_CMD_LOCAL)
 # define ST_QUIT		0xffff
 
-
 typedef struct		s_packet
 {
 	unsigned int	magic;
 	unsigned int	chunks_number;
-	unsigned short	size; // header + data
+	unsigned short	size;
 	unsigned short	type;
 	char			data[MAX_DATA_SIZE];
 }					t_packet;

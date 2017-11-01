@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 18:00:18 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 18:00:19 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ERROR_H
 
 # define ERROR_H
@@ -17,7 +29,7 @@
 # define UNKNOW_ARG "Unknown command line argument."
 # define CONNECT_ERROR "connect() error."
 # define BIND_ERROR "bind() error."
-# define GETPROTOBYNAME_FAIL "getprotobyname() failed."
+# define GPBN_FAIL "getprotobyname() failed."
 # define INET_ADDR_FAILED "inet_addr(), malformed requests."
 # define SOCKET_FAILED "socket() failed."
 # define CANT_ESTABLISH_CONNECTION "Unable to reach the client."
@@ -30,11 +42,13 @@
 # define UNKNOWN_CMD "UNKNOWN COMMAND"
 # define INVALID_FILE "INVALID FILE"
 
-
 int		ft_error(char const *exec_name, char const *filename,
 				char const *type, int ret);
-void	ft_error_child(char const *cmd, char const *filename, char const *type);
-int		error_handler_socket(t_config *config, char const *function, char const *msg);
-int		error_handler_local(t_config *config, char const *function, char const *msg);
+void	ft_error_child(char const *cmd, char const *filename,
+						char const *type);
+int		error_handler_socket(t_config *config, char const *function,
+								char const *msg);
+int		error_handler_local(t_config *config, char const *function,
+							char const *msg);
 
 #endif
