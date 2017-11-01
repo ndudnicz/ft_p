@@ -23,10 +23,10 @@ int			get_check_local_file(char const *filename)
 	path = ft_strjoin_free(ft_strjoin(cwd, "/"), filename, 1, 0);
 	if ((fd = open(path, O_RDONLY)) > 0)
 	{
-		free(path);
+		my_free(1, path);
 		return (ft_error("ERROR", "GET", "FILE ALREADY EXISTS.", 1));
 	}
-	free(path);
+	my_free(2, path);
 	close(fd);
 	return (0);
 }
@@ -35,6 +35,7 @@ int		get(t_config *config, t_packet *packet, char const *filename,
 			char const *remote_filename)
 {
 	config->port.data = ft_atoi(packet->data); //valid port string
+	print_packet(packet, 1);
 	establish_data_connection(config, filename, &receive_data);
 	return (0);
 }

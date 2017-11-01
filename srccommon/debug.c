@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <arpa/inet.h>
+#include <stdlib.h>
 
 #include "libft.h"
 #include "config.h"
@@ -67,4 +68,10 @@ void print_input(t_input *input)
 {
 	printf("cmd:%04hx\n", input->cmd);
 	printf("arg:%s\n", input->arg);
+}
+
+void	my_free(int n, void *ptr)
+{
+	ft_putnbr_endl(n);
+	free(ptr);
 }

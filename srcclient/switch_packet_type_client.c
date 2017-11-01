@@ -13,9 +13,9 @@
 static int	data_handling(t_config *config, t_packet *packet,
 							char const *filename)
 {
-	if ((packet->type & 0x0fff) == (ST_PUT & 0x0fff))
+	if ((packet->type & 0x0fff) == (ST_PUT & ST_MASK))
 		return put(config, packet, filename, "");
-	else if ((packet->type & 0x0fff) == (ST_GET & 0x0fff))
+	else if ((packet->type & 0x0fff) == (ST_GET & ST_MASK))
 		return get(config, packet, filename);
 	else
 		return (0);
@@ -31,10 +31,7 @@ int		switch_packet_type_client(t_config *config, t_packet *packet,
 		char const *arg)
 {
 	if (packet->magic != MAGIC)
-	{
-		ft_putstr(config->buf);
 		return (0);
-	}
 	else if ((packet->type & ST_MASK) == T_MESSAGE)
 		return display_message_from_packet(packet);
 	else if ((packet->type & ST_MASK) == T_DATA)

@@ -40,7 +40,7 @@
 int				_ft_isalpha(int c);
 int				_ft_puts(char const *str);
 size_t			_ft_strlen(char const *s);
-void			_ft_bzero(char const *s, size_t n);
+void			_ft_bzero(char *s, size_t n);
 int				_ft_isdigit(int c);
 int				_ft_isalnum(int c);
 int				_ft_isascii(int c);

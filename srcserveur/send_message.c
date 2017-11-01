@@ -10,9 +10,10 @@
 int		send_message(t_config *config, char const *msg, char const *side)
 {
 	t_packet		hello;
-	size_t const	size = (HEADER_SIZE + ft_strlen(msg)) << 16 | T_MESSAGE;
+	// size_t const	size = (HEADER_SIZE + ft_strlen(msg)) << 16 | T_MESSAGE;
+	t_size_type const	size_type = {HEADER_SIZE + ft_strlen(msg), T_MESSAGE};
 
-	forge_packet(&hello, size, msg, 1);
+	forge_packet(&hello, &size_type, msg, 1);
 	if (send_packet(config->socket.cmd, &hello) > 0)
 		return (ft_error(side, "send_message()", CANT_ESTABLISH_CONNECTION, 1));
 	else

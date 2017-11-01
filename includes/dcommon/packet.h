@@ -18,6 +18,7 @@
 */
 
 # define MAGIC	0xaefcaeba
+# define CIGAM	0xbaaefcae
 
 /*
 ** Define the packet sizes.
@@ -34,7 +35,7 @@
 /*
 ** Generic types
 */
-# define T_MESSAGE				0x0001
+# define T_MESSAGE				0x1ff1
 # define T_DATA					0x0002
 # define T_PING_PONG			0x0004
 
@@ -75,7 +76,13 @@ typedef struct		s_packet
 	char			data[MAX_DATA_SIZE];
 }					t_packet;
 
-void				forge_packet(t_packet *packet, unsigned int size_type,
+typedef struct		s_size_type
+{
+	unsigned short	size;
+	unsigned short	type;
+}					t_size_type;
+
+void				forge_packet(t_packet *packet, t_size_type const *size_type,
 								char const *data, unsigned int chunks);
 
 void				unforge_packet(t_packet *packet);

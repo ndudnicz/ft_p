@@ -11,6 +11,7 @@
 #include "libft.h"
 #include "constant_config_serveur.h"
 #include "error.h"
+#include "debug.h"
 
 /*
 ** Try to open a connection on <ip>:<port>, port given as parameter
@@ -110,7 +111,7 @@ int			open_data_connection(t_config *config, t_packet *packet,
 	struct sockaddr_in	sin;
 	t_packet			new_connection;
 	char				*new_port;
-	unsigned int		size_type;
+	t_size_type			size_type;
 
 	if ((proto = getprotobyname("tcp")) == 0)
 		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
@@ -122,12 +123,14 @@ int			open_data_connection(t_config *config, t_packet *packet,
 		return (1);
 	if (!(new_port = ft_itoa((int)config->port.data)))
 		return (send_message(config, "open_data_connection()", MALLOC_FAIL));
-	size_type = (HEADER_SIZE | (unsigned short)ft_strlen(new_port)) << 16 |
-	SEND_NEW_DATA_CONNECTION | (packet->type & 0x0fff);
-	forge_packet(&new_connection, size_type, new_port, 1);
+	size_type.size = HEADER_SIZE + ft_strlen(new_port);
+	size_type.type = SEND_NEW_DATA_CONNECTION | (packet->type & ST_MASK);
+	ft_putendl(new_port);
+	forge_packet(&new_connection, &size_type, new_port, 1);
+	print_packet(packet, 1);
 	if (send_packet(config->socket.cmd, &new_connection) > 0)
 		return (1);
-	free(new_port);
+	my_free(29,new_port);
 	wait_for_client(config);
 	transfert(config, packet->data);
 	return (0);

@@ -11,6 +11,7 @@
 #include "send_packet.h"
 #include "debug.h"//
 #include "libft.h"//
+#include "libftasm.h"//
 #include "receive_packet.h"
 
 static unsigned int	swap32(unsigned int const n)
@@ -22,23 +23,17 @@ static unsigned int	swap32(unsigned int const n)
 }
 
 static int	ping_pong(t_config *config, t_packet *packet_ping,
-	t_packet *packet_pong, int const packet_number)
+	t_packet *packet_pong)
 {
 	int		i;
 
 	i = 0;
-	if (!(config->options & IAMSERVER))
-		printf("%d / %d\n", packet_number, swap32(packet_ping->chunks_number));
-	i = send_packet(config->socket.data, packet_ping);
-	receive_packet(config, config->socket.data, packet_pong);
-	// while (i >= 0 && i < 100 && packet_pong->type != T_PING_PONG)
-	// {
-	// 	i++;
-	// 	if (!(config->options & IAMSERVER))
-	// 		printf("%d / %d\n", packet_number, swap32(packet_ping->chunks_number));
-	// 	send_packet(config->socket.data, packet_ping);
-	// 	receive_packet(config, config->socket.data, packet_pong);
-	// }
+	send_packet(config->socket.data, packet_ping);
+	while (i < 100 && packet_pong->type != T_PING_PONG)
+	{
+		i++;
+		receive_packet(config, config->socket.data, packet_pong, 0);
+	}
 	return (i);
 }
 
@@ -48,26 +43,45 @@ static int	chunk_data(t_config *config, char *data, int const chunks_number,
 	int				i;
 	t_packet		*packet_ping;
 	t_packet		*packet_pong;
-	unsigned int	size;
+	// unsigned int	size;
+	t_size_type		size_type;
+
 
 	if (!(packet_ping = (t_packet*)malloc(sizeof(t_packet))) ||
 	!(packet_pong = (t_packet*)malloc(sizeof(t_packet))))
 		return (ft_error("Error", "send_data", MALLOC_FAIL, 1));
 	i = 0;
-	while (i < chunks_number)
+	size_type.type = T_DATA;
+	int fd = open("toto", O_CREAT | O_RDWR | O_TRUNC, 0600);//
+
+	// printf("header:%lu\n", HEADER_SIZE);
+	// printf("max data:%lu\n", MAX_DATA_SIZE);
+	while (i <= chunks_number)
 	{
-		if (i == chunks_number - 1)
-			size = HEADER_SIZE + (file_size - (i * MAX_DATA_SIZE));
+		ft_bzero((char*)packet_pong, sizeof(t_packet));
+		if (i + 1 == chunks_number)
+		{
+
+			size_type.size = HEADER_SIZE + file_size % MAX_DATA_SIZE;
+			// printf("i:%d\nfile size:%lu\n%lu\n", i,file_size, file_size % MAX_DATA_SIZE);
+		}
 		else
-			size = MAX_PACKET_SIZE;
-		forge_packet(packet_ping, ((size << 16) + T_DATA)
-		,&data[i * MAX_DATA_SIZE], chunks_number);
-		if (ping_pong(config, packet_ping, packet_pong, i + 1) > 99)
-			return (ft_error("Error", "send_data", "FILE PERMISSION ?", 1));
+			size_type.size = MAX_PACKET_SIZE;
+		ft_putnbr_endl(size_type.size);
+		forge_packet(packet_ping, &size_type ,&data[i * MAX_DATA_SIZE], chunks_number);
+		write(fd, &data[i * MAX_DATA_SIZE], size_type.size - HEADER_SIZE);//
+		if (!(config->options & IAMSERVER))
+			printf("%d / %d\n", i + 1, swap32(packet_ping->chunks_number));
+		if (ping_pong(config, packet_ping, packet_pong) >= 100)
+		{
+			ft_error_child("ERROR", "DATA TRANSFERT", "CONNECTION LOST");
+			exit(0);
+		}
 		i++;
 	}
-	free(packet_ping);
-	free(packet_pong);
+	close(fd);//
+	my_free(51,packet_ping);
+	my_free(52,packet_pong);
 	return (0);
 }
 

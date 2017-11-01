@@ -35,16 +35,16 @@ static int	free_all_split(char const **aa, char const **bb, char const **cc)
 	while (a[i] || b[i] || c[i])
 	{
 		if (i < ft_array_length(aa))
-			free(a[i]);
+			my_free(3,a[i]);
 		if (i < ft_array_length(bb))
-			free(b[i]);
+			my_free(4,b[i]);
 		if (i < ft_array_length(cc))
-			free(c[i]);
+			my_free(5,c[i]);
 		i++;
 	}
-	free(a);
-	free(b);
-	free(c);
+	my_free(6,a);
+	my_free(7,b);
+	my_free(8,c);
 	return (0);
 }
 
@@ -96,7 +96,7 @@ int			lcd(t_config *config, char *arg)
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
 	if (data_len)
-		free(new_path);
+		my_free(9, new_path);
 	printf("%s\n", CMD_LCD_SUCCESS);
 	return (0);
 }

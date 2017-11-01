@@ -5,6 +5,7 @@
 
 int		display_message_from_packet(t_packet *packet)
 {
-	printf("%s\n", packet->data);
+	// if (ft_strlen(packet->data))
+		printf("%s\n", packet->data);
 	return (0);
 }

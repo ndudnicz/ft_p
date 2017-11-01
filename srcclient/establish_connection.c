@@ -43,11 +43,12 @@ int			establish_connection(t_config *config, char const *ip_str,
 		return (ft_error("Client", "establish_connection()", CONNECT_ERROR, 1));
 	// if (!(config->current_path = ft_strdup(".")))
 		// return (ft_error("Client", "", MALLOC_FAIL, 1));
-	if (receive_packet(config, config->socket.cmd, packet))
-		return (1);
+	receive_packet(config, config->socket.cmd, packet, 0);
+	// if (receive_packet(config, config->socket.cmd, packet))
+	// 	return (1);
 	if (switch_packet_type_client(config, packet, NULL) > 0)
 		return (1);
-	free(packet);
+	my_free(12,packet);
 	printf("Connection done with: %s:%s\n", ip_str, cmd_port_str);
 	return (0);
 }
@@ -66,7 +67,8 @@ int			establish_data_connection(t_config *config, char const *filename,
 	struct sockaddr_in	sin;
 
 	if ((proto = getprotobyname("tcp")) == 0)
-		return (ft_error("ERROR", "establish_data_connection()", GETPROTOBYNAME_FAIL, 0));
+		return (ft_error("ERROR", "establish_data_connection()",
+		GETPROTOBYNAME_FAIL, 0));
 	if ((config->socket.data = socket(PF_INET, SOCK_STREAM, proto->p_proto))
 	< 0)
 		return (ft_error("ERROR", "establish_data_co...()", SOCKET_FAILED, 0));

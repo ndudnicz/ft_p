@@ -49,10 +49,11 @@ void	ft_error_child(char const *cmd, char const *filename, char const *type)
 
 int		error_handler_socket(t_config *config, char const *function, char const *msg)
 {
-	t_packet		hello;
-	size_t const	size = (HEADER_SIZE + ft_strlen(msg)) << 16 | T_MESSAGE;
+	t_packet			hello;
+	// size_t const		size = (HEADER_SIZE + ft_strlen(msg)) << 16 | T_MESSAGE;
+	t_size_type const	size_type = {HEADER_SIZE + ft_strlen(msg), T_MESSAGE};
 
-	forge_packet(&hello, size, msg, 1);
+	forge_packet(&hello, &size_type, msg, 1);
 	if (send_packet(config->socket.cmd, &hello) > 0)
 		return (1);
 	else

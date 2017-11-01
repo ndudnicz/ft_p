@@ -5,9 +5,11 @@
 
 #include "my_syslimits.h"
 #include "config.h"
+#include "packet.h"//
 #include "error.h"
 #include "libft.h"
 #include "libftasm.h"
+#include "debug.h"//
 
 static int	free_all_split(char const **aa, char const **bb)
 {
@@ -21,13 +23,13 @@ static int	free_all_split(char const **aa, char const **bb)
 	while (a[i] || b[i])
 	{
 		if (i < ft_array_length(aa))
-			free(a[i]);
+			my_free(31,a[i]);
 		if (i < ft_array_length(bb))
-			free(b[i]);
+			my_free(32,b[i]);
 		i++;
 	}
-	free(a);
-	free(b);
+	my_free(33,a);
+	my_free(34,b);
 	return (0);
 }
 
