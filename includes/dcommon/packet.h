@@ -36,8 +36,8 @@
 ** Generic types
 */
 # define T_MESSAGE				0x1ff1
-# define T_DATA					0x0002
-# define T_PING_PONG			0x0004
+# define T_DATA					0x2ff2
+# define T_PING_PONG			0x4ff4
 
 /*
 ** T_SPEC_TYPE

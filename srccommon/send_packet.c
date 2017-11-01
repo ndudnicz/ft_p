@@ -18,8 +18,10 @@ int		send_packet(int const socket, t_packet *packet)
 {
 	int		ret;
 
-	// ret = send(socket, packet, packet->size, 0);
-	ret = write(socket, packet, MAX_PACKET_SIZE);
+	ret = send(socket, packet, ntohs(packet->size), 0);
+	// ft_putendl("send_packet ---->");
+	// print_forged_packet(packet, 0);
+	// ret = write(socket, packet, packet->size);
 	if (ret < 0)
 		ft_error_child("send_packet", "sendpacket()", SEND_FAIL);
 	return (ret < 0 ? 1 : 0);

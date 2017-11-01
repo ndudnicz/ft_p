@@ -46,7 +46,7 @@ void			forge_packet(t_packet *packet, t_size_type const *size_type,
 	packet->chunks_number = htonl(chunks);
 	packet->size = htons(size_type->size);
 	packet->type = htons(size_type->type);
-	ft_memcpy(packet->data, data, size_type->size);
+	ft_memcpy(packet->data, data, size_type->size - HEADER_SIZE);
 }
 
 /*

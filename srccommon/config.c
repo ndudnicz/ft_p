@@ -41,7 +41,7 @@ t_config	*create_config(char const*exec_name)
 		return (NULL);
 	}
 	ft_bzero((char*)new, sizeof(t_config));
-	if (!(new->buf = (char*)malloc(MAX_PACKET_SIZE)))
+	if (!(new->buf = (char*)malloc(MAX_PACKET_SIZE + 1)))
 	{
 		ft_error_child(exec_name, "", MALLOC_FAIL);
 		return (NULL);
