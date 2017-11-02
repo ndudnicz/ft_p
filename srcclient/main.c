@@ -19,8 +19,6 @@
 #include "error.h"
 #include "options_handling.h"
 
-// FLAGS DANS LE MAKEFILE!
-
 /*
 ** Display a usefull usage message.
 */

@@ -14,16 +14,13 @@
 
 #include "config.h"
 #include "packet.h"
-#include "debug.h"
 #include "valid_filename.h"
 #include "send_message.h"
 #include "send_data.h"
 #include "open_data_connection.h"
-#include "error.h"
 
 int		get(t_config *config, t_packet *packet)
 {
-	// print_packet(packet, 1);
 	if (valid_filename(config, packet->data, 0) < 1)
 		send_message(config, "ERROR: GET: FILE DOES NOT EXIST.", "server");
 	else

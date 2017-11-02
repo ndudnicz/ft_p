@@ -11,15 +11,14 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdio.h>//
 
 #include "libft.h"
 #include "config.h"
-
 #include "config.h"
 #include "packet.h"
 #include "user_input.h"
 
-#include <stdio.h>
 void	print_packet(t_packet *packet, int print_data)
 {
 	printf("\n------------------------------------\n");
@@ -34,8 +33,6 @@ void	print_packet(t_packet *packet, int print_data)
 
 void	print_forged_packet(t_packet *packet, int print_data)
 {
-
-
 	printf("\n------------------------------------\n");
 	printf("magic:%x\n", ntohl(packet->magic));
 	printf("chunks number:%u\n", ntohs(packet->chunks_number));
@@ -45,19 +42,9 @@ void	print_forged_packet(t_packet *packet, int print_data)
 		printf("%s\n", packet->data);
 	printf("------------------------------------\n\n");
 }
-/*
-void print_input(t_input *input)
-{
-	printf("cmd:%04hx\n", input->cmd);
-	printf("arg:%s\n", input->arg);
-}
-*/
 
-void	my_free(int n, void *ptr, unsigned char const options)
+void	my_free(int n, void *ptr)
 {
-	unsigned char	p = options;
-	p = 0;
-	// if (options & DEBUG)
-		ft_putnbr_endl(n);
+	ft_putnbr_endl(n);
 	free(ptr);
 }

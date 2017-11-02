@@ -15,6 +15,6 @@
 
 # include "user_input.h"
 
-void	my_free(int n, void *ptr, unsigned char const options);
+void	my_free(int n, void *ptr);
 
 #endif

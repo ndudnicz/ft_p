@@ -76,7 +76,7 @@ static int				wait_for_client(t_config *config)
 ** Return 1 if fails
 */
 
-static unsigned int	get_available_port(t_config *config,
+static unsigned int		get_available_port(t_config *config,
 											struct sockaddr_in *sin)
 {
 	unsigned int	port;
@@ -141,7 +141,7 @@ int						open_data_connection(t_config *config, t_packet *packet,
 	forge_packet(&new_connection, &size_type, new_port, 1);
 	if (send_packet(config->socket.cmd, &new_connection) > 0)
 		return (1);
-	my_free(29, new_port, config->options);
+	my_free(29, new_port);
 	wait_for_client(config);
 	transfert(config, packet->data, 0);
 	return (0);

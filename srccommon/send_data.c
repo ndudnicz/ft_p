@@ -65,8 +65,8 @@ static int				chunk_data(t_config *config, char *data,
 		ping_pong(config, packet_ping, packet_pong);
 		i++;
 	}
-	my_free(51, packet_ping, config->options);
-	my_free(52, packet_pong, config->options);
+	my_free(51, packet_ping);
+	my_free(52, packet_pong);
 	return (0);
 }
 
@@ -82,14 +82,12 @@ int						send_data(t_config *config, char const *filename,
 {
 	struct stat		stat;
 	char			*data;
-	char b[PATH_MAX];
+	int const		sock = config->socket.data;
 
 	if ((fd = open(filename, O_RDONLY)) < 0)
-		return (ft_error("ERROR", "send_data()", OPEN_FAILED,
-		stop(config->socket.data)));
+		return (ft_error("ERROR", "send_data()", OPEN_FAILED, stop(sock)));
 	if (fstat(fd, &stat) < 0)
-		return (ft_error("ERROR", "send_data()", FSTAT_FAILED,
-		stop(config->socket.data)));
+		return (ft_error("ERROR", "send_data()", FSTAT_FAILED, stop(sock)));
 	if ((data = (char*)mmap(NULL, stat.st_size, PROT_READ, MAP_PRIVATE, fd, 0))
 	== MAP_FAILED)
 	{

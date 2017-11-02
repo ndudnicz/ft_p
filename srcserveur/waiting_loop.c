@@ -27,9 +27,27 @@
 #include "send_message.h"
 #include "error.h"
 
-static int	should_fork(unsigned short type)
+static void	ft_norme(t_config *config, t_packet *packet, int const ret)
 {
-	return (!(type == ST_CD));
+	ft_bzero((char*)packet, MAX_PACKET_SIZE);
+	if (ret > MAX_PACKET_SIZE)
+		exit(0);
+	ft_memcpy(packet, config->buf, ret);
+	unforge_packet(packet);
+	ft_bzero(config->buf, MAX_PACKET_SIZE);
+}
+
+static void	my_fork_child(t_config *config, t_packet *packet)
+{
+	int		pid;
+	int		stat_loc;
+
+	if ((pid = fork()) < 0)
+		ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
+	else if (pid == 0)
+		switch_packet_type_server(config, packet);
+	else
+		wait4(pid, &stat_loc, 0, NULL);
 }
 
 /*
@@ -41,38 +59,24 @@ static int	should_fork(unsigned short type)
 static int	child_waiting_loop(t_config *config)
 {
 	t_packet	*packet;
-	int			pid;
-	int			stat_loc;
 	int			ret;
 
 	send_message(config, "Server says: Hello !", "Server");
 	ft_putendl("NEW CONNECTION ESTABLISHED!");
 	packet = (t_packet*)malloc(sizeof(t_packet));
-	while ((ret = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0)) > 0)
+	while ((ret = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0))
+	> 0)
 	{
-		ft_bzero((char*)packet, MAX_PACKET_SIZE);
-		pid = 0;
-		if (ret > MAX_PACKET_SIZE)
-			exit(0);
-		ft_memcpy(packet, config->buf, ret);
-		unforge_packet(packet);
-		if (should_fork(packet->type))
-		{
-			if ((pid = fork()) < 0)
-				ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
-			else if (pid == 0)
-				switch_packet_type_server(config, packet);
-			else
-				wait4(pid, &stat_loc, 0, NULL);
-		}
+		ft_norme(config, packet, ret);
+		if (packet->type != ST_CD)
+			my_fork_child(config, packet);
 		else
 			switch_packet_type_server_no_fork(config, packet);
-		ft_bzero(config->buf, MAX_PACKET_SIZE);
 	}
 	exit(0);
 }
 
-static void	my_fork(t_config *config)
+static void	my_fork_master(t_config *config)
 {
 	if (!fork())
 		child_waiting_loop(config);
@@ -102,7 +106,7 @@ int			master_waiting_loop(t_config *config)
 		if ((pid = fork()) < 0)
 			ft_error_child("master_waiting_loop", "fork()", FORK_FAIL);
 		if (config->socket.cmd > 0 && pid == 0)
-			my_fork(config);
+			my_fork_master(config);
 		else if (config->socket.cmd > 0 && pid)
 			wait4(pid, &stat_loc, 0, NULL);
 		if (config->socket.cmd < 0)

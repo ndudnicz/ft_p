@@ -24,7 +24,7 @@
 #include "libft.h"
 #include "libftasm.h"
 
-int		put_check_local_file(t_config *config, char const *filename)
+int		put_check_local_file(char const *filename)
 {
 	char		cwd[PATH_MAX];
 	char		*path;
@@ -36,14 +36,14 @@ int		put_check_local_file(t_config *config, char const *filename)
 	path = ft_strjoin_free(ft_strjoin(cwd, "/"), filename, 1, 0);
 	if (!path || (fd = open(path, O_RDONLY)) < 0)
 	{
-		my_free(10, path, config->options);
+		my_free(10, path);
 		return (ft_error("ERROR", "PUT", INVALID_PATH, 1));
 	}
 	if (fstat(fd, &stat) < 0)
 		return (ft_error("ERROR", "PUT", FSTAT_FAILED, 1));
 	if (!(stat.st_mode & S_IFREG))
 		return (ft_error("ERROR", "PUT", INVALID_FILE, 1));
-	my_free(11, path, config->options);
+	my_free(11, path);
 	close(fd);
 	return (0);
 }

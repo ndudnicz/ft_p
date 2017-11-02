@@ -23,7 +23,7 @@
 #include "libftasm.h"
 #include "debug.h"
 
-static int	free_all_split(t_config *config, char const **aa, char const **bb)
+static int	free_all_split(char const **aa, char const **bb)
 {
 	int		i;
 	char	**a;
@@ -35,13 +35,13 @@ static int	free_all_split(t_config *config, char const **aa, char const **bb)
 	while (a[i] || b[i])
 	{
 		if (i < ft_array_length(aa))
-			my_free(31, a[i], config->options);
+			my_free(31, a[i]);
 		if (i < ft_array_length(bb))
-			my_free(32, b[i], config->options);
+			my_free(32, b[i]);
 		i++;
 	}
-	my_free(33, a, config->options);
-	my_free(34, b, config->options);
+	my_free(33, a);
+	my_free(34, b);
 	return (0);
 }
 
@@ -70,7 +70,7 @@ static int	valid_path(t_config *config, char const *cwd, char const *input)
 	if (cursor <= ft_array_length(array_cwd))
 		return (1);
 	else
-		return (free_all_split(config, array_input, array_cwd));
+		return (free_all_split(array_input, array_cwd));
 }
 
 static int	ret_close(int const fd, char const in)
@@ -84,7 +84,7 @@ static int	ret_close(int const fd, char const in)
 		close(fd);
 	return (((stat.st_mode & S_IFREG) && ret && in) || (ret));
 }
-#include <stdio.h>
+
 int			valid_filename(t_config *config, char const *filename,
 							char const in)
 {
@@ -92,7 +92,6 @@ int			valid_filename(t_config *config, char const *filename,
 	char	*path_file;
 	int		fd;
 
-	puts(filename);
 	if (!getcwd(cwd, PATH_MAX))
 		return (-1);
 	if (valid_path(config, cwd, filename) > 0)

@@ -81,8 +81,6 @@ int				receive_data(t_config *config, char const *filename, int i)
 	while (i != n && (ret = receive_packet(config, config->socket.data,
 	packets[0], 0)) > 0)
 	{
-		if (ret <= 0)
-			break ;
 		if (packets[0]->magic == MAGIC && packets[0]->type == T_DATA)
 		{
 			n = packets[0]->chunks_number;
@@ -90,7 +88,7 @@ int				receive_data(t_config *config, char const *filename, int i)
 			i++;
 		}
 		else if (packets[0]->magic == MAGIC && packets[0]->type == T_CLOSE)
-	 		return ft_error("ERROR", "make_data_connection()", CLOSE, 1);
+			return (ft_error("ERROR", "make_data_connection()", CLOSE, 1));
 	}
 	close_and_free(fd, packets);
 	return (0);
