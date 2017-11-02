@@ -31,7 +31,8 @@
 ** Display an error message and return 1 if fail
 */
 
-int		open_cmd_connection(t_config *config, char const *cmd_port_str)
+int						open_cmd_connection(t_config *config,
+											char const *cmd_port_str)
 {
 	struct protoent		*proto;
 	struct sockaddr_in	sin;
@@ -96,8 +97,8 @@ static unsigned short	get_available_port(t_config *config,
 	return (1);
 }
 
-
-static int	open_data_norme(t_config *config, struct sockaddr_in *sin)
+static int				open_data_norme(t_config *config,
+										struct sockaddr_in *sin)
 {
 	if ((sin->sin_addr.s_addr = inet_addr(config->ip_str)) == INADDR_NONE)
 		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
@@ -116,8 +117,8 @@ static int	open_data_norme(t_config *config, struct sockaddr_in *sin)
 ** Display an error message and return 1 if fail
 */
 
-int			open_data_connection(t_config *config, t_packet *packet,
-								int (*transfert)(t_config*, char const*))
+int						open_data_connection(t_config *config, t_packet *packet,
+								int (*transfert)(t_config*, char const*, int))
 {
 	struct protoent		*proto;
 	struct sockaddr_in	sin;
@@ -140,8 +141,8 @@ int			open_data_connection(t_config *config, t_packet *packet,
 	forge_packet(&new_connection, &size_type, new_port, 1);
 	if (send_packet(config->socket.cmd, &new_connection) > 0)
 		return (1);
-	my_free(29,new_port);
+	my_free(29, new_port);
 	wait_for_client(config);
-	transfert(config, packet->data);
+	transfert(config, packet->data, 0);
 	return (0);
 }

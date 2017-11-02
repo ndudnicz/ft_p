@@ -19,7 +19,7 @@ typedef struct	s_input
 	char			*arg;
 }				t_input;
 
-int				user_input_loop(t_config *config);
+int				user_input_loop(t_config *config, int ret, char *line);
 void			fork_and_run(t_config *config, t_input *input);
 
 #endif

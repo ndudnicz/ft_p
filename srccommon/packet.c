@@ -13,11 +13,8 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 
-#include "config.h"//
 #include "packet.h"
-#include "debug.h"//
 #include "libftasm.h"
-#include "libft.h"
 
 /*
 ** Get st_size from struct stat (sys/stat.h) and return a number of chunk
@@ -34,13 +31,8 @@ unsigned int	get_chunk_number(unsigned long int st_size)
 */
 
 void			forge_packet(t_packet *packet, t_size_type const *size_type,
-								char const* data, unsigned int chunks)
+								char const *data, unsigned int chunks)
 {
-	// int size;
-	// unsigned short type;
-
-	// size = (unsigned short)(size_type >> 16);
-	// type = (unsigned short)(size_type);
 	ft_bzero((char *)packet, MAX_PACKET_SIZE);
 	packet->magic = htonl(MAGIC);
 	packet->chunks_number = htonl(chunks);
@@ -53,21 +45,10 @@ void			forge_packet(t_packet *packet, t_size_type const *size_type,
 ** Get host values from network values
 */
 
-void	unforge_packet(t_packet *packet)
+void			unforge_packet(t_packet *packet)
 {
 	packet->chunks_number = ntohl(packet->chunks_number);
 	packet->magic = ntohl(packet->magic);
 	packet->size = ntohs(packet->size);
 	packet->type = ntohs(packet->type);
-}
-
-t_packet	*packetdup(t_config *config)
-{
-	// ft_putendl("packetdup");
-	// if (!(new = (t_packet*)malloc(sizeof(t_packet))))
-	// 	return (NULL);
-	// ft_memcpy(new, packet, sizeof(MAX_PACKET_SIZE));
-	// print_packet(packet, 1);
-	// print_packet(new, 1);
-	return ((t_packet*)config);
 }

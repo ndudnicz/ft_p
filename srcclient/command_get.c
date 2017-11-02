@@ -20,7 +20,7 @@
 #include "error.h"
 #include "receive_data.h"
 #include "my_syslimits.h"
-#include "establish_connection.h"
+#include "make_connection.h"
 #include "libft.h"
 #include "libftasm.h"
 
@@ -33,7 +33,7 @@ int			get_check_local_file(char const *filename)
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (ft_error("ERROR", "GET", "GETCWD()", 1));
 	path = ft_strjoin_free(ft_strjoin(cwd, "/"), filename, 1, 0);
-	if ((fd = open(path, O_RDONLY)) > 0)
+	if (!path || (fd = open(path, O_RDONLY)) > 0)
 	{
 		my_free(1, path);
 		return (ft_error("ERROR", "GET", "FILE ALREADY EXISTS.", 1));
@@ -43,10 +43,9 @@ int			get_check_local_file(char const *filename)
 	return (0);
 }
 
-int		get(t_config *config, t_packet *packet, char const *filename)
+int			get(t_config *config, t_packet *packet, char const *filename)
 {
 	config->port.data = ft_atoi(packet->data); //valid port string
-	print_packet(packet, 1);
-	establish_data_connection(config, filename, &receive_data);
+	make_data_connection(config, filename, &receive_data);
 	return (0);
 }

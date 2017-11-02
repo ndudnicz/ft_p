@@ -42,9 +42,6 @@
 
 # define LS_PATH	"/bin/ls"
 
-# define DUPED			0x04
-# define IAMSERVER		0x08
-
 /*
 ** ========= S_PORT ============================================================
 **

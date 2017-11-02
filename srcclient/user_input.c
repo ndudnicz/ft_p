@@ -17,7 +17,7 @@
 #include "config.h"
 #include "user_input.h"
 #include "packet.h"
-#include "debug.h"//
+#include "debug.h"
 #include "send_packet.h"
 #include "receive_packet.h"
 #include "switch_packet_type_client.h"
@@ -61,13 +61,11 @@ static void				sub_free(void *p1, void *p2)
 		my_free(15, p2);
 }
 
-static unsigned short	treat_input(t_input *input, char *line)
+static unsigned short	treat_input(t_input *input, char *line, int i)
 {
 	char const	*s = ft_strtrim(line);
 	char const	**array = (char const**)ft_strsplit(s, ' ');
-	int			i;
 
-	i = 0;
 	input->arg = NULL;
 	if (line)
 		my_free(13, line);
@@ -77,6 +75,9 @@ static unsigned short	treat_input(t_input *input, char *line)
 		input->arg = (char*)array[1];
 	else
 		input->arg = ft_strdup("");
+	if (ft_strlen(array[0]) > PATH_MAX ||
+	(input->arg && ft_strlen(input->arg) > PATH_MAX))
+		return (0);
 	input->cmd = get_type(array[0], input->arg);
 	while (array[i])
 	{
@@ -88,48 +89,55 @@ static unsigned short	treat_input(t_input *input, char *line)
 	return (input->cmd);
 }
 
+static int				cmd_handling(t_config *config, t_input *input,
+									t_packet *packet)
+{
+	t_size_type	size_type;
+
+	if ((input->cmd == ST_PUT && put_check_local_file(input->arg) > 0) ||
+	(input->cmd == ST_GET && get_check_local_file(input->arg) > 0))
+		return (-1);
+	size_type.size = HEADER_SIZE + ft_strlen(input->arg);
+	size_type.type = input->cmd;
+	forge_packet(packet, &size_type, input->arg, 1);
+	send_packet(config->socket.cmd, packet);
+	receive_packet(config, config->socket.cmd, packet, input->cmd);
+	if (switch_packet_type_client(config, packet, input->arg) > 0)
+		return (1);
+	ft_bzero((char*)packet, packet->size);
+	return (0);
+}
+
 /*
 ** Loop and treat the input string while the user doesn't type 'quit' or press
 ** CTRL-D
 */
 
-int						user_input_loop(t_config *config)
+int						user_input_loop(t_config *config, int ret, char *line)
 {
-	char		*line;
 	t_packet	*packet;
 	t_input		input;
-	t_size_type	size_type;
 
 	if (!(packet = (t_packet*)malloc(sizeof(t_packet))))
 		return (ft_error("Error", "user_input_loop()", MALLOC_FAIL, 1));
-	line = NULL;
 	input.arg = NULL;
 	while (ft_putstr(PROMPT) && gnl(0, &line) > 0)
 	{
 		if (input.arg)
 			my_free(17, input.arg);
-		if (treat_input(&input, line) == ST_QUIT)
+		if (treat_input(&input, line, 0) == ST_QUIT)
 			break ;
 		if (input.arg && input.cmd && !(input.cmd & ST_CMD_LOCAL))
 		{
-			if ((input.cmd == ST_PUT && put_check_local_file(input.arg) > 0) ||
-			(input.cmd == ST_GET && get_check_local_file(input.arg) > 0))
+			if ((ret = cmd_handling(config, &input, packet)) < 0)
 				continue ;
-			size_type.size = HEADER_SIZE + ft_strlen(input.arg);
-			size_type.type = input.cmd;
-			forge_packet(packet, &size_type, input.arg, 1);
-			send_packet(config->socket.cmd, packet);
-			receive_packet(config, config->socket.cmd, packet, input.cmd);
-			while (((char*)packet)[0] == 0)
-				receive_packet(config, config->socket.cmd, packet, input.cmd);
-			if (switch_packet_type_client(config, packet, input.arg) > 0)
+			else if (ret)
 				return (1);
-			ft_bzero((char*)packet, packet->size);
 		}
 		else if (input.cmd)
 			fork_and_run(config, &input);
 	}
+	close(config->socket.cmd);
 	my_free(18, packet);
-	ft_putendl("Bye!");
-	return (0);
+	return (ft_putstr("Bye!\n") - 5);
 }

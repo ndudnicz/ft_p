@@ -10,11 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 
-#include "libftasm.h"
-#include "libft.h"//
 #include "config.h"
 #include "packet.h"
 #include "error.h"

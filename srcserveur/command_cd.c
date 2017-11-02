@@ -35,16 +35,16 @@ static int	free_all_split(char const **aa, char const **bb, char const **cc)
 	while (a[i] || b[i] || c[i])
 	{
 		if (i < ft_array_length(aa))
-			my_free(20,a[i]);
+			my_free(20, a[i]);
 		if (i < ft_array_length(bb))
-			my_free(21,b[i]);
+			my_free(21, b[i]);
 		if (i < ft_array_length(cc))
-			my_free(22,c[i]);
+			my_free(22, c[i]);
 		i++;
 	}
-	my_free(23,a);
-	my_free(24,b);
-	my_free(25,c);
+	my_free(23, a);
+	my_free(24, b);
+	my_free(25, c);
 	return (0);
 }
 
@@ -93,10 +93,10 @@ int			cd(t_config *config, t_packet *packet)
 		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), packet->data, 1, 0);
 	if (chdir(new_path) < 0)
 	{
-		my_free(26,new_path);
+		my_free(26, new_path);
 		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
 	}
-	my_free(27,new_path);
+	my_free(27, new_path);
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (send_message(config, INTERNAL_ERROR, "serveur"));
 	else

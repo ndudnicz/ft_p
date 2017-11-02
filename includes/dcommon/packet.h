@@ -84,11 +84,7 @@ typedef struct		s_size_type
 
 void				forge_packet(t_packet *packet, t_size_type const *size_type,
 								char const *data, unsigned int chunks);
-
 void				unforge_packet(t_packet *packet);
-
 unsigned int		get_chunk_number(unsigned long int st_size);
-
-t_packet			*packetdup(t_config *config);
 
 #endif

@@ -10,15 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <arpa/inet.h>
 #include <stdlib.h>
 
 #include "libft.h"
-#include "config.h"
+
+/*#include "config.h"
 #include "packet.h"
 #include "user_input.h"
-
 void	print_packet(t_packet *packet, int print_data)
 {
 	printf("\n------------------------------------\n");
@@ -50,6 +48,7 @@ void print_input(t_input *input)
 	printf("cmd:%04hx\n", input->cmd);
 	printf("arg:%s\n", input->arg);
 }
+*/
 
 void	my_free(int n, void *ptr)
 {

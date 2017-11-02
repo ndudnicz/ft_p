@@ -11,13 +11,10 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "config.h"
-#include "libft.h"
-#include "libftasm.h"
 #include "packet.h"
-#include "establish_connection.h"
+#include "make_connection.h"
 #include "user_input.h"
 #include "error.h"
 #include "options_handling.h"
@@ -50,9 +47,9 @@ int		main(int ac, char **av)
 	{
 		if (get_options(config, &ac, av) > 0)
 			return (1);
-		else if (establish_connection(config, av[1], av[2]) > 0)
+		else if (make_connection(config, av[1], av[2]) > 0)
 			return (1);
-		else if (user_input_loop(config) > 0)
+		else if (user_input_loop(config, 0, NULL) > 0)
 			return (1);
 		else
 			return (free_config(config));

@@ -21,7 +21,6 @@
 #include "packet.h"
 #include "libftasm.h"
 #include "libft.h"
-#include "debug.h"//
 #include "switch_packet_type_server.h"
 #include "receive_packet.h"
 #include "send_packet.h"
@@ -68,6 +67,14 @@ static int	child_waiting_loop(t_config *config)
 	exit(0);
 }
 
+static void	my_fork(t_config *config)
+{
+	if (!fork())
+		child_waiting_loop(config);
+	else
+		exit(0);
+}
+
 /*
 ** Master loop, waiting for new input connection.
 ** fork(), copy *config and launch child_waiting_loop() when it gets
@@ -79,9 +86,10 @@ int			master_waiting_loop(t_config *config)
 {
 	int					pid;
 	struct sockaddr_in	csin;
-	unsigned int		cslen = sizeof(csin);
+	unsigned int		cslen;
 	int					stat_loc;
 
+	cslen = sizeof(csin);
 	while ((config->socket.cmd = accept(config->socket.server_master,
 	(struct sockaddr*)&csin, &cslen)))
 	{
@@ -89,12 +97,7 @@ int			master_waiting_loop(t_config *config)
 		if ((pid = fork()) < 0)
 			ft_error_child("master_waiting_loop", "fork()", FORK_FAIL);
 		if (config->socket.cmd > 0 && pid == 0)
-		{
-			if (!fork())
-				child_waiting_loop(config);
-			else
-				exit(0);
-		}
+			my_fork(config);
 		else if (config->socket.cmd > 0 && pid)
 			wait4(pid, &stat_loc, 0, NULL);
 		if (config->socket.cmd < 0)

@@ -10,13 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>//
 #include <sys/socket.h>
 
 #include "config.h"
 #include "packet.h"
-#include "debug.h"//
-#include "libft.h"
 #include "libftasm.h"
 #include "error.h"
 
@@ -35,11 +32,10 @@ static void	print_ls(t_config *config, t_packet *packet)
 				break ;
 		}
 	}
-
 }
 
-int		receive_packet(t_config *config, int socket, t_packet *packet,
-						unsigned short cmd)
+int			receive_packet(t_config *config, int socket, t_packet *packet,
+							unsigned short cmd)
 {
 	int			ret1;
 	int			ret2;
@@ -51,7 +47,8 @@ int		receive_packet(t_config *config, int socket, t_packet *packet,
 		ret1 = read(socket, config->buf, HEADER_SIZE);
 	tmp = (t_packet*)config->buf;
 	ft_memcpy((char*)packet, tmp, ret1);
-	if (ret1 >= HEADER_SIZE && (tmp->magic == CIGAM || tmp->magic == MAGIC))
+	if (ret1 >= HEADER_SIZE && (tmp->magic == CIGAM || tmp->magic == MAGIC) &&
+	ntohs(tmp->size) <= MAX_PACKET_SIZE)
 	{
 		if ((ret2 = read(socket, config->buf, ntohs(tmp->size))) < 0)
 			ft_error_child("receive_cmd_packet", "read()", READ_FAIL);
@@ -61,5 +58,7 @@ int		receive_packet(t_config *config, int socket, t_packet *packet,
 	}
 	else if (cmd == ST_LS)
 		print_ls(config, packet);
+	else
+		return (-1);
 	return (ret1 + ret2);
 }

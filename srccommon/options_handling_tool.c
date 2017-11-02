@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   send_message.c                                     :+:      :+:    :+:   */
+/*   options_handling_tool.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/01 17:45:08 by ndudnicz          #+#    #+#             */
-/*   Updated: 2017/11/01 17:45:09 by ndudnicz         ###   ########.fr       */
+/*   Created: 2017/11/02 10:59:34 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/02 10:59:36 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,25 @@
 
 #include "libftasm.h"
 #include "config.h"
-#include "packet.h"
-#include "send_packet.h"
 #include "error.h"
 
-int		send_message(t_config *config, char const *msg, char const *side)
+int		set_root_folder(t_config *config, char const *exec_name,
+						char const *param)
 {
-	t_packet			hello;
-	t_size_type const	size_type = {HEADER_SIZE + ft_strlen(msg), T_MESSAGE};
+	config->options |= ROOT_FOLDER;
+	if (chdir(param) < 0)
+		return (ft_error(exec_name, "-f", CHDIR_FAILED, 1));
+	else
+		return (0);
+}
 
-	forge_packet(&hello, &size_type, msg, 1);
-	if (send_packet(config->socket.cmd, &hello) > 0)
-		return (ft_error(side, "send_message()", CANT_ESTABLISH_CONNECTION, 1));
+int		set_bind_ip(t_config *config, char const *exec_name, char const *param)
+{
+	config->options |= BIND_IP;
+	if (!param)
+		return (ft_error(exec_name, "-b", BIND_FAILED, 1));
+	else if (!(config->ip_str = ft_strdup(param)))
+		return (ft_error(exec_name, "", MALLOC_FAIL, 1));
 	else
 		return (0);
 }

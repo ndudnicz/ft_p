@@ -35,7 +35,7 @@ void		fork_and_run(t_config *config, t_input *input)
 	{
 		pid = fork();
 		if (pid == 0)
-			exec_cmd_local(config, input->cmd);
+			exec_cmd_local(input->cmd);
 		else
 			wait4(pid, &stat_loc, 0, NULL);
 	}

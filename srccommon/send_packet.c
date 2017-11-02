@@ -11,13 +11,10 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include <arpa/inet.h>//
-#include <sys/socket.h>
+#include <arpa/inet.h>
 
-#include "config.h"//
+#include "config.h"
 #include "packet.h"
-#include "debug.h"//
-#include "libft.h"//
 #include "error.h"
 
 /*
@@ -30,7 +27,7 @@ int		send_packet(int const socket, t_packet *packet)
 {
 	int		ret;
 
-	ret = send(socket, packet, ntohs(packet->size), 0);
+	ret = write(socket, packet, ntohs(packet->size));
 	if (ret < 0)
 		ft_error_child("send_packet", "sendpacket()", SEND_FAIL);
 	return (ret < 0 ? 1 : 0);

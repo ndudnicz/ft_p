@@ -10,14 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-
 #include "config.h"
 #include "libft.h"
 #include "error.h"
-#include "libftasm.h"
 #include "my_limits.h"
+#include "libftasm.h"
 #include "my_syslimits.h"
+#include "options_handling.h"
 
 /*
 ** Moves NULLs argv to the end of the array. Options are set in config
@@ -49,8 +48,8 @@ static void	del_null_params(int *ac, char **av, int offset)
 	*ac -= offset;
 }
 
-static int	switch_set_options(char *exec_name, char *arg, char *param,
-						t_config *config)
+static int	switch_set_options(char const *exec_name, char const *arg,
+								char const *param, t_config *config)
 {
 	if (!arg)
 		return (0);
@@ -61,23 +60,9 @@ static int	switch_set_options(char *exec_name, char *arg, char *param,
 		if (*arg && ft_strchr(PARAMS_STR, (int)(*arg)))
 		{
 			if (*arg == BIND_IP_CHAR)
-			{
-				config->options |= BIND_IP;
-				if (!param)
-					return ft_error(exec_name, "-b", BIND_FAILED, 1);
-				else if (!(config->ip_str = ft_strdup(param)))
-					return ft_error(exec_name, "", MALLOC_FAIL, 1);
-				else
-					return (0);
-			}
+				set_bind_ip(config, exec_name, param);
 			else if (*arg == ROOT_FOLDER_CHAR)
-			{
-				config->options |= ROOT_FOLDER;
-				if (chdir(param) < 0)
-					return ft_error(exec_name, "-f", CHDIR_FAILED, 1);
-				else
-					return (0);
-			}
+				set_root_folder(config, exec_name, param);
 			else
 				return (ft_error(exec_name, "", UNKNOW_ARG, 1));
 		}
@@ -159,6 +144,7 @@ int			get_options(t_config *config, int *ac, char **av)
 	del_null_params(ac, av, n);
 	if (valid_port_number(av[0], ac, av) > 0 || set_root(config) > 0)
 		return (1);
-	config->ip_str = config->ip_str ? config->ip_str : ft_strdup(DEFAULT_IP_BIND);
+	config->ip_str = config->ip_str ? config->ip_str :
+	ft_strdup(DEFAULT_IP_BIND);
 	return (0);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   establish_connection.h                             :+:      :+:    :+:   */
+/*   make_connection.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ESTABLISH_CONNECTION_H
-# define ESTABLISH_CONNECTION_H
+#ifndef MAKE_CONNECTION_H
+# define MAKE_CONNECTION_H
 
 # include "config.h"
 
-int		establish_connection(t_config *config, char const *ip_str,
+int		make_connection(t_config *config, char const *ip_str,
 								char const *cmd_port_str);
-int		establish_data_connection(t_config *config, char const *filename,
-								int (*transfert)(t_config*, char const*));
+int		make_data_connection(t_config *config, char const *filename,
+								int (*transfert)(t_config*, char const*, int));
 
 #endif

@@ -11,13 +11,10 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <unistd.h>
 
 #include "config.h"
 #include "packet.h"
 #include "send_message.h"
-#include "libft.h"//
-#include "debug.h"//
 #include "commands.h"
 
 void	switch_packet_type_server(t_config *config, t_packet *packet)

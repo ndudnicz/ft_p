@@ -21,7 +21,6 @@
 
 void	ls(t_config *config)
 {
-	// free_config(config);
 	my_pipe(STDOUT_FILENO, config->socket.cmd);
 	my_pipe(STDERR_FILENO, config->socket.cmd);
 	execl(LS_PATH, LS_PATH, "-pa", ".", NULL);
