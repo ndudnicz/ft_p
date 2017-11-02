@@ -14,5 +14,6 @@
 # define SEND_PACKET_H
 
 int		send_packet(int const socket, t_packet *packet);
+int		stop(int const socket);
 
 #endif

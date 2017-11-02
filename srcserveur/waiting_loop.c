@@ -43,13 +43,18 @@ static int	child_waiting_loop(t_config *config)
 	t_packet	*packet;
 	int			pid;
 	int			stat_loc;
+	int			ret;
 
 	send_message(config, "Server says: Hello !", "Server");
 	ft_putendl("NEW CONNECTION ESTABLISHED!");
-	while (recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0) > 0)
+	packet = (t_packet*)malloc(sizeof(t_packet));
+	while ((ret = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0)) > 0)
 	{
+		ft_bzero((char*)packet, MAX_PACKET_SIZE);
 		pid = 0;
-		packet = (t_packet*)config->buf;
+		if (ret > MAX_PACKET_SIZE)
+			exit(0);
+		ft_memcpy(packet, config->buf, ret);
 		unforge_packet(packet);
 		if (should_fork(packet->type))
 		{

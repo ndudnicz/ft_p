@@ -21,7 +21,8 @@
 #include "error.h"
 #include "my_syslimits.h"
 
-static int	free_all_split(t_config *config, char const **aa, char const **bb,
+static int	free_all_split(t_config *config, char const **aa,
+							char const **bb,
 							char const **cc)
 {
 	int		i;
@@ -68,6 +69,8 @@ static int	valid_user_input(t_config *config, char const *root,
 			cursor--;
 		else
 			cursor++;
+		if (cursor < ft_array_length(array_root))
+			return (1);
 		i++;
 	}
 	if (cursor < ft_array_length(array_root))
@@ -84,6 +87,7 @@ int			cd(t_config *config, t_packet *packet)
 
 	cwd[0] = 0;
 	new_path = NULL;
+	packet->data[packet->size - HEADER_SIZE] = 0;
 	if (!getcwd(cwd, PATH_MAX))
 		return (send_message(config, INTERNAL_ERROR, "serveur"));
 	if (valid_user_input(config, config->root, packet->data, cwd) > 0)

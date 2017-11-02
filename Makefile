@@ -2,7 +2,7 @@ CLIENT = client
 SERVEUR = serveur
 LIBCOMMON = libcommon.a
 CC = gcc
-FLAGS = -Werror -Wextra -Wall
+FLAGS = #-Werror -Wextra -Wall
 
 # SOURCE FOLDERS ==============================================================#
 

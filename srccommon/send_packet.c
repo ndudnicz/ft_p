@@ -29,6 +29,19 @@ int		send_packet(int const socket, t_packet *packet)
 
 	ret = write(socket, packet, ntohs(packet->size));
 	if (ret < 0)
-		ft_error_child("send_packet", "sendpacket()", SEND_FAIL);
+		ft_error_child("ERROR", "sendpacket()", SEND_FAIL);
 	return (ret < 0 ? 1 : 0);
+}
+
+int		stop(int const socket)
+{
+	t_packet	stop;
+	t_size_type	st;
+
+	st.size = HEADER_SIZE;
+	st.type = T_CLOSE;
+	forge_packet(&stop, &st, "", 1);
+	send_packet(socket, &stop);
+	close(socket);
+	return (1);
 }

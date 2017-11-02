@@ -33,7 +33,6 @@ int		usage(char const *bin)
 	printf("Usage: %s [options] <port>\n\n", bin);
 	printf("Options:\n\n");
 	printf("\t-f <root_folder> : set a root folder\n");
-	printf("\t-b <ip>          : bind the connection on <ip>\n");
 	return (1);
 }
 

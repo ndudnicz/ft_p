@@ -49,6 +49,7 @@ static int	valid_path(t_config *config, char const *cwd, char const *input)
 {
 	int			cursor;
 	int			i;
+	char const	**array_root = (char const**)ft_strsplit(config->root, '/');
 	char const	**array_input = (char const**)ft_strsplit(input, '/');
 	char const	**array_cwd = (char const**)ft_strsplit(cwd, '/');
 
@@ -62,6 +63,8 @@ static int	valid_path(t_config *config, char const *cwd, char const *input)
 			cursor--;
 		else
 			cursor++;
+		if (cursor < ft_array_length(array_root))
+			return (1);
 		i++;
 	}
 	if (cursor <= ft_array_length(array_cwd))
@@ -81,7 +84,7 @@ static int	ret_close(int const fd, char const in)
 		close(fd);
 	return (((stat.st_mode & S_IFREG) && ret && in) || (ret));
 }
-
+#include <stdio.h>
 int			valid_filename(t_config *config, char const *filename,
 							char const in)
 {
@@ -89,6 +92,7 @@ int			valid_filename(t_config *config, char const *filename,
 	char	*path_file;
 	int		fd;
 
+	puts(filename);
 	if (!getcwd(cwd, PATH_MAX))
 		return (-1);
 	if (valid_path(config, cwd, filename) > 0)

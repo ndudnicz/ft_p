@@ -32,11 +32,9 @@
 ** Options
 */
 
-# define DEBUG				0x01
 # define ROOT_FOLDER		0x02
 # define ROOT_FOLDER_CHAR	'f'
-# define DEBUG_CHAR			'd'
-# define PARAMS_STR			"fd"
+# define PARAMS_STR			"f"
 # define LS_PATH			"/bin/ls"
 
 /*

@@ -23,7 +23,7 @@
 # define READ_FAIL "Unable to read incoming data."
 # define MALLOC_FAIL "memory allocation failed."
 # define FSTAT_FAILED "fstat() failed."
-# define MMAP_FAILED "mmap() failed."
+# define MMAP_FAILED "mmap() failed. Empty file ?"
 # define OPEN_FAILED "open() failed."
 # define CLOSE_FAILED "close() failed."
 # define UNKNOW_ARG "Unknown command line argument."
@@ -41,6 +41,7 @@
 # define BAD_PORT "Invalid port number."
 # define UNKNOWN_CMD "UNKNOWN COMMAND"
 # define INVALID_FILE "INVALID FILE"
+# define CLOSE "CONNECTION CLOSED BY PEER"
 
 int		ft_error(char const *exec_name, char const *filename,
 				char const *type, int ret);

@@ -76,10 +76,10 @@ static int				wait_for_client(t_config *config)
 ** Return 1 if fails
 */
 
-static unsigned short	get_available_port(t_config *config,
+static unsigned int	get_available_port(t_config *config,
 											struct sockaddr_in *sin)
 {
-	unsigned short	port;
+	unsigned int	port;
 
 	port = LOW_BOUND_PORT_RANGE;
 	while (port <= HIGH_BOUND_PORT_RANGE)

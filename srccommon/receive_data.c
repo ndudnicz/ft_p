@@ -89,6 +89,8 @@ int				receive_data(t_config *config, char const *filename, int i)
 			write_forge_and_send_pong(config, packets[1], packets[0], fd);
 			i++;
 		}
+		else if (packets[0]->magic == MAGIC && packets[0]->type == T_CLOSE)
+	 		return ft_error("ERROR", "make_data_connection()", CLOSE, 1);
 	}
 	close_and_free(fd, packets);
 	return (0);

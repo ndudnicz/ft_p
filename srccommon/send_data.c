@@ -70,32 +70,35 @@ static int				chunk_data(t_config *config, char *data,
 	return (0);
 }
 
+int						ret_close(int fd1, int fd2, int ret)
+{
+	close(fd1);
+	close(fd2);
+	return (ret);
+}
+
 int						send_data(t_config *config, char const *filename,
 									int fd)
 {
 	struct stat		stat;
 	char			*data;
+	char b[PATH_MAX];
 
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return (ft_error("Error", "send_data", OPEN_FAILED, 1));
+	if ((fd = open(filename, O_RDONLY)) < 0)
+		return (ft_error("ERROR", "send_data()", OPEN_FAILED,
+		stop(config->socket.data)));
 	if (fstat(fd, &stat) < 0)
-		return (ft_error("Error", "send_data", FSTAT_FAILED, 1));
+		return (ft_error("ERROR", "send_data()", FSTAT_FAILED,
+		stop(config->socket.data)));
 	if ((data = (char*)mmap(NULL, stat.st_size, PROT_READ, MAP_PRIVATE, fd, 0))
 	== MAP_FAILED)
 	{
 		close(fd);
-		close(config->socket.data);
-		return (ft_error("Error", "send_data", MMAP_FAILED, 1));
+		return (ft_error("ERROR", "send_data()", MMAP_FAILED,
+		stop(config->socket.data)));
 	}
 	if (chunk_data(config, data, get_chunk_number(stat.st_size),
 	stat.st_size) > 0)
-	{
-		close(fd);
-		close(config->socket.data);
-		return (1);
-	}
-	close(fd);
-	close(config->socket.data);
-	return (0);
+		return (ret_close(fd, config->socket.data, 1));
+	return (ret_close(fd, config->socket.data, 0));
 }

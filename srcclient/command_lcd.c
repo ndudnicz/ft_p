@@ -28,7 +28,8 @@ int		lcd(t_config *config, char *arg)
 	int const	data_len = ft_strlen(arg);
 
 	cwd[0] = 0;
-	ft_putendl(arg);
+	if (ft_strlen(arg) > 0)
+		ft_putendl(arg);
 	if (!getcwd(cwd, PATH_MAX))
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
 	if (data_len == 0)

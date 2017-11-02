@@ -39,6 +39,7 @@
 # define T_MESSAGE				0x1ff1
 # define T_DATA					0x2ff2
 # define T_PING_PONG			0x4ff4
+# define T_CLOSE				0x8ff8
 
 /*
 ** T_SPEC_TYPE

@@ -59,10 +59,10 @@ static int	switch_set_options(char const *exec_name, char const *arg,
 	{
 		if (*arg && ft_strchr(PARAMS_STR, (int)(*arg)))
 		{
-			if (*arg == ROOT_FOLDER_CHAR)
-				set_root_folder(config, exec_name, param);
-			else if (*arg == DEBUG_CHAR)
-				config->options |= DEBUG;
+			if (*arg == ROOT_FOLDER_CHAR && !*(arg + 1))
+				return (set_root_folder(config, exec_name, param));
+			// else if (*arg == DEBUG_CHAR)
+				// config->options |= DEBUG;
 			else
 				return (ft_error(exec_name, "", UNKNOW_ARG, 1));
 		}
@@ -136,6 +136,8 @@ int			get_options(t_config *config, int *ac, char **av)
 			av[i] = NULL;
 			av[i + 1] = NULL;
 			n += 2;
+			// n += config->options > 1 ? 2 : 1;
+			// i += config->options > 1 ? 2 : 1;
 			i += 2;
 		}
 		else

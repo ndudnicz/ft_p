@@ -15,9 +15,11 @@
 #include "libft.h"
 #include "config.h"
 
-/*#include "config.h"
+#include "config.h"
 #include "packet.h"
 #include "user_input.h"
+
+#include <stdio.h>
 void	print_packet(t_packet *packet, int print_data)
 {
 	printf("\n------------------------------------\n");
@@ -43,7 +45,7 @@ void	print_forged_packet(t_packet *packet, int print_data)
 		printf("%s\n", packet->data);
 	printf("------------------------------------\n\n");
 }
-
+/*
 void print_input(t_input *input)
 {
 	printf("cmd:%04hx\n", input->cmd);
@@ -53,7 +55,9 @@ void print_input(t_input *input)
 
 void	my_free(int n, void *ptr, unsigned char const options)
 {
-	if (options & DEBUG)
+	unsigned char	p = options;
+	p = 0;
+	// if (options & DEBUG)
 		ft_putnbr_endl(n);
 	free(ptr);
 }

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <sys/socket.h>
+#include <arpa/inet.h>
 
 #include "config.h"
 #include "packet.h"
@@ -23,8 +24,8 @@
 static void	print_ls(t_config *config, t_packet *packet, int ret)
 {
 	((char*)packet)[ret] = 0;
-	int r = ft_putstr((char*)packet);
-	if (r >= HEADER_SIZE - 1 && ((char*)packet)[r - 1] > 10)
+	ret = ft_putstr((char*)packet);
+	if (ret >= HEADER_SIZE - 1 && ((char*)packet)[ret - 1] > 10)
 	{
 		while ((ret =
 		read(config->socket.cmd, config->buf, MAX_PACKET_SIZE - 1)) > 0)
@@ -50,7 +51,7 @@ int			receive_packet(t_config *config, int socket, t_packet *packet,
 		ret1 = read(socket, config->buf, HEADER_SIZE);
 	tmp = (t_packet*)config->buf;
 	ft_memcpy((char*)packet, tmp, ret1);
-	if (ret1 >= HEADER_SIZE && (tmp->magic == CIGAM || tmp->magic == MAGIC) &&
+	if (ret1 == HEADER_SIZE && (tmp->magic == CIGAM || tmp->magic == MAGIC) &&
 	ntohs(tmp->size) <= MAX_PACKET_SIZE)
 	{
 		if ((ret2 = read(socket, config->buf, ntohs(tmp->size))) < 0)
