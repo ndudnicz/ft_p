@@ -16,12 +16,15 @@
 #include "packet.h"
 #include "libftasm.h"
 #include "error.h"
+#include "libft.h"
 
-static void	print_ls(t_config *config, t_packet *packet)
+#include <stdio.h>
+
+static void	print_ls(t_config *config, t_packet *packet, int ret)
 {
-	int		ret;
-
-	if (ft_putstr((char*)packet) > HEADER_SIZE - 1)
+	((char*)packet)[ret] = 0;
+	int r = ft_putstr((char*)packet);
+	if (r >= HEADER_SIZE - 1 && ((char*)packet)[r - 1] > 10)
 	{
 		while ((ret =
 		read(config->socket.cmd, config->buf, MAX_PACKET_SIZE - 1)) > 0)
@@ -57,7 +60,7 @@ int			receive_packet(t_config *config, int socket, t_packet *packet,
 		unforge_packet(packet);
 	}
 	else if (cmd == ST_LS)
-		print_ls(config, packet);
+		print_ls(config, packet, ret1);
 	else
 		return (-1);
 	return (ret1 + ret2);

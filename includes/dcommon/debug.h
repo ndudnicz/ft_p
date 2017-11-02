@@ -15,9 +15,6 @@
 
 # include "user_input.h"
 
-void	print_packet(t_packet *packet, int print_data);
-void	print_forged_packet(t_packet *packet, int print_data);
-void	print_input(t_input *input);
-void	my_free(int n, void *ptr);
+void	my_free(int n, void *ptr, unsigned char const options);
 
 #endif

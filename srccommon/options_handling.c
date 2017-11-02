@@ -59,10 +59,10 @@ static int	switch_set_options(char const *exec_name, char const *arg,
 	{
 		if (*arg && ft_strchr(PARAMS_STR, (int)(*arg)))
 		{
-			if (*arg == BIND_IP_CHAR)
-				set_bind_ip(config, exec_name, param);
-			else if (*arg == ROOT_FOLDER_CHAR)
+			if (*arg == ROOT_FOLDER_CHAR)
 				set_root_folder(config, exec_name, param);
+			else if (*arg == DEBUG_CHAR)
+				config->options |= DEBUG;
 			else
 				return (ft_error(exec_name, "", UNKNOW_ARG, 1));
 		}

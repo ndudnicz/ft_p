@@ -25,14 +25,3 @@ int		set_root_folder(t_config *config, char const *exec_name,
 	else
 		return (0);
 }
-
-int		set_bind_ip(t_config *config, char const *exec_name, char const *param)
-{
-	config->options |= BIND_IP;
-	if (!param)
-		return (ft_error(exec_name, "-b", BIND_FAILED, 1));
-	else if (!(config->ip_str = ft_strdup(param)))
-		return (ft_error(exec_name, "", MALLOC_FAIL, 1));
-	else
-		return (0);
-}

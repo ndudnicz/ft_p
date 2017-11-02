@@ -63,7 +63,7 @@ int			make_connection(t_config *config, char const *ip_str,
 	receive_packet(config, config->socket.cmd, packet, 0);
 	if (switch_packet_type_client(config, packet, NULL) > 0)
 		return (1);
-	my_free(12, packet);
+	my_free(12, packet, config->options);
 	printf("Connection done with: %s:%s\n", ip_str, cmd_port_str);
 	return (0);
 }

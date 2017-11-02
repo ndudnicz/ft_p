@@ -16,5 +16,5 @@
 
 void	lls(void)
 {
-	execl(LS_PATH, LS_PATH, "-p", ".", NULL);
+	execl(LS_PATH, LS_PATH, "-pa", ".", NULL);
 }

@@ -16,9 +16,9 @@
 int		lcd(t_config *config, char *arg);
 int		lpwd(void);
 int		put(t_config *config, t_packet *packet, char const *filename);
-int		put_check_local_file(char const *filename);
+int		put_check_local_file(t_config *config, char const *filename);
 int		get(t_config *config, t_packet *packet, char const *filename);
-int		get_check_local_file(char const *filename);
+int		get_check_local_file(t_config *config, char const *filename);
 
 void	lls(void);
 

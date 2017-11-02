@@ -32,15 +32,12 @@
 ** Options
 */
 
-# define BIND_IP		0x01
-# define ROOT_FOLDER	0x02
-
-# define BIND_IP_CHAR		'b'
+# define DEBUG				0x01
+# define ROOT_FOLDER		0x02
 # define ROOT_FOLDER_CHAR	'f'
-
-# define PARAMS_STR		"bf"
-
-# define LS_PATH	"/bin/ls"
+# define DEBUG_CHAR			'd'
+# define PARAMS_STR			"fd"
+# define LS_PATH			"/bin/ls"
 
 /*
 ** ========= S_PORT ============================================================
@@ -94,7 +91,6 @@ typedef struct	s_config
 	t_port			port;
 }				t_config;
 
-t_config		*configdup(t_config *c);
 t_config		*create_config(char const*exec_name);
 int				free_config(t_config *config);
 

@@ -13,6 +13,7 @@
 #include <stdlib.h>
 
 #include "libft.h"
+#include "config.h"
 
 /*#include "config.h"
 #include "packet.h"
@@ -50,8 +51,9 @@ void print_input(t_input *input)
 }
 */
 
-void	my_free(int n, void *ptr)
+void	my_free(int n, void *ptr, unsigned char const options)
 {
-	ft_putnbr_endl(n);
+	if (options & DEBUG)
+		ft_putnbr_endl(n);
 	free(ptr);
 }

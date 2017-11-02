@@ -42,7 +42,7 @@ int		lcd(t_config *config, char *arg)
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
 	if (data_len)
-		my_free(9, new_path);
+		my_free(9, new_path, config->options);
 	printf("%s\n", CMD_LCD_SUCCESS);
 	return (0);
 }

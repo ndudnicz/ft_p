@@ -21,7 +21,7 @@
 
 int		put(t_config *config, t_packet *packet)
 {
-	if (valid_filename(packet->data, 1) < 1)
+	if (valid_filename(config, packet->data, 1) < 1)
 		send_message(config, "ERROR: PUT: FILE ALREADY EXISTS.", "server");
 	else
 		open_data_connection(config, packet, &receive_data);

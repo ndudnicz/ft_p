@@ -38,8 +38,8 @@ t_config	*create_config(char const *exec_name)
 
 int			free_config(t_config *config)
 {
-	my_free(40, config->buf);
-	my_free(41, config->ip_str);
-	my_free(42, config);
+	my_free(40, config->buf, config->options);
+	my_free(41, config->ip_str, config->options);
+	my_free(42, config, config->options);
 	return (0);
 }

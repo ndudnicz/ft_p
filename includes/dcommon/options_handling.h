@@ -16,5 +16,5 @@
 int		get_options(t_config *config, int *ac, char **av);
 int		set_root_folder(t_config *config, char const *exec_name,
 						char const *param);
-int		set_bind_ip(t_config *config, char const *exec_name, char const *param);
+
 #endif

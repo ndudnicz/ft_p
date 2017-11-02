@@ -65,8 +65,8 @@ static int				chunk_data(t_config *config, char *data,
 		ping_pong(config, packet_ping, packet_pong);
 		i++;
 	}
-	my_free(51, packet_ping);
-	my_free(52, packet_pong);
+	my_free(51, packet_ping, config->options);
+	my_free(52, packet_pong, config->options);
 	return (0);
 }
 

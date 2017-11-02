@@ -24,7 +24,7 @@
 #include "libft.h"
 #include "libftasm.h"
 
-int			get_check_local_file(char const *filename)
+int			get_check_local_file(t_config *config, char const *filename)
 {
 	char	cwd[PATH_MAX];
 	char	*path;
@@ -35,10 +35,10 @@ int			get_check_local_file(char const *filename)
 	path = ft_strjoin_free(ft_strjoin(cwd, "/"), filename, 1, 0);
 	if (!path || (fd = open(path, O_RDONLY)) > 0)
 	{
-		my_free(1, path);
+		my_free(1, path, config->options);
 		return (ft_error("ERROR", "GET", "FILE ALREADY EXISTS.", 1));
 	}
-	my_free(2, path);
+	my_free(2, path, config->options);
 	close(fd);
 	return (0);
 }

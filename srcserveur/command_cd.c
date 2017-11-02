@@ -21,7 +21,8 @@
 #include "error.h"
 #include "my_syslimits.h"
 
-static int	free_all_split(char const **aa, char const **bb, char const **cc)
+static int	free_all_split(t_config *config, char const **aa, char const **bb,
+							char const **cc)
 {
 	int		i;
 	char	**a;
@@ -35,16 +36,16 @@ static int	free_all_split(char const **aa, char const **bb, char const **cc)
 	while (a[i] || b[i] || c[i])
 	{
 		if (i < ft_array_length(aa))
-			my_free(20, a[i]);
+			my_free(20, a[i], config->options);
 		if (i < ft_array_length(bb))
-			my_free(21, b[i]);
+			my_free(21, b[i], config->options);
 		if (i < ft_array_length(cc))
-			my_free(22, c[i]);
+			my_free(22, c[i], config->options);
 		i++;
 	}
-	my_free(23, a);
-	my_free(24, b);
-	my_free(25, c);
+	my_free(23, a, config->options);
+	my_free(24, b, config->options);
+	my_free(25, c, config->options);
 	return (0);
 }
 
@@ -72,7 +73,7 @@ static int	valid_user_input(t_config *config, char const *root,
 	if (cursor < ft_array_length(array_root))
 		return (1);
 	else
-		return (free_all_split(array_root, array_input, array_cwd));
+		return (free_all_split(config, array_root, array_input, array_cwd));
 }
 
 int			cd(t_config *config, t_packet *packet)
@@ -93,10 +94,10 @@ int			cd(t_config *config, t_packet *packet)
 		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), packet->data, 1, 0);
 	if (chdir(new_path) < 0)
 	{
-		my_free(26, new_path);
+		my_free(26, new_path, config->options);
 		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
 	}
-	my_free(27, new_path);
+	my_free(27, new_path, config->options);
 	if (getcwd(cwd, PATH_MAX) < 0)
 		return (send_message(config, INTERNAL_ERROR, "serveur"));
 	else

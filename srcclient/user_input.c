@@ -53,22 +53,23 @@ static unsigned short	get_type(char const *str, char const *arg)
 		return ((unsigned short)ft_error("ERROR", "INPUT", UNKNOWN_CMD, 0));
 }
 
-static void				sub_free(void *p1, void *p2)
+static void				sub_free(t_config *config, void *p1, void *p2)
 {
 	if (p1)
-		my_free(14, p1);
+		my_free(14, p1, config->options);
 	if (p2)
-		my_free(15, p2);
+		my_free(15, p2, config->options);
 }
 
-static unsigned short	treat_input(t_input *input, char *line, int i)
+static unsigned short	treat_input(t_config *config, t_input *input,
+									char *line, int i)
 {
 	char const	*s = ft_strtrim(line);
 	char const	**array = (char const**)ft_strsplit(s, ' ');
 
 	input->arg = NULL;
 	if (line)
-		my_free(13, line);
+		my_free(13, line, config->options);
 	if (!array)
 		return (0);
 	if (ft_array_length(array) > 1)
@@ -82,10 +83,10 @@ static unsigned short	treat_input(t_input *input, char *line, int i)
 	while (array[i])
 	{
 		if (i != 1)
-			my_free(16, (void*)array[i]);
+			my_free(16, (void*)array[i], config->options);
 		i++;
 	}
-	sub_free((void*)array, (void*)s);
+	sub_free(config, (void*)array, (void*)s);
 	return (input->cmd);
 }
 
@@ -94,8 +95,8 @@ static int				cmd_handling(t_config *config, t_input *input,
 {
 	t_size_type	size_type;
 
-	if ((input->cmd == ST_PUT && put_check_local_file(input->arg) > 0) ||
-	(input->cmd == ST_GET && get_check_local_file(input->arg) > 0))
+	if ((input->cmd == ST_PUT && put_check_local_file(config, input->arg) > 0) ||
+	(input->cmd == ST_GET && get_check_local_file(config, input->arg) > 0))
 		return (-1);
 	size_type.size = HEADER_SIZE + ft_strlen(input->arg);
 	size_type.type = input->cmd;
@@ -124,8 +125,8 @@ int						user_input_loop(t_config *config, int ret, char *line)
 	while (ft_putstr(PROMPT) && gnl(0, &line) > 0)
 	{
 		if (input.arg)
-			my_free(17, input.arg);
-		if (treat_input(&input, line, 0) == ST_QUIT)
+			my_free(17, input.arg, config->options);
+		if (treat_input(config, &input, line, 0) == ST_QUIT)
 			break ;
 		if (input.arg && input.cmd && !(input.cmd & ST_CMD_LOCAL))
 		{
@@ -138,6 +139,6 @@ int						user_input_loop(t_config *config, int ret, char *line)
 			fork_and_run(config, &input);
 	}
 	close(config->socket.cmd);
-	my_free(18, packet);
+	my_free(18, packet, config->options);
 	return (ft_putstr("Bye!\n") - 5);
 }
