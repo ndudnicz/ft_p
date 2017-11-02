@@ -89,7 +89,7 @@ int			valid_filename(t_config *config, char const *filename,
 	char	*path_file;
 	int		fd;
 
-	if (getcwd(cwd, PATH_MAX) < 0)
+	if (!getcwd(cwd, PATH_MAX))
 		return (-1);
 	if (valid_path(config, cwd, filename) > 0)
 		return (-1);

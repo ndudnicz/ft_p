@@ -30,7 +30,7 @@ int			get_check_local_file(t_config *config, char const *filename)
 	char	*path;
 	int		fd;
 
-	if (getcwd(cwd, PATH_MAX) < 0)
+	if (!getcwd(cwd, PATH_MAX))
 		return (ft_error("ERROR", "GET", "GETCWD()", 1));
 	path = ft_strjoin_free(ft_strjoin(cwd, "/"), filename, 1, 0);
 	if (!path || (fd = open(path, O_RDONLY)) > 0)

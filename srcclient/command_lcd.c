@@ -29,7 +29,7 @@ int		lcd(t_config *config, char *arg)
 
 	cwd[0] = 0;
 	ft_putendl(arg);
-	if (getcwd(cwd, PATH_MAX) < 0)
+	if (!getcwd(cwd, PATH_MAX))
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
 	if (data_len == 0)
 		new_path = config->root;
@@ -39,7 +39,7 @@ int		lcd(t_config *config, char *arg)
 		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), arg, 1, 0);
 	if (chdir(new_path) < 0)
 		return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
-	if (getcwd(cwd, PATH_MAX) < 0)
+	if (!getcwd(cwd, PATH_MAX))
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
 	if (data_len)
 		my_free(9, new_path, config->options);

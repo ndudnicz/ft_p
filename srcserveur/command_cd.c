@@ -84,7 +84,7 @@ int			cd(t_config *config, t_packet *packet)
 
 	cwd[0] = 0;
 	new_path = NULL;
-	if (getcwd(cwd, PATH_MAX) < 0)
+	if (!getcwd(cwd, PATH_MAX))
 		return (send_message(config, INTERNAL_ERROR, "serveur"));
 	if (valid_user_input(config, config->root, packet->data, cwd) > 0)
 		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
@@ -98,7 +98,7 @@ int			cd(t_config *config, t_packet *packet)
 		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
 	}
 	my_free(27, new_path, config->options);
-	if (getcwd(cwd, PATH_MAX) < 0)
+	if (!getcwd(cwd, PATH_MAX))
 		return (send_message(config, INTERNAL_ERROR, "serveur"));
 	else
 		return (send_message(config, CMD_CD_SUCCESS, "serveur"));
