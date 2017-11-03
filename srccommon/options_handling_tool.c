@@ -27,6 +27,13 @@ int		set_root_folder(t_config *config, char const *exec_name,
 		return (0);
 }
 
+/*
+** Check the port_str
+** Return 0 if port number is valid
+** Display an error message and return 1 if the port number is not valid
+** Invalid: port > SHORTMAX || port < 0 || non digit char
+*/
+
 int		valid_port_string(char const *port)
 {
 	int		i;

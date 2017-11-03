@@ -23,6 +23,7 @@
 #include "make_connection.h"
 #include "libft.h"
 #include "libftasm.h"
+#include "options_handling.h"
 
 int		put_check_local_file(char const *filename)
 {
@@ -50,7 +51,12 @@ int		put_check_local_file(char const *filename)
 
 int		put(t_config *config, t_packet *packet, char const *filename)
 {
-	config->port.data = ft_atoi(packet->data); // valid port string
-	make_data_connection(config, filename, &send_data);
-	return (0);
+	if (valid_port_string(packet->data))
+		return (1);
+	else
+	{
+		config->port.data = ft_atoi(packet->data);
+		make_data_connection(config, filename, &send_data);
+		return (0);
+	}
 }

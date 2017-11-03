@@ -18,8 +18,6 @@
 #include "packet.h"
 #include "exec_cmd_local.h"
 
-#include <stdio.h>//
-
 static int	should_fork(unsigned short type)
 {
 	if (type == ST_LCD || type == ST_LPWD)

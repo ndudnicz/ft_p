@@ -43,13 +43,9 @@ int		lcd(t_config *config, char *arg)
 		my_free(53, new_path);
 		return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
 	}
-	if (!getcwd(cwd, PATH_MAX))
-	{
-		my_free(54, new_path);
-		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
-	}
 	if (data_len)
 		my_free(9, new_path);
-	printf("%s\n", CMD_LCD_SUCCESS);
+	if (!getcwd(cwd, PATH_MAX))
+		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
 	return (0);
 }

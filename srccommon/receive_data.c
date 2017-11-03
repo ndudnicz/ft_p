@@ -46,9 +46,12 @@ static int		write_forge_and_send_pong(t_config *config,
 static void		close_and_free(int const fd, t_packet **p)
 {
 	close(fd);
-	free(p[0]);
-	free(p[1]);
-	free(p);
+	if (p && p[0])
+		free(p[0]);
+	if (p && p[1])
+		free(p[1]);
+	if (p)
+		free(p);
 }
 
 static t_packet	**create_packets(void)
@@ -77,7 +80,6 @@ int				receive_data(t_config *config, char const *filename, int i)
 		return (ft_error("ERROR", "receive_data", MALLOC_FAIL, 1));
 	if ((fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0600)) < 0)
 		return (ret_error(config));
-	ft_bzero(config->buf, MAX_PACKET_SIZE);
 	while (i != n && (ret = receive_packet(config, config->socket.data,
 	packets[0], 0)) > 0)
 	{
@@ -88,7 +90,8 @@ int				receive_data(t_config *config, char const *filename, int i)
 			i++;
 		}
 		else if (packets[0]->magic == MAGIC && packets[0]->type == T_CLOSE)
-			return (ft_error("ERROR", "make_data_connection()", CLOSE, 1));
+			return (unlink(filename) ||
+			ft_error("ERROR", "receive_data()", CLOSE, 1));
 	}
 	close_and_free(fd, packets);
 	return (0);

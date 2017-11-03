@@ -23,25 +23,32 @@
 #include "libftasm.h"
 #include "debug.h"
 
-static int	free_all_split(char const **aa, char const **bb)
+static int	free_all_split(char const **aa,
+							char const **bb,
+							char const **cc)
 {
 	int		i;
 	char	**a;
 	char	**b;
+	char	**c;
 
 	a = (char**)aa;
 	b = (char**)bb;
+	c = (char**)cc;
 	i = 0;
-	while (a[i] || b[i])
+	while (a[i] || b[i] || c[i])
 	{
 		if (i < ft_array_length(aa))
-			my_free(31, a[i]);
+			my_free(20, a[i]);
 		if (i < ft_array_length(bb))
-			my_free(32, b[i]);
+			my_free(21, b[i]);
+		if (i < ft_array_length(cc))
+			my_free(22, c[i]);
 		i++;
 	}
-	my_free(33, a);
-	my_free(34, b);
+	my_free(23, a);
+	my_free(24, b);
+	my_free(25, c);
 	return (0);
 }
 
@@ -70,10 +77,10 @@ static int	valid_path(t_config *config, char const *cwd, char const *input)
 	if (cursor <= ft_array_length(array_cwd))
 		return (1);
 	else
-		return (free_all_split(array_input, array_cwd));
+		return (free_all_split(array_input, array_cwd, array_root));
 }
 
-static int	ret_close(int const fd, char const in)
+static int	ret_close(int const fd, char const in, char *path)
 {
 	int const	ret = (in && fd < 0) || (!in && fd > 0) ? 1 : 0;
 	struct stat stat;
@@ -82,6 +89,8 @@ static int	ret_close(int const fd, char const in)
 		return (-1);
 	if (fd > 0)
 		close(fd);
+	if (path)
+		free(path);
 	return (((stat.st_mode & S_IFREG) && ret && in) || (ret));
 }
 
@@ -100,5 +109,5 @@ int			valid_filename(t_config *config, char const *filename,
 	if (!path_file)
 		return (-1);
 	fd = open(path_file, O_RDONLY);
-	return (ret_close(fd, in));
+	return (ret_close(fd, in, path_file));
 }

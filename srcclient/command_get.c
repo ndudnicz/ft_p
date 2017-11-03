@@ -25,8 +25,6 @@
 #include "libftasm.h"
 #include "options_handling.h"
 
-#include <stdio.h>//
-
 int			get_check_local_file(char const *filename)
 {
 	char	cwd[PATH_MAX];

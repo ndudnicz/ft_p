@@ -83,10 +83,10 @@ typedef struct	s_config
 	unsigned char	options;
 	int				inet_addr;
 	char			*ip_str;
-	char			*buf;
 	char			root[PATH_MAX];
-	t_socket		socket;
+	char			*buf;
 	t_port			port;
+	t_socket		socket;
 }				t_config;
 
 t_config		*create_config(char const*exec_name);

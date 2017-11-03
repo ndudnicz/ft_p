@@ -25,7 +25,6 @@
 #include "exec_cmd_local.h"
 #include "commands.h"
 
-#include <stdio.h>//
 static unsigned short	get_type(char const *str, char const *arg)
 {
 	unsigned int const	arg_len = ft_strlen(arg);
@@ -73,7 +72,6 @@ static unsigned short	treat_input(t_input *input, char *line, int i)
 		my_free(13, line);
 	if (!array || ft_array_length(array) == 0)
 		return (sub_free((void*)array, (void*)s, 1));
-		printf("->%d\n", ft_array_length(array));
 	if (ft_array_length(array) > 1)
 		input->arg = (char*)array[1];
 	else
@@ -115,6 +113,7 @@ static int				cmd_handling(t_config *config, t_input *input,
 ** Loop and treat the input string while the user doesn't type 'quit' or press
 ** CTRL-D
 */
+
 int						user_input_loop(t_config *config, int ret, char *line)
 {
 	t_packet	*packet;

@@ -71,38 +71,18 @@ static int	switch_set_options(char const *exec_name, char const *arg,
 	return (0);
 }
 
-/*
-** Check the port_str
-** Return 0 if port number is valid
-** Display an error message and return 1 if the port number is not valid
-** Invalid: port > SHORTMAX || port < 0 || non digit char
-*/
-
 static int	valid_port_number(char const *exec_name, int *ac, char **av)
 {
-	int		i;
 	char	*port_str;
 
 	if (*ac == 2 || *ac == 3)
 		port_str = av[*ac - 1];
 	else
 		return (ft_error(exec_name, "", BAD_PORT, 1));
-	i = 0;
 	if (valid_port_string(port_str) > 0)
 		return (1);
 	else
 		return (0);
-	// if (ft_strlen(port_str) > 5)
-	// 	return (ft_error(exec_name, "", BAD_PORT, 1));
-	// while (port_str && port_str[i])
-	// {
-	// 	if (ft_isdigit((int)port_str[i]))
-	// 		i++;
-	// 	else
-	// 		return (ft_error(exec_name, "", BAD_PORT, 1));
-	// }
-	// if (ft_atoi(port_str) > USHORTMAX)
-	// 	return (ft_error(exec_name, "", BAD_PORT, 1));
 }
 
 /*
