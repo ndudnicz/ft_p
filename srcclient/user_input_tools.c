@@ -1,36 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_pwd.c                                      :+:      :+:    :+:   */
+/*   user_input_tools.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/01 17:44:44 by ndudnicz          #+#    #+#             */
-/*   Updated: 2017/11/01 17:44:49 by ndudnicz         ###   ########.fr       */
+/*   Created: 2017/11/01 17:42:59 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:43:00 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
-#include "libftasm.h"
 #include "config.h"
+#include "user_input.h"
 #include "packet.h"
-#include "send_message.h"
-#include "error.h"
-#include "my_syslimits.h"
+#include "exec_cmd_local.h"
 
-/*
-** Get the current working directory and send it to the client
-*/
-
-void	pwd(t_config *config)
+static int	should_fork(unsigned short type)
 {
-	char	pwd[PATH_MAX];
-
-	if (getcwd(pwd, PATH_MAX))
-		send_message(config, pwd, "Server");
+	if (type == ST_LCD || type == ST_LPWD)
+		return (0);
 	else
-		send_message(config, INTERNAL_ERROR, "Server");
-	exit(0);
+		return (1);
+}
+
+void		fork_and_run(t_config *config, t_input *input)
+{
+	int			pid;
+	int			stat_loc;
+
+	if (should_fork(input->cmd) > 0)
+	{
+		pid = fork();
+		if (pid == 0)
+			exec_cmd_local(input->cmd);
+		else
+			wait4(pid, &stat_loc, 0, NULL);
+	}
+	else
+		exec_cmd_local_no_fork(config, input);
 }

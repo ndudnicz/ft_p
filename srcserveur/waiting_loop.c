@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   waiting_loop.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:45:24 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:45:25 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <netdb.h>
@@ -9,16 +21,33 @@
 #include "packet.h"
 #include "libftasm.h"
 #include "libft.h"
-#include "debug.h"//
 #include "switch_packet_type_server.h"
 #include "receive_packet.h"
 #include "send_packet.h"
 #include "send_message.h"
 #include "error.h"
 
-static int	should_fork(unsigned short type)
+static void	ft_norme(t_config *config, t_packet *packet, int const ret)
 {
-	return (!(type == ST_CD));
+	ft_bzero((char*)packet, MAX_PACKET_SIZE);
+	if (ret > MAX_PACKET_SIZE)
+		exit(0);
+	ft_memcpy(packet, config->buf, ret);
+	unforge_packet(packet);
+	ft_bzero(config->buf, MAX_PACKET_SIZE);
+}
+
+static void	my_fork_child(t_config *config, t_packet *packet)
+{
+	int		pid;
+	int		stat_loc;
+
+	if ((pid = fork()) < 0)
+		ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
+	else if (pid == 0)
+		switch_packet_type_server(config, packet);
+	else
+		wait4(pid, &stat_loc, 0, NULL);
 }
 
 /*
@@ -30,39 +59,34 @@ static int	should_fork(unsigned short type)
 static int	child_waiting_loop(t_config *config)
 {
 	t_packet	*packet;
-	t_packet	*fork_packet;
-	int			pid;
-	int			stat_loc;
-	t_config	*fork_config;
+	int			ret;
 
-	send_message(config, "Server says: Hello !", "Server");
-	ft_putendl("NEW CONNECTION ESTABLISHED!");
-	while (recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0) > 0)
+	if (!(packet = (t_packet*)malloc(sizeof(t_packet))))
 	{
-		pid = 0;
-		packet = (t_packet*)config->buf;
-		unforge_packet(packet);
-		if (should_fork(packet->type))
-		{
-			if (!(fork_config = configdup(config)) ||
-			!(fork_packet = packetdup(fork_config)) || (pid = fork()) < 0)
-				ft_error_child("child_waiting_loop", "fork()", FORK_FAIL);
-			else if (pid == 0)
-			{
-				if (!fork())
-					switch_packet_type_server(fork_config, packet);
-				else
-					exit(0);
-			}
-			else
-				wait4(pid, &stat_loc, 0, NULL);
-		}
+		stop(config->socket.cmd, "ERROR: INTERNAL ERROR: CLOSING CONNECTION.");
+		close(config->socket.cmd);
+		exit(0);
+	}
+	else
+		send_message(config, "Server says: Hello !", "Server");
+	while ((ret = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0))
+	> 0)
+	{
+		ft_norme(config, packet, ret);
+		if (packet->type != ST_CD)
+			my_fork_child(config, packet);
 		else
 			switch_packet_type_server_no_fork(config, packet);
-		ft_bzero(config->buf, MAX_PACKET_SIZE);
 	}
-	close(config->socket.cmd);
-	return (0);
+	exit(0);
+}
+
+static void	my_fork_master(t_config *config)
+{
+	if (!fork())
+		child_waiting_loop(config);
+	else
+		exit(0);
 }
 
 /*
@@ -71,41 +95,27 @@ static int	child_waiting_loop(t_config *config)
 ** a new connection
 ** Return 1 and display an error message if fails
 */
+
 int			master_waiting_loop(t_config *config)
 {
 	int					pid;
 	struct sockaddr_in	csin;
-	unsigned int		cslen = sizeof(csin);
-	t_config			*fork_config;
+	unsigned int		cslen;
 	int					stat_loc;
 
-	while ((config->socket.cmd = accept(config->socket.server_master, (struct sockaddr*)&csin, &cslen)))
+	cslen = sizeof(csin);
+	while ((config->socket.cmd = accept(config->socket.server_master,
+	(struct sockaddr*)&csin, &cslen)))
 	{
 		pid = 0;
 		if ((pid = fork()) < 0)
 			ft_error_child("master_waiting_loop", "fork()", FORK_FAIL);
 		if (config->socket.cmd > 0 && pid == 0)
-		{
-			if (!fork())
-			{
-				if (!(fork_config = configdup(config)))
-				{
-					ft_error_child("master_waiting_loop", "configcpy", MALLOC_FAIL);
-					exit(0);
-				}
-				else
-					child_waiting_loop(fork_config);
-				// free_config(config);
-				exit(0);
-			}
-			else
-				exit(0);
-		}
+			my_fork_master(config);
 		else if (config->socket.cmd > 0 && pid)
 			wait4(pid, &stat_loc, 0, NULL);
 		if (config->socket.cmd < 0)
-			printf("Accept() error, exit.\n");
-		// return 0;
+			printf("Accept() error.\n");
 	}
 	close(config->socket.server_master);
 	return (0);

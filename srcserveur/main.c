@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:44:57 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:44:58 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <netdb.h>
@@ -10,7 +22,6 @@
 #include "error.h"
 #include "options_handling.h"
 #include "open_connection.h"
-#include "debug.h"//
 #include "waiting_loop.h"
 
 /*
@@ -22,7 +33,6 @@ int		usage(char const *bin)
 	printf("Usage: %s [options] <port>\n\n", bin);
 	printf("Options:\n\n");
 	printf("\t-f <root_folder> : set a root folder\n");
-	printf("\t-b <ip>          : bind the connection on <ip>\n");
 	return (1);
 }
 

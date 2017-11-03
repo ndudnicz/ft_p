@@ -6,12 +6,12 @@
 /*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/25 13:49:36 by ndudnicz          #+#    #+#             */
-/*   Updated: 2017/10/25 13:49:37 by ndudnicz         ###   ########.fr       */
+/*   Updated: 2017/11/01 17:42:08 by ndudnicz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>//
+#include <unistd.h>
+#include <stdio.h>
 
 #include "config.h"
 #include "packet.h"
@@ -21,58 +21,10 @@
 #include "error.h"
 #include "my_syslimits.h"
 
-static int	free_all_split(char const **aa, char const **bb, char const **cc)
+static int	ret_success(void)
 {
-	int		i;
-	char	**a;
-	char	**b;
-	char	**c;
-
-	a = (char**)aa;
-	b = (char**)bb;
-	c = (char**)cc;
-	i = 0;
-	while (a[i] || b[i] || c[i])
-	{
-		if (i < ft_array_length(aa))
-			free(a[i]);
-		if (i < ft_array_length(bb))
-			free(b[i]);
-		if (i < ft_array_length(cc))
-			free(c[i]);
-		i++;
-	}
-	free(a);
-	free(b);
-	free(c);
+	ft_putendl(CMD_LCD_SUCCESS);
 	return (0);
-}
-
-static int	valid_user_input(t_config *config, char const *root,
-								char const *input, char const *cwd)
-{
-	int			cursor;
-	int			i;
-	char const	**array_root = (char const**)ft_strsplit(root, '/');
-	char const	**array_input = (char const**)ft_strsplit(input, '/');
-	char const	**array_cwd = (char const**)ft_strsplit(cwd, '/');
-
-	i = 0;
-	if (!array_root || !array_input || !array_cwd)
-		return (ft_error("LCD", INTERNAL_ERROR, "client", 0) || 1);
-	cursor = ft_array_length(array_cwd);
-	while (array_input[i])
-	{
-		if (!ft_strcmp(array_input[i], ".."))
-			cursor--;
-		else
-			cursor++;
-		i++;
-	}
-	if (cursor < ft_array_length(array_root))
-		return (1);
-	else
-		return (free_all_split(array_root, array_input, array_cwd));
 }
 
 int			lcd(t_config *config, char *arg)
@@ -82,20 +34,22 @@ int			lcd(t_config *config, char *arg)
 	int const	data_len = ft_strlen(arg);
 
 	cwd[0] = 0;
-	if (getcwd(cwd, PATH_MAX) < 0)
+	if (!getcwd(cwd, PATH_MAX))
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
-	// if (valid_user_input(config, config->root, arg, cwd) > 0)
-		// return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
 	if (data_len == 0)
 		new_path = config->root;
+	else if (arg[0] == '/')
+		new_path = ft_strdup(arg);
 	else
 		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), arg, 1, 0);
-	if (chdir(new_path) < 0)
-		return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
-	if (getcwd(cwd, PATH_MAX) < 0)
-		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
+	if (!new_path || (chdir(new_path) < 0 && data_len))
+	{
+		my_free(53, new_path);
+		return (ft_error("ERROR", "COMMAND LCD", INVALID_PATH, 0));
+	}
 	if (data_len)
-		free(new_path);
-	printf("%s\n", CMD_LCD_SUCCESS);
-	return (0);
+		my_free(9, new_path);
+	if (!getcwd(cwd, PATH_MAX))
+		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
+	return (ret_success());
 }

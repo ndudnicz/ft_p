@@ -1,16 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:42:41 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:42:42 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "config.h"
-#include "libft.h"
-#include "libftasm.h"
 #include "packet.h"
-#include "establish_connection.h"
+#include "make_connection.h"
 #include "user_input.h"
 #include "error.h"
 #include "options_handling.h"
-
-// FLAGS DANS LE MAKEFILE!
 
 /*
 ** Display a usefull usage message.
@@ -19,7 +26,6 @@
 int		usage(char const *bin)
 {
 	printf("Usage: %s [options] <ip> <port>\n", bin);
-	printf("Options:\n\t-z : toto\n\t-n : lol\n");
 	return (1);
 }
 
@@ -39,9 +45,9 @@ int		main(int ac, char **av)
 	{
 		if (get_options(config, &ac, av) > 0)
 			return (1);
-		else if (establish_connection(config, av[1], av[2]) > 0)
+		else if (make_connection(config, av[1], av[2]) > 0)
 			return (1);
-		else if (user_input_loop(config) > 0)
+		else if (user_input_loop(config, 0, NULL) > 0)
 			return (1);
 		else
 			return (free_config(config));

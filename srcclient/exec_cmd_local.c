@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cmd_local.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:42:36 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:42:37 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -5,12 +17,11 @@
 #include "packet.h"
 #include "user_input.h"
 #include "commands.h"
-// #include "my_pipe.h"
 
-void	exec_cmd_local(t_config *config, unsigned short cmd)
+void	exec_cmd_local(unsigned short cmd)
 {
-	if (cmd == ST_LLS)
-		execl(LS_PATH, LS_PATH, "-p", config->current_path, NULL);
+	if ((cmd & ST_MASK) == ST_LLS)
+		lls();
 	else
 		exit(0);
 }

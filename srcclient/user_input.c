@@ -1,24 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   user_input.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndudnicz <ndudnicz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/01 17:42:50 by ndudnicz          #+#    #+#             */
+/*   Updated: 2017/11/01 17:42:51 by ndudnicz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>//
-#include <sys/time.h>//
-#include <sys/resource.h>//
-#include <sys/wait.h>//
 
 #include "libft.h"
 #include "libftasm.h"
 #include "config.h"
 #include "user_input.h"
 #include "packet.h"
-#include "debug.h"//
+#include "debug.h"
 #include "send_packet.h"
 #include "receive_packet.h"
 #include "switch_packet_type_client.h"
-#include "error.h"//
+#include "error.h"
 #include "exec_cmd_local.h"
 #include "commands.h"
 
-static unsigned short get_type(char const *str, char const *arg)
+static unsigned short	get_type(char const *str, char const *arg)
 {
 	unsigned int const	arg_len = ft_strlen(arg);
 
@@ -46,45 +53,60 @@ static unsigned short get_type(char const *str, char const *arg)
 		return ((unsigned short)ft_error("ERROR", "INPUT", UNKNOWN_CMD, 0));
 }
 
-static unsigned short	treat_input(t_input *input, char *line)
+static int				sub_free(void *p1, void *p2, int ret)
+{
+	if (p1)
+		my_free(14, p1);
+	if (p2)
+		my_free(15, p2);
+	return (ret);
+}
+
+static unsigned short	treat_input(t_input *input, char *line, int i)
 {
 	char const	*s = ft_strtrim(line);
 	char const	**array = (char const**)ft_strsplit(s, ' ');
-	int			i;
 
-	i = 0;
 	input->arg = NULL;
 	if (line)
-		free(line);
-	if (!array)
-		return (0);
+		my_free(13, line);
+	if (!array || ft_array_length(array) == 0)
+		return (sub_free((void*)array, (void*)s, 1));
+	if (ft_array_length(array) > 1)
+		input->arg = (char*)array[1];
 	else
+		input->arg = ft_strdup("");
+	if (ft_strlen(array[0]) > PATH_MAX ||
+	(input->arg && ft_strlen(input->arg) > PATH_MAX))
+		return (0);
+	input->cmd = get_type(array[0], input->arg);
+	while (array[i])
 	{
-		if (ft_array_length(array) > 1)
-			input->arg = (char*)array[1];
-		else
-			input->arg = ft_strdup("");
-		input->cmd = get_type(array[0], input->arg);
-		while (array[i])
-		{
-			if (i != 1)
-				free((void*)array[i]);
-			i++;
-		}
-		if (array)
-			free((void*)array);
-		if (s)
-			free((void*)s);
+		if (i != 1)
+			my_free(16, (void*)array[i]);
+		i++;
 	}
+	sub_free((void*)array, (void*)s, 0);
 	return (input->cmd);
 }
 
-static int	should_fork(unsigned short type)
+static int				cmd_handling(t_config *config, t_input *input,
+									t_packet *packet)
 {
-	if (type == ST_LCD || type == ST_LPWD)
-		return (0);
-	else
+	t_size_type	size_type;
+
+	if ((input->cmd == ST_PUT && put_check_local_file(input->arg) > 0)
+	|| (input->cmd == ST_GET && get_check_local_file(input->arg) > 0))
+		return (-1);
+	size_type.size = HEADER_SIZE + ft_strlen(input->arg);
+	size_type.type = input->cmd;
+	forge_packet(packet, &size_type, input->arg, 1);
+	send_packet(config->socket.cmd, packet);
+	receive_packet(config, config->socket.cmd, packet, input->cmd);
+	if (switch_packet_type_client(config, packet, input->arg) > 0)
 		return (1);
+	ft_bzero((char*)packet, packet->size);
+	return (0);
 }
 
 /*
@@ -92,60 +114,31 @@ static int	should_fork(unsigned short type)
 ** CTRL-D
 */
 
-int		user_input_loop(t_config *config)
+int						user_input_loop(t_config *config, int ret, char *line)
 {
-	char		*line;
-	int			pid;
 	t_packet	*packet;
 	t_input		input;
-	int			stat_loc;
 
-	packet = (t_packet*)malloc(sizeof(t_packet)); // check malloc ret
-	line = NULL;
-	ft_putstr(PROMPT);
-	while (gnl(0, &line) > 0)
+	if (!(packet = (t_packet*)malloc(sizeof(t_packet))))
+		return (ft_error("Error", "user_input_loop()", MALLOC_FAIL, 1));
+	input.arg = NULL;
+	while (ft_putstr(PROMPT) && gnl(0, &line) > 0)
 	{
-		if (treat_input(&input, line) == ST_QUIT)
+		if (input.arg)
+			my_free(17, input.arg);
+		if (treat_input(&input, line, 0) == ST_QUIT)
 			break ;
-		if (input.arg && input.cmd && !(input.cmd & T_MASK_CMD_LOCAL))
+		if (input.arg && input.cmd && !(input.cmd & ST_CMD_LOCAL))
 		{
-			if ((input.cmd == ST_PUT && put_check_local_file(input.arg) > 0) || (input.cmd == ST_GET && get_check_local_file(input.arg) > 0))
-			{
-				if (input.arg)
-					free(input.arg);
-				ft_putstr(PROMPT);
+			if ((ret = cmd_handling(config, &input, packet)) < 0)
 				continue ;
-			}
-			forge_packet(packet, (HEADER_SIZE + ft_strlen(input.arg)) << 16 | input.cmd, input.arg, 1);
-			send_packet(config->socket.cmd, packet);
-			receive_packet(config, config->socket.cmd, packet);
-			if (switch_packet_type_client(config, packet, input.arg) > 0)
+			else if (ret)
 				return (1);
-			ft_bzero((char*)packet, packet->size);
 		}
 		else if (input.cmd)
-		{
-			if (should_fork(input.cmd) > 0)
-			{
-				pid = fork();
-				if (pid == 0)
-				{
-					if (!fork())
-						exec_cmd_local(config, input.cmd);
-					else
-						exit(0);
-				}
-				else
-					wait4(pid, &stat_loc, 0, NULL);
-			}
-			else
-				exec_cmd_local_no_fork(config, &input);
-		}
-		if (input.arg)
-			free(input.arg);
-		ft_putstr(PROMPT);
+			fork_and_run(config, &input);
 	}
-	free(packet);
-	ft_putendl("Bye!");
-	return (0);
+	close(config->socket.cmd);
+	my_free(18, packet);
+	return (ft_putstr("Bye!\n") - 5);
 }

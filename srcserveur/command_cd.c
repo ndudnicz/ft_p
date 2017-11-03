@@ -21,7 +21,9 @@
 #include "error.h"
 #include "my_syslimits.h"
 
-static int	free_all_split(char const **aa, char const **bb, char const **cc)
+static int	free_all_split(char const **aa,
+							char const **bb,
+							char const **cc)
 {
 	int		i;
 	char	**a;
@@ -35,16 +37,16 @@ static int	free_all_split(char const **aa, char const **bb, char const **cc)
 	while (a[i] || b[i] || c[i])
 	{
 		if (i < ft_array_length(aa))
-			free(a[i]);
+			my_free(20, a[i]);
 		if (i < ft_array_length(bb))
-			free(b[i]);
+			my_free(21, b[i]);
 		if (i < ft_array_length(cc))
-			free(c[i]);
+			my_free(22, c[i]);
 		i++;
 	}
-	free(a);
-	free(b);
-	free(c);
+	my_free(23, a);
+	my_free(24, b);
+	my_free(25, c);
 	return (0);
 }
 
@@ -67,6 +69,8 @@ static int	valid_user_input(t_config *config, char const *root,
 			cursor--;
 		else
 			cursor++;
+		if (cursor < ft_array_length(array_root))
+			return (1);
 		i++;
 	}
 	if (cursor < ft_array_length(array_root))
@@ -82,30 +86,24 @@ int			cd(t_config *config, t_packet *packet)
 	int const	data_len = ft_strlen(packet->data);
 
 	cwd[0] = 0;
-	if (getcwd(cwd, PATH_MAX) < 0)
+	new_path = NULL;
+	packet->data[packet->size - HEADER_SIZE] = 0;
+	if (!getcwd(cwd, PATH_MAX))
 		return (send_message(config, INTERNAL_ERROR, "serveur"));
 	if (valid_user_input(config, config->root, packet->data, cwd) > 0)
-	{
-		ft_putendl("a");
 		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
-	}
 	if (data_len == 0)
-		new_path = config->root;
+		new_path = ft_strdup(config->root);
 	else
 		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), packet->data, 1, 0);
 	if (chdir(new_path) < 0)
 	{
-		free(new_path);
+		my_free(26, new_path);
 		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
 	}
-	else if (getcwd(cwd, PATH_MAX) < 0)
-	{
-		free(new_path);
+	my_free(27, new_path);
+	if (!getcwd(cwd, PATH_MAX))
 		return (send_message(config, INTERNAL_ERROR, "serveur"));
-	}
 	else
-	{
-		free(new_path);
 		return (send_message(config, CMD_CD_SUCCESS, "serveur"));
-	}
 }

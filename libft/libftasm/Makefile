@@ -47,7 +47,7 @@ symlinks:
 	@sh configure
 
 test:
-	gcc -o $(NAME_TEST) tests/tests.c -I includes $(NAME)
+	gcc -o $(NAME_TEST) tests/.tests.c -I includes $(NAME)
 	./$(NAME_TEST)
 
 clean:

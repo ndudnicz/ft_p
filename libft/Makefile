@@ -52,7 +52,7 @@ $(NAME): $(OBJ)
 	ar rc $@ $(OBJ)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CPP) $(FLAGS) -c $< -o $@ -I includes
+	$(CPP) $(FLAGS) -c $< -o $@ -I includes -I libftasm/includes/
 
 libasm:
 	@make -C libftasm

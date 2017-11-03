@@ -2,7 +2,7 @@ CLIENT = client
 SERVEUR = serveur
 LIBCOMMON = libcommon.a
 CC = gcc
-FLAGS = #-Werror -Wextra -Wall
+FLAGS = -Werror -Wextra -Wall
 
 # SOURCE FOLDERS ==============================================================#
 
@@ -26,11 +26,12 @@ PATH_COMMON_INCLUDES = includes/dcommon
 
 SRC_COMMON = debug.c packet.c my_pipe.c error.c options_handling.c \
 			config.c receive_packet.c send_packet.c send_data.c \
-			receive_data.c send_data.c
+			receive_data.c send_data.c options_handling_tool.c
 
-SRC_CLIENT = main.c user_input.c establish_connection.c exec_cmd_local.c \
+SRC_CLIENT = main.c user_input.c make_connection.c exec_cmd_local.c \
 			switch_packet_type_client.c display_message.c command_lcd.c \
-			command_lpwd.c command_put.c command_get.c
+			command_lpwd.c command_put.c command_get.c command_lls.c \
+			user_input_tools.c
 
 SRC_SERVEUR = main.c switch_packet_type_server.c open_connection.c \
 			waiting_loop.c send_message.c command_ls.c command_cd.c \
@@ -60,19 +61,19 @@ re: clean fclean all
 
 $(CLIENT): $(LIBCOMMON) $(OBJ_CLIENT)
 	make -sC libft
-	$(CC) -o $@ $(OBJ_CLIENT) -L. -lft -lcommon -lftasm
+	$(CC) -o $@ $(OBJ_CLIENT) -L. -lft -lftasm -lcommon
 
 $(OBJ_CLIENT_DIR)/%.o: $(SRC_CLIENT_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_CLIENT_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_CLIENT_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I libft/libftasm/includes
 
 # SERVEUR RULES ===============================================================#
 
 $(SERVEUR): $(LIBCOMMON) $(OBJ_SERVEUR)
 	make -sC libft
-	$(CC) -o $@ $(OBJ_SERVEUR) -L. -lft -lcommon -lftasm libft.a
+	$(CC) -o $@ $(OBJ_SERVEUR) -L. -lft -lftasm -lcommon
 
 $(OBJ_SERVEUR_DIR)/%.o: $(SRC_SERVEUR_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/ -I includes/dclient ##################################################################################
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_SERVEUR_INCLUDES) -I $(PATH_COMMON_INCLUDES) -I libft/includes -I libft/libftasm/includes
 
 # LIBCOMMON RULES =============================================================#
 
@@ -81,4 +82,4 @@ $(LIBCOMMON): $(OBJ_COMMON)
 	ar rc $(LIBCOMMON) $(OBJ_COMMON)
 
 $(OBJ_COMMON_DIR)/%.o: $(SRC_COMMON_DIR)/%.c
-	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/dclient
+	$(CC) $(FLAGS) -o $@ -c $< -I $(PATH_COMMON_INCLUDES) -I libft/includes -I includes/dclient -I libft/libftasm/includes/
