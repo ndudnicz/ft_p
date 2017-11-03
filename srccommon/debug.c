@@ -11,13 +11,8 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <arpa/inet.h>
 
 #include "libft.h"
-#include "config.h"
-#include "config.h"
-#include "packet.h"
-#include "user_input.h"
 
 void	my_free(int n, void *ptr)
 {

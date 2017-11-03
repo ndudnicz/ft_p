@@ -13,8 +13,6 @@
 #ifndef DEBUG_H
 # define DEBUG_H
 
-# include "user_input.h"
-
 void	my_free(int n, void *ptr);
 
 #endif
