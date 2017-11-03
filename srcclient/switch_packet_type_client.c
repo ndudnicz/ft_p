@@ -35,8 +35,6 @@ int			switch_packet_type_client(t_config *config, t_packet *packet,
 		return (0);
 	else if (packet->type == T_MESSAGE)
 		return (display_message_from_packet(packet));
-	else if ((packet->type & ST_MASK) == T_DATA)
-		return (0);
 	else if ((packet->type & 0xf000) == SEND_NEW_DATA_CONNECTION)
 		return (data_handling(config, packet, arg));
 	else

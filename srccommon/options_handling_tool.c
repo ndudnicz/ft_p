@@ -14,6 +14,7 @@
 
 #include "libftasm.h"
 #include "config.h"
+#include "my_limits.h"
 #include "error.h"
 
 int		set_root_folder(t_config *config, char const *exec_name,
@@ -22,6 +23,26 @@ int		set_root_folder(t_config *config, char const *exec_name,
 	config->options |= ROOT_FOLDER;
 	if (chdir(param) < 0)
 		return (ft_error(exec_name, "-f", CHDIR_FAILED, 1));
+	else
+		return (0);
+}
+
+int		valid_port_string(char const *port)
+{
+	int		i;
+
+	i = 0;
+	if (ft_strlen(port) > 5)
+		return (ft_error("ERROR", "PORT", BAD_PORT, 1));
+	while (port && port[i])
+	{
+		if (ft_isdigit((int)port[i]))
+			i++;
+		else
+			return (ft_error("ERROR", "", BAD_PORT, 1));
+	}
+	if (ft_atoi(port) > USHORTMAX)
+		return (ft_error("ERROR", "PORT", BAD_PORT, 1));
 	else
 		return (0);
 }

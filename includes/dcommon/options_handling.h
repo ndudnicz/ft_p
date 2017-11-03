@@ -16,5 +16,6 @@
 int		get_options(t_config *config, int *ac, char **av);
 int		set_root_folder(t_config *config, char const *exec_name,
 						char const *param);
+int		valid_port_string(char const *port);
 
 #endif

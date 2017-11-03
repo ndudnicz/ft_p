@@ -88,18 +88,21 @@ static int	valid_port_number(char const *exec_name, int *ac, char **av)
 	else
 		return (ft_error(exec_name, "", BAD_PORT, 1));
 	i = 0;
-	if (ft_strlen(port_str) > 5)
-		return (ft_error(exec_name, "", BAD_PORT, 1));
-	while (port_str && port_str[i])
-	{
-		if (ft_isdigit((int)port_str[i]))
-			i++;
-		else
-			return (ft_error(exec_name, "", BAD_PORT, 1));
-	}
-	if (ft_atoi(port_str) > USHORTMAX)
-		return (ft_error(exec_name, "", BAD_PORT, 1));
-	return (0);
+	if (valid_port_string(port_str) > 0)
+		return (1);
+	else
+		return (0);
+	// if (ft_strlen(port_str) > 5)
+	// 	return (ft_error(exec_name, "", BAD_PORT, 1));
+	// while (port_str && port_str[i])
+	// {
+	// 	if (ft_isdigit((int)port_str[i]))
+	// 		i++;
+	// 	else
+	// 		return (ft_error(exec_name, "", BAD_PORT, 1));
+	// }
+	// if (ft_atoi(port_str) > USHORTMAX)
+	// 	return (ft_error(exec_name, "", BAD_PORT, 1));
 }
 
 /*

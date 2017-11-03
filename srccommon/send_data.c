@@ -98,5 +98,7 @@ int						send_data(t_config *config, char const *filename,
 	if (chunk_data(config, data, get_chunk_number(stat.st_size),
 	stat.st_size) > 0)
 		return (ret_close(fd, config->socket.data, 1));
+	if (munmap(data, stat.st_size) < 0)
+		ft_error_child("ERROR", "send_data()", MUNMAP_FAILED);
 	return (ret_close(fd, config->socket.data, 0));
 }

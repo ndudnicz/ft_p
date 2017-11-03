@@ -38,10 +38,16 @@ int		lcd(t_config *config, char *arg)
 		new_path = ft_strdup(arg);
 	else
 		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), arg, 1, 0);
-	if (chdir(new_path) < 0)
+	if (chdir(new_path) < 0 && data_len)
+	{
+		my_free(53, new_path);
 		return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
+	}
 	if (!getcwd(cwd, PATH_MAX))
+	{
+		my_free(54, new_path);
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
+	}
 	if (data_len)
 		my_free(9, new_path);
 	printf("%s\n", CMD_LCD_SUCCESS);
