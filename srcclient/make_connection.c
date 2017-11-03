@@ -22,6 +22,7 @@
 #include "switch_packet_type_client.h"
 #include "debug.h"
 #include "error.h"
+#include "libft.h"
 
 static int	make_socket(t_config *config, char const *ip_str)
 {
@@ -61,7 +62,12 @@ int			make_connection(t_config *config, char const *ip_str,
 	< 0)
 		return (ft_error("Client", "make_connection()", CONNECT_ERROR, 1));
 	receive_packet(config, config->socket.cmd, packet, 0);
-	if (switch_packet_type_client(config, packet, NULL) > 0)
+	if (packet->type == T_CLOSE)
+	{
+		ft_putendl(packet->data);
+		return (1);
+	}
+	else if (switch_packet_type_client(config, packet, NULL) > 0)
 		return (1);
 	my_free(12, packet);
 	printf("Connection done with: %s:%s\n", ip_str, cmd_port_str);

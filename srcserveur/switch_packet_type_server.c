@@ -25,9 +25,9 @@ void	switch_packet_type_server(t_config *config, t_packet *packet)
 			ls(config);
 		else if ((packet->type & ST_MASK) == ST_PWD)
 			pwd(config, packet);
-		else if (packet->type == (ASK_NEW_DATA_CONNECTION | ST_PUT))
+		else if (packet->type == ST_PUT)
 			put(config, packet);
-		else if (packet->type == (ASK_NEW_DATA_CONNECTION | ST_GET))
+		else if (packet->type == ST_GET)
 			get(config, packet);
 		else
 		{

@@ -85,15 +85,15 @@ int						send_data(t_config *config, char const *filename,
 	int const		sock = config->socket.data;
 
 	if ((fd = open(filename, O_RDONLY)) < 0)
-		return (ft_error("ERROR", "send_data()", OPEN_FAILED, stop(sock)));
+		return (ft_error("ERROR", "send_data()", OPEN_FAILED, stop(sock, "")));
 	if (fstat(fd, &stat) < 0)
-		return (ft_error("ERROR", "send_data()", FSTAT_FAILED, stop(sock)));
+		return (ft_error("ERROR", "send_data()", FSTAT_FAILED, stop(sock, "")));
 	if ((data = (char*)mmap(NULL, stat.st_size, PROT_READ, MAP_PRIVATE, fd, 0))
 	== MAP_FAILED)
 	{
 		close(fd);
 		return (ft_error("ERROR", "send_data()", MMAP_FAILED,
-		stop(config->socket.data)));
+		stop(config->socket.data, "")));
 	}
 	if (chunk_data(config, data, get_chunk_number(stat.st_size),
 	stat.st_size) > 0)

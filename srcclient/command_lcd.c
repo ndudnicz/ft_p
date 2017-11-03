@@ -21,15 +21,19 @@
 #include "error.h"
 #include "my_syslimits.h"
 
-int		lcd(t_config *config, char *arg)
+static int	ret_success(void)
+{
+	ft_putendl(CMD_LCD_SUCCESS);
+	return (0);
+}
+
+int			lcd(t_config *config, char *arg)
 {
 	char		*new_path;
 	char		cwd[PATH_MAX];
 	int const	data_len = ft_strlen(arg);
 
 	cwd[0] = 0;
-	if (ft_strlen(arg) > 0)
-		ft_putendl(arg);
 	if (!getcwd(cwd, PATH_MAX))
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
 	if (data_len == 0)
@@ -38,14 +42,14 @@ int		lcd(t_config *config, char *arg)
 		new_path = ft_strdup(arg);
 	else
 		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), arg, 1, 0);
-	if (chdir(new_path) < 0 && data_len)
+	if (!new_path || (chdir(new_path) < 0 && data_len))
 	{
 		my_free(53, new_path);
-		return (ft_error("ERROR", "LCD", INVALID_PATH, 0));
+		return (ft_error("ERROR", "COMMAND LCD", INVALID_PATH, 0));
 	}
 	if (data_len)
 		my_free(9, new_path);
 	if (!getcwd(cwd, PATH_MAX))
 		return (ft_error("LCD", INTERNAL_ERROR, "client", 0));
-	return (0);
+	return (ret_success());
 }

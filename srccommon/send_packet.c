@@ -16,6 +16,7 @@
 #include "config.h"
 #include "packet.h"
 #include "error.h"
+#include "libftasm.h"
 
 /*
 ** Try to send the packet through the connection given in config.
@@ -33,14 +34,14 @@ int		send_packet(int const socket, t_packet *packet)
 	return (ret < 0 ? 1 : 0);
 }
 
-int		stop(int const socket)
+int		stop(int const socket, char const *msg)
 {
 	t_packet	stop;
 	t_size_type	st;
 
-	st.size = HEADER_SIZE;
+	st.size = HEADER_SIZE + ft_strlen(msg);
 	st.type = T_CLOSE;
-	forge_packet(&stop, &st, "", 1);
+	forge_packet(&stop, &st, msg, 1);
 	send_packet(socket, &stop);
 	close(socket);
 	return (1);

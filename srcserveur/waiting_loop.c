@@ -61,9 +61,14 @@ static int	child_waiting_loop(t_config *config)
 	t_packet	*packet;
 	int			ret;
 
-	send_message(config, "Server says: Hello !", "Server");
-	ft_putendl("NEW CONNECTION ESTABLISHED!");
-	packet = (t_packet*)malloc(sizeof(t_packet));
+	if (!(packet = (t_packet*)malloc(sizeof(t_packet))))
+	{
+		stop(config->socket.cmd, "ERROR: INTERNAL ERROR: CLOSING CONNECTION.");
+		close(config->socket.cmd);
+		exit(0);
+	}
+	else
+		send_message(config, "Server says: Hello !", "Server");
 	while ((ret = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0))
 	> 0)
 	{
@@ -110,7 +115,7 @@ int			master_waiting_loop(t_config *config)
 		else if (config->socket.cmd > 0 && pid)
 			wait4(pid, &stat_loc, 0, NULL);
 		if (config->socket.cmd < 0)
-			printf("Accept() error, exit.\n");
+			printf("Accept() error.\n");
 	}
 	close(config->socket.server_master);
 	return (0);
