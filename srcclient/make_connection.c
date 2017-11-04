@@ -27,13 +27,21 @@
 static int	make_socket(t_config *config, char const *ip_str)
 {
 	struct protoent		*proto;
+	struct hostent		*host;
 
+	host = NULL;
 	if ((proto = getprotobyname("tcp")) == 0)
 		return (ft_error("Client", "", GPBN_FAIL, 1));
 	if ((config->socket.cmd = socket(PF_INET, SOCK_STREAM, proto->p_proto)) < 0)
 		return (ft_error("Client", "open_connection:", SOCKET_FAILED, 1));
 	if ((unsigned int)(config->inet_addr = inet_addr(ip_str)) == INADDR_NONE)
-		return (ft_error("Client", "open_connection:", INET_ADDR_FAILED, 1));
+	{
+		host = gethostbyname(ip_str);
+		if ((unsigned int)(config->inet_addr =
+		inet_addr(inet_ntoa(*(struct in_addr*)host->h_addr_list[0])))
+		== INADDR_NONE)
+			return (ft_error("Client", "open_connection", INET_ADDR_FAILED, 1));
+	}
 	return (0);
 }
 

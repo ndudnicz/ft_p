@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <arpa/inet.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 
 #include "packet.h"
 #include "libftasm.h"

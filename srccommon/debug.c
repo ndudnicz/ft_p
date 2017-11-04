@@ -16,7 +16,11 @@
 
 void	my_free(int n, void *ptr)
 {
-	if (n > 1000)
-		ft_putnbr_endl(n);
+	int i = 0;
+
+	ft_putnbr_endl(n);
+	while (i < 200000000)
+		i++;
+	// if (n > 1000)
 	free(ptr);
 }

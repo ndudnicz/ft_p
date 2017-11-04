@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <sys/socket.h>
-#include <arpa/inet.h>
+//#include <arpa/inet.h>
 
 #include "config.h"
 #include "packet.h"
@@ -19,7 +19,7 @@
 #include "error.h"
 #include "libft.h"
 
-#include <stdio.h>
+//#include <stdio.h>
 
 static void	print_ls(t_config *config, t_packet *packet, int ret)
 {
@@ -47,6 +47,7 @@ int			receive_packet(t_config *config, int socket, t_packet *packet,
 
 	ret2 = 0;
 	ft_bzero(config->buf, MAX_PACKET_SIZE);
+	ft_bzero((char*)packet, MAX_PACKET_SIZE);
 	while (config->buf[0] == 0)
 		ret1 = read(socket, config->buf, HEADER_SIZE);
 	tmp = (t_packet*)config->buf;

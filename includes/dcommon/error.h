@@ -36,6 +36,7 @@
 # define CANT_ESTABLISH_CONNECTION "Unable to reach the client."
 # define BAD_PACKET "Bad packet format: wrong magic number."
 # define BAD_TYPE "Bad packet format: wrong type number."
+# define BAD_PACKET_DATA "Bad packet data."
 # define GETCWD_FAILED "Unable to set root working directory."
 # define CHDIR_FAILED "Invalid path."
 # define BIND_FAILED "Invalid bind ip."
@@ -43,6 +44,7 @@
 # define UNKNOWN_CMD "UNKNOWN COMMAND"
 # define INVALID_FILE "INVALID FILE"
 # define CLOSE "CONNECTION CLOSED BY PEER"
+# define ABORT "ABORT ABORT ABORT !"
 
 int		ft_error(char const *exec_name, char const *filename,
 				char const *type, int ret);

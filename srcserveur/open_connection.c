@@ -116,7 +116,7 @@ static int				open_data_norme(t_config *config,
 ** Return 0 if success
 ** Display an error message and return 1 if fail
 */
-
+#include <stdio.h>
 int						open_data_connection(t_config *config, t_packet *packet,
 								int (*transfert)(t_config*, char const*, int))
 {
