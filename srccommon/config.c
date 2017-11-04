@@ -35,11 +35,13 @@ t_config	*create_config(char const *exec_name)
 	}
 	return (new);
 }
-
+/*
 int			free_config(t_config *config)
 {
-	my_free(40, config->buf);
-	my_free(41, config->ip_str);
-	my_free(42, config);
+	config = NULL;
+	// my_free(40, config->buf);
+	// my_free(41, config->ip_str);
+	// my_free(42, config);
 	return (0);
 }
+*/

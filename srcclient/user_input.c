@@ -75,7 +75,10 @@ static unsigned short	treat_input(t_input *input, char *line, int i)
 	if (!line || !array)
 		return (ft_error("ERROR", "treat_input()", MALLOC_FAIL, 1));
 	if (line)
+	{
 		my_free(13, line);
+		line = NULL;
+	}
 	if (ft_array_length(((char const**)array)) == 0)
 		return (free_array(array, i, 0));
 	if (ft_array_length((char const**)array) > 1)
@@ -141,6 +144,6 @@ int						user_input_loop(t_config *config, int ret, char *line)
 			fork_and_run(config, &input);
 	}
 	close(config->socket.cmd);
-	my_free(18, packet);
+	// my_free(18, packet);
 	return (ft_putstr("Bye!\n") - 5);
 }

@@ -50,6 +50,6 @@ int		main(int ac, char **av)
 		else if (user_input_loop(config, 0, NULL) > 0)
 			return (ft_error("CORRUPTED PACKET", "ABORT", ABORT, 1));
 		else
-			return (free_config(config));
+			return (0);
 	}
 }

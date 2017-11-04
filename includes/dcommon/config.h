@@ -90,6 +90,5 @@ typedef struct	s_config
 }				t_config;
 
 t_config		*create_config(char const*exec_name);
-int				free_config(t_config *config);
 
 #endif

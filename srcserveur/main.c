@@ -57,6 +57,6 @@ int		main(int ac, char **av)
 		else if (master_waiting_loop(config) > 0)
 			return (1);
 		else
-			return (free_config(config));
+			return (0);
 	}
 }
