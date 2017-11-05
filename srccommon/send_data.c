@@ -14,8 +14,6 @@
 #include <stdlib.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
-//#include <sys/socket.h>
-//#include <stdio.h>
 
 #include "config.h"
 #include "error.h"

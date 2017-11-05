@@ -11,15 +11,12 @@
 /* ************************************************************************** */
 
 #include <sys/socket.h>
-//#include <arpa/inet.h>
 
 #include "config.h"
 #include "packet.h"
 #include "libftasm.h"
 #include "error.h"
 #include "libft.h"
-
-//#include <stdio.h>
 
 static void	print_ls(t_config *config, t_packet *packet, int ret)
 {

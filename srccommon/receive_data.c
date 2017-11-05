@@ -68,8 +68,6 @@ static t_packet	**create_packets(void)
 		return (double_packet);
 }
 
-#include <stdio.h>//
-
 int				receive_data(t_config *config, char const *filename, int i)
 {
 	t_packet	**packets;

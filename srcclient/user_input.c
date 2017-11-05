@@ -66,10 +66,10 @@ static int				free_array(char **array, int i, int ret)
 	}
 	return (ret);
 }
-#include <stdio.h>//
+
 static unsigned short	treat_input(t_input *input, char *line, int i)
 {
-	char	**array = ft_strsplit(line, ' ');
+	char const	**array = (char const**)ft_strsplit(line, ' ');
 
 	input->arg = NULL;
 	if (!line || !array)
@@ -80,7 +80,7 @@ static unsigned short	treat_input(t_input *input, char *line, int i)
 		line = NULL;
 	}
 	if (ft_array_length(((char const**)array)) == 0)
-		return (free_array(array, i, 0));
+		return (free_array((char**)array, i, 0));
 	if (ft_array_length((char const**)array) > 1)
 		input->arg = ft_strdup((char*)array[1]);
 	else
@@ -91,7 +91,7 @@ static unsigned short	treat_input(t_input *input, char *line, int i)
 	(input->arg && ft_strlen(input->arg) > PATH_MAX))
 		return (0);
 	input->cmd = get_type(array[0], input->arg);
-	free_array(array, i, 0);
+	free_array((char**)array, i, 0);
 	return (input->cmd);
 }
 
@@ -144,6 +144,5 @@ int						user_input_loop(t_config *config, int ret, char *line)
 			fork_and_run(config, &input);
 	}
 	close(config->socket.cmd);
-	// my_free(18, packet);
 	return (ft_putstr("Bye!\n") - 5);
 }

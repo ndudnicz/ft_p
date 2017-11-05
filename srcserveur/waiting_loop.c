@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-//#include <sys/wait.h>
+#include <sys/wait.h>
 #include <stdio.h>
 
 #include "config.h"
