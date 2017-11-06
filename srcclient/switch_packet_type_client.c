@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-
 #include "config.h"
 #include "packet.h"
 #include "display_message.h"
@@ -20,9 +18,9 @@
 static int	data_handling(t_config *config, t_packet *packet,
 							char const *filename)
 {
-	if ((packet->type & 0x0fff) == (ST_PUT & ST_MASK))
+	if ((packet->type & ST_MASK) == (ST_PUT & ST_MASK))
 		return (put(config, packet, filename));
-	else if ((packet->type & 0x0fff) == (ST_GET & ST_MASK))
+	else if ((packet->type & ST_MASK) == (ST_GET & ST_MASK))
 		return (get(config, packet, filename));
 	else
 		return (0);

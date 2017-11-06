@@ -12,7 +12,6 @@
 
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdlib.h>
 
 #include "config.h"
 #include "packet.h"
@@ -34,11 +33,10 @@ int			get_check_local_file(char const *filename)
 	if (!getcwd(cwd, PATH_MAX))
 		return (ft_error("ERROR", "GET", "GETCWD()", 1));
 	path = ft_strjoin_free(ft_strjoin(cwd, "/"), filename, 1, 0);
-	if (!path || (fd = open(path, O_RDONLY)) > 0)
-	{
-		my_free(1, path);
+	if (!path)
+		return (ft_error("ERROR", "GET", MALLOC_FAIL, 1));
+	if ((fd = open(path, O_RDONLY)) > 0)
 		return (ft_error("ERROR", "GET", "FILE ALREADY EXISTS.", 1));
-	}
 	my_free(2, path);
 	close(fd);
 	return (0);

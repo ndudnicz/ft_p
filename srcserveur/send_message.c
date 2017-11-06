@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-
 #include "libftasm.h"
 #include "config.h"
 #include "packet.h"

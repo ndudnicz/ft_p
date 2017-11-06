@@ -53,40 +53,45 @@ static unsigned short	get_type(char const *str, char const *arg)
 		return ((unsigned short)ft_error("ERROR", "INPUT", UNKNOWN_CMD, 0));
 }
 
-static int				sub_free(void *p1, void *p2, int ret)
+static int				free_array(char **array, int i, int ret)
 {
-	if (p1)
-		my_free(14, p1);
-	if (p2)
-		my_free(15, p2);
+	if (array)
+	{
+		while (array[i])
+		{
+			my_free(16, (void*)array[i]);
+			i++;
+		}
+		my_free(15, (void*)array);
+	}
 	return (ret);
 }
 
 static unsigned short	treat_input(t_input *input, char *line, int i)
 {
-	char const	*s = ft_strtrim(line);
-	char const	**array = (char const**)ft_strsplit(s, ' ');
+	char const	**array = (char const**)ft_strsplit(line, ' ');
 
 	input->arg = NULL;
+	if (!line || !array)
+		return (ft_error("ERROR", "treat_input()", MALLOC_FAIL, 1));
 	if (line)
+	{
 		my_free(13, line);
-	if (!array || ft_array_length(array) == 0)
-		return (sub_free((void*)array, (void*)s, 1));
-	if (ft_array_length(array) > 1)
-		input->arg = (char*)array[1];
+		line = NULL;
+	}
+	if (ft_array_length(((char const**)array)) == 0)
+		return (free_array((char**)array, i, 0));
+	if (ft_array_length((char const**)array) > 1)
+		input->arg = ft_strdup((char*)array[1]);
 	else
 		input->arg = ft_strdup("");
+	if (!input->arg)
+		return (ft_error("ERROR", "treat_input()", MALLOC_FAIL, 1));
 	if (ft_strlen(array[0]) > PATH_MAX ||
 	(input->arg && ft_strlen(input->arg) > PATH_MAX))
 		return (0);
 	input->cmd = get_type(array[0], input->arg);
-	while (array[i])
-	{
-		if (i != 1)
-			my_free(16, (void*)array[i]);
-		i++;
-	}
-	sub_free((void*)array, (void*)s, 0);
+	free_array((char**)array, i, 0);
 	return (input->cmd);
 }
 
@@ -139,6 +144,5 @@ int						user_input_loop(t_config *config, int ret, char *line)
 			fork_and_run(config, &input);
 	}
 	close(config->socket.cmd);
-	my_free(18, packet);
 	return (ft_putstr("Bye!\n") - 5);
 }
