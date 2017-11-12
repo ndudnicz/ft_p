@@ -22,6 +22,7 @@
 #include "debug.h"
 #include "libftasm.h"
 #include "receive_packet.h"
+#include "libft.h"
 
 static unsigned short	get_size(int const i, int const chunks_number,
 								unsigned long int const file_size)
@@ -36,8 +37,13 @@ static int				ping_pong(t_config *config, t_packet *packet_ping,
 									t_packet *packet_pong)
 {
 	send_packet(config->socket.data, packet_ping);
-	receive_packet(config, config->socket.data, packet_pong, 0);
-	return (0);
+	if (receive_packet(config, config->socket.data, packet_pong, 0) < 1 || packet_pong->type == T_CLOSE)
+	{
+		ft_putendl(packet_pong->data);
+		return (1);
+	}
+	else
+		return (0);
 }
 
 static int				chunk_data(t_config *config, char *data,
@@ -60,7 +66,8 @@ static int				chunk_data(t_config *config, char *data,
 		size_type.size = get_size(i, chunks_number, file_size);
 		forge_packet(packet_ping, &size_type, &data[i * MAX_DATA_SIZE],
 		chunks_number);
-		ping_pong(config, packet_ping, packet_pong);
+		if (ping_pong(config, packet_ping, packet_pong))
+			return (1);
 		i++;
 	}
 	my_free(51, packet_ping);

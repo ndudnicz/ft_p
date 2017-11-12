@@ -35,6 +35,25 @@ static void	print_ls(t_config *config, t_packet *packet, int ret)
 	}
 }
 
+int			read_timeout(t_config *config, int socket, unsigned short read_size)
+{
+	int		ret;
+	int		timeout;
+
+	timeout = 0;
+	// ft_bzero(config->buf, MAX_PACKET_SIZE);
+	while ((ret = read(socket, config->buf, read_size)) == 0)
+	{
+		if (timeout > 100)
+			return (-1);
+		ret = read(socket, config->buf, read_size);
+		ft_putstr("read 0 ");
+		ft_putnbr_endl(timeout);
+		timeout++;
+	}
+	return (ret);
+}
+
 int			receive_packet(t_config *config, int socket, t_packet *packet,
 							unsigned short cmd)
 {
@@ -45,22 +64,25 @@ int			receive_packet(t_config *config, int socket, t_packet *packet,
 	ret2 = 0;
 	ft_bzero(config->buf, MAX_PACKET_SIZE);
 	ft_bzero((char*)packet, MAX_PACKET_SIZE);
-	while (config->buf[0] == 0)
-		ret1 = read(socket, config->buf, HEADER_SIZE);
+	ret1 = read_timeout(config, socket, HEADER_SIZE);
 	tmp = (t_packet*)config->buf;
-	ft_memcpy((char*)packet, tmp, ret1);
+	if (ret1 > 0)
+		ft_memcpy((char*)packet, tmp, ret1);
 	if (ret1 == HEADER_SIZE && (tmp->magic == CIGAM || tmp->magic == MAGIC) &&
 	ntohs(tmp->size) <= MAX_PACKET_SIZE)
 	{
-		if ((ret2 = read(socket, config->buf, ntohs(tmp->size))) < 0)
-			ft_error_child("receive_cmd_packet", "read()", READ_FAIL);
+		// if ((ret2 = read(socket, config->buf, ntohs(tmp->size))) < 0)
+		if ((ret2 = read_timeout(config, socket, ntohs(tmp->size))) < 0)
+			return (ft_error("receive_cmd_packet", "read()", READ_FAIL, -1));
 		config->buf[ret2] = 0;
 		ft_memcpy((char*)packet + ret1, config->buf, ret2);
 		unforge_packet(packet);
 	}
-	else if (cmd == ST_LS)
+	else if (ret1 > 0 && cmd == ST_LS)
 		print_ls(config, packet, ret1);
-	else
-		return (-1);
+	// else
+		// return (-1);
+	ft_putendl("\na");
+	ft_putnbr_endl(ret1 + ret2);
 	return (ret1 + ret2);
 }

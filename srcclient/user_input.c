@@ -107,7 +107,8 @@ static int				cmd_handling(t_config *config, t_input *input,
 	size_type.type = input->cmd;
 	forge_packet(packet, &size_type, input->arg, 1);
 	send_packet(config->socket.cmd, packet);
-	receive_packet(config, config->socket.cmd, packet, input->cmd);
+	if (receive_packet(config, config->socket.cmd, packet, input->cmd) < 0)
+		return (ft_error("ERROR", "SERVER SIDE", "CONNECTION LOST", 1));
 	if (switch_packet_type_client(config, packet, input->arg) > 0)
 		return (1);
 	ft_bzero((char*)packet, packet->size);

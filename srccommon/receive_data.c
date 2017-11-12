@@ -23,7 +23,8 @@
 
 static int		ret_error(t_config *config)
 {
-	ft_putendl("Open() error");
+	ft_putendl("Open() error, closing connection.");
+	stop(config->socket.data, "ERROR: TRANSFERT STOPPED");
 	close(config->socket.data);
 	return (1);
 }
@@ -77,7 +78,7 @@ int				receive_data(t_config *config, char const *filename, int i)
 
 	n = -1;
 	if (!(packets = create_packets()))
-		return (ft_error("ERROR", "receive_data", MALLOC_FAIL, 1));
+		return (ft_error("ERROR", "receive_data()", MALLOC_FAIL, 1));
 	if ((fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0600)) < 0)
 		return (ret_error(config));
 	while (i != n && (ret = receive_packet(config, config->socket.data,
