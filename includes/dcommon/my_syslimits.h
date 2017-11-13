@@ -13,6 +13,6 @@
 #ifndef MY_SYSLIMITS_H
 # define MY_SYSLIMITS_H
 
-# include <sys/syslimits.h>
+# include <linux/limits.h>
 
 #endif
