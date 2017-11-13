@@ -22,17 +22,19 @@ static void	print_ls(t_config *config, t_packet *packet, int ret)
 {
 	((char*)packet)[ret] = 0;
 	ret = ft_putstr((char*)packet);
-	if (ret >= HEADER_SIZE - 1 && ((char*)packet)[ret - 1] > 10)
-	{
-		while ((ret =
-		read(config->socket.cmd, config->buf, MAX_PACKET_SIZE - 1)) > 0)
+	// ft_putendl("\nss");
+	// ft_putnbr_endl(ret);
+	// if (ret == HEADER_SIZE && ((char*)packet)[ret - 1] > 10)
+	// {
+		// while ((ret = read(config->socket.cmd, config->buf, MAX_PACKET_SIZE - 1)) > 0)
+		while ((ret = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE - 1, 0)) > 0)
 		{
 			config->buf[ret] = 0;
 			ft_putstr(config->buf);
 			if (ret < MAX_PACKET_SIZE - 1)
 				break ;
 		}
-	}
+	// }
 }
 
 int			read_timeout(t_config *config, int socket, unsigned short read_size)
@@ -42,13 +44,14 @@ int			read_timeout(t_config *config, int socket, unsigned short read_size)
 
 	timeout = 0;
 	// ft_bzero(config->buf, MAX_PACKET_SIZE);
-	while ((ret = read(socket, config->buf, read_size)) == 0)
+	// while ((ret = read(socket, config->buf, read_size)) == 0)
+	while ((ret = recv(socket, config->buf, read_size, 0)) == 0)
 	{
 		if (timeout > 100)
 			return (-1);
 		ret = read(socket, config->buf, read_size);
-		ft_putstr("read 0 ");
-		ft_putnbr_endl(timeout);
+		// ft_putstr("read 0 ");
+		// ft_putnbr_endl(timeout);
 		timeout++;
 	}
 	return (ret);
@@ -62,6 +65,7 @@ int			receive_packet(t_config *config, int socket, t_packet *packet,
 	t_packet	*tmp;
 
 	ret2 = 0;
+	// ft_putendl("ppp");//
 	ft_bzero(config->buf, MAX_PACKET_SIZE);
 	ft_bzero((char*)packet, MAX_PACKET_SIZE);
 	ret1 = read_timeout(config, socket, HEADER_SIZE);
@@ -82,7 +86,7 @@ int			receive_packet(t_config *config, int socket, t_packet *packet,
 		print_ls(config, packet, ret1);
 	// else
 		// return (-1);
-	ft_putendl("\na");
-	ft_putnbr_endl(ret1 + ret2);
+	// ft_putendl("\na");
+	// ft_putnbr_endl(ret1 + ret2);
 	return (ret1 + ret2);
 }

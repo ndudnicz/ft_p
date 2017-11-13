@@ -24,6 +24,7 @@
 #include "constant_config_serveur.h"
 #include "error.h"
 #include "debug.h"
+#include "my_setsockopt.h"
 
 /*
 ** Try to open a connection on <ip>:<port>, port given as parameter
@@ -45,6 +46,8 @@ int						open_cmd_connection(t_config *config,
 	if ((config->socket.server_master =
 	socket(PF_INET, SOCK_STREAM, proto->p_proto)) < 0)
 		return (ft_error("Serveur", "open_connection:", SOCKET_FAILED, 1));
+	if (my_setsockopt(config->socket.server_master))
+		return (1);
 	sin.sin_family = AF_INET;
 	if ((sin.sin_addr.s_addr = inet_addr(config->ip_str)) == INADDR_NONE)
 		return (ft_error("Serveur", "open_connection:", INET_ADDR_FAILED, 1));
@@ -131,6 +134,8 @@ int						open_data_connection(t_config *config, t_packet *packet,
 	if ((config->socket.data = socket(PF_INET, SOCK_STREAM, proto->p_proto))
 	< 0)
 		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
+	if (my_setsockopt(config->socket.data))
+		return (1);
 	sin.sin_family = AF_INET;
 	if (open_data_norme(config, &sin))
 		return (1);

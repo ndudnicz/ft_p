@@ -33,7 +33,7 @@
 # define GPBN_FAIL "getprotobyname() failed."
 # define INET_ADDR_FAILED "inet_addr(), malformed requests."
 # define SOCKET_FAILED "socket() failed."
-# define CANT_ESTABLISH_CONNECTION "Unable to reach the client."
+# define CANT_ESTABLISH_CONNECTION "Unable to reach the peer."
 # define BAD_PACKET "Bad packet format: wrong magic number."
 # define BAD_TYPE "Bad packet format: wrong type number."
 # define BAD_PACKET_DATA "Bad packet data."
@@ -45,6 +45,7 @@
 # define INVALID_FILE "INVALID FILE"
 # define CLOSE "CONNECTION CLOSED BY PEER"
 # define ABORT "ABORT ABORT ABORT !"
+# define SETSOCKOPT "setsockopt() failed."
 
 int		ft_error(char const *exec_name, char const *filename,
 				char const *type, int ret);

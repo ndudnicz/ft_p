@@ -23,20 +23,24 @@
 #include "debug.h"
 #include "error.h"
 #include "libft.h"
+#include "my_setsockopt.h"
 
 static int	make_socket(t_config *config, char const *ip_str)
 {
 	struct protoent		*proto;
 	struct hostent		*host;
-
 	host = NULL;
 	if ((proto = getprotobyname("tcp")) == 0)
 		return (ft_error("Client", "", GPBN_FAIL, 1));
 	if ((config->socket.cmd = socket(PF_INET, SOCK_STREAM, proto->p_proto)) < 0)
 		return (ft_error("Client", "open_connection:", SOCKET_FAILED, 1));
+	if (my_setsockopt(config->socket.cmd))
+		return (1);
 	if ((unsigned int)(config->inet_addr = inet_addr(ip_str)) == INADDR_NONE)
 	{
 		host = gethostbyname(ip_str);
+		if (!host)
+			return (ft_error("Client", "open_connection", INET_ADDR_FAILED, 1));
 		if ((unsigned int)(config->inet_addr =
 		inet_addr(inet_ntoa(*(struct in_addr*)host->h_addr_list[0])))
 		== INADDR_NONE)
@@ -53,23 +57,25 @@ static int	make_socket(t_config *config, char const *ip_str)
 */
 
 int			make_connection(t_config *config, char const *ip_str,
-								char const *cmd_port_str)
+							char const *cmd_port_str)
 {
 	struct sockaddr_in	sin;
 	t_packet			*packet;
 
 	if (!(packet = (t_packet*)malloc(sizeof(t_packet))))
-		return (ft_error("Client", "make_connection()", MALLOC_FAIL, 1));
+	return (ft_error("Client", "make_connection()", MALLOC_FAIL, 1));
 	printf("Connecting to: %s:%s\n", ip_str, cmd_port_str);
-	make_socket(config, ip_str);
+	if (make_socket(config, ip_str))
+		return (1);
 	config->port.cmd = htons(ft_atoi(cmd_port_str));
 	sin.sin_family = AF_INET;
 	sin.sin_port = config->port.cmd;
 	sin.sin_addr.s_addr = config->inet_addr;
 	if (connect(config->socket.cmd, (const struct sockaddr*)&sin, sizeof(sin))
 	< 0)
-		return (ft_error("Client", "make_connection()", CONNECT_ERROR, 1));
-	receive_packet(config, config->socket.cmd, packet, 0);
+	return (ft_error("Client", "make_connection()", CONNECT_ERROR, 1));
+	if (receive_packet(config, config->socket.cmd, packet, 0) < 0)
+		return (ft_error("Error", "make_co..()", CANT_ESTABLISH_CONNECTION, 1));
 	if (packet->type == T_CLOSE)
 	{
 		ft_putendl(packet->data);
@@ -90,7 +96,7 @@ int			make_connection(t_config *config, char const *ip_str,
 */
 
 int			make_data_connection(t_config *config, char const *filename,
-				int (*transfert)(t_config*, char const*, int))
+								int (*transfert)(t_config*, char const*, int))
 {
 	struct protoent		*proto;
 	struct sockaddr_in	sin;
@@ -100,6 +106,8 @@ int			make_data_connection(t_config *config, char const *filename,
 	if ((config->socket.data = socket(PF_INET, SOCK_STREAM, proto->p_proto))
 	< 0)
 		return (ft_error("ERROR", "make_data_connection()", SOCKET_FAILED, 0));
+	if (my_setsockopt(config->socket.cmd))
+		return (1);
 	config->port.data = htons(config->port.data);
 	sin.sin_family = AF_INET;
 	sin.sin_port = config->port.data;
