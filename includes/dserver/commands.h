@@ -13,7 +13,7 @@
 #ifndef COMMANDS_H
 # define COMMANDS_H
 
-void	ls(t_config *config);
+void	ls(t_config *config, char const *arg);
 void	cd(t_config *config, t_packet *packet);
 void	pwd(t_config *config, t_packet *packet);
 int		put(t_config *config, t_packet *packet);

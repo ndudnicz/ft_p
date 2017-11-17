@@ -79,28 +79,33 @@ static int	valid_user_input(t_config *config, char const *root,
 		return (free_all_split(array_root, array_input, array_cwd));
 }
 
+static int	ret_norme(t_config *config, int n, char *new_path)
+{
+	my_free(n, new_path);
+	return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
+}
+
 int			cd(t_config *config, t_packet *packet)
 {
 	char		*new_path;
 	char		cwd[PATH_MAX];
+	char		oldcwd[PATH_MAX];
 	int const	data_len = ft_strlen(packet->data);
 
-	cwd[0] = 0;
-	new_path = NULL;
 	packet->data[packet->size - HEADER_SIZE] = 0;
-	if (!getcwd(cwd, PATH_MAX))
+	if (!getcwd(oldcwd, PATH_MAX))
 		return (send_message(config, INTERNAL_ERROR, "serveur"));
-	if (valid_user_input(config, config->root, packet->data, cwd) > 0)
+	if (valid_user_input(config, config->root, packet->data, oldcwd) > 0)
 		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
 	if (data_len == 0)
 		new_path = ft_strdup(config->root);
 	else
-		new_path = ft_strjoin_free(ft_strjoin(cwd, "/"), packet->data, 1, 0);
+		new_path = ft_strjoin_free(ft_strjoin(oldcwd, "/"), packet->data, 1, 0);
 	if (chdir(new_path) < 0)
-	{
-		my_free(26, new_path);
-		return (send_message(config, CMD_CD_INVALID_PATH, "serveur"));
-	}
+		return (ret_norme(config, 26, new_path));
+	if ((!getcwd(cwd, PATH_MAX) || !(ft_strstr(cwd, config->root) == cwd))
+	&& chdir(oldcwd) + 2)
+		return (ret_norme(config, 27, new_path));
 	my_free(27, new_path);
 	if (!getcwd(cwd, PATH_MAX))
 		return (send_message(config, INTERNAL_ERROR, "serveur"));

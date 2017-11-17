@@ -22,7 +22,7 @@ void	switch_packet_type_server(t_config *config, t_packet *packet)
 	if (packet->type & T_MASK_CMD || packet->type & T_MASK_DATA)
 	{
 		if ((packet->type & ST_MASK) == ST_LS)
-			ls(config);
+			ls(config, packet->data);
 		else if ((packet->type & ST_MASK) == ST_PWD)
 			pwd(config, packet);
 		else if (packet->type == ST_PUT)

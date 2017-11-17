@@ -72,6 +72,7 @@ static int	child_waiting_loop(t_config *config)
 	while ((ret = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE, 0))
 	> 0)
 	{
+		config->buf[ret] = 0;
 		ft_norme(config, packet, ret);
 		if (packet->type != ST_CD)
 			my_fork_child(config, packet);
