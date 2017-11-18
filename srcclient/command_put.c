@@ -35,7 +35,7 @@ int		put_check_local_file(char const *filename)
 
 	path = NULL;
 	if (!getcwd(cwd, PATH_MAX))
-		return (ft_error("ERROR", "PUT", "GETCWD()", 1));
+		return (ft_error("ERROR", "PUT", "getcwd()", 1));
 	path = ft_strjoin_free(ft_strjoin(cwd, "/"), filename, 1, 0);
 	if (!path || (fd = open(path, O_RDONLY)) < 0)
 	{

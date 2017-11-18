@@ -38,7 +38,7 @@ static int	valid_arg(char const *arg)
 ** Pipe stdout and stderr in socket.cmd and execute /bin/ls -p current_path
 */
 
-void	ls(t_config *config, char const *arg)
+void		ls(t_config *config, char const *arg)
 {
 	my_pipe(STDOUT_FILENO, config->socket.cmd);
 	my_pipe(STDERR_FILENO, config->socket.cmd);

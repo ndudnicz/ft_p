@@ -33,7 +33,7 @@ static unsigned short	get_type(char const *str, char const *arg)
 		return ((unsigned short)ft_error("ERROR", "INPUT", UNKNOWN_CMD, 0));
 	else if (!ft_strcmp_nocase("quit", str) && arg_len == 0)
 		return (ST_QUIT);
-	else if (!ft_strcmp_nocase("ls", str)/* && arg_len == 0*/)
+	else if (!ft_strcmp_nocase("ls", str))
 		return (ST_LS);
 	else if (!ft_strcmp_nocase("cd", str))
 		return (ST_CD);

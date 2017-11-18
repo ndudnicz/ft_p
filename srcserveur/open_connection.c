@@ -12,7 +12,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <arpa/inet.h>
 #include <netdb.h>
 
 #include "config.h"
@@ -25,6 +24,7 @@
 #include "error.h"
 #include "debug.h"
 #include "my_setsockopt.h"
+#include "open_connection.h"
 
 /*
 ** Try to open a connection on <ip>:<port>, port given as parameter
@@ -58,8 +58,7 @@ int						open_cmd_connection(t_config *config,
 		return (ft_error("Serveur", "open_connection:", BIND_ERROR, 1));
 	config->inet_addr = sin.sin_addr.s_addr;
 	config->port.cmd = sin.sin_port;
-	printf("Connection opened on: %s:%d\n", config->ip_str,
-	ntohs(config->port.cmd));
+	printf("Listening on: %s:%d\n", config->ip_str, ntohs(config->port.cmd));
 	return (0);
 }
 
@@ -123,30 +122,26 @@ static int				open_data_norme(t_config *config,
 int						open_data_connection(t_config *config, t_packet *packet,
 								int (*transfert)(t_config*, char const*, int))
 {
-	struct protoent		*proto;
-	struct sockaddr_in	sin;
-	t_packet			new_connection;
-	char				*new_port;
-	t_size_type			size_type;
+	t_box	b;
 
-	if ((proto = getprotobyname("tcp")) == 0)
+	if ((b.proto = getprotobyname("tcp")) == 0)
 		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
-	if ((config->socket.data = socket(PF_INET, SOCK_STREAM, proto->p_proto))
+	if ((config->socket.data = socket(PF_INET, SOCK_STREAM, b.proto->p_proto))
 	< 0)
 		return (send_message(config, "open_data_connection()", INTERNAL_ERROR));
 	if (my_setsockopt(config->socket.data))
 		return (1);
-	sin.sin_family = AF_INET;
-	if (open_data_norme(config, &sin))
+	b.sin.sin_family = AF_INET;
+	if (open_data_norme(config, &b.sin))
 		return (1);
-	if (!(new_port = ft_itoa((int)config->port.data)))
+	if (!(b.new_port = ft_itoa((int)config->port.data)))
 		return (send_message(config, "open_data_connection()", MALLOC_FAIL));
-	size_type.size = HEADER_SIZE + ft_strlen(new_port);
-	size_type.type = SEND_NEW_DATA_CONNECTION | (packet->type & ST_MASK);
-	forge_packet(&new_connection, &size_type, new_port, 1);
-	if (send_packet(config->socket.cmd, &new_connection) > 0)
+	b.size_type.size = HEADER_SIZE + ft_strlen(b.new_port);
+	b.size_type.type = SEND_NEW_DATA_CONNECTION | (packet->type & ST_MASK);
+	forge_packet(&b.new_connection, &b.size_type, b.new_port, 1);
+	if (send_packet(config->socket.cmd, &b.new_connection) > 0)
 		return (1);
-	my_free(29, new_port);
+	my_free(29, b.new_port);
 	wait_for_client(config);
 	transfert(config, packet->data, 0);
 	return (0);

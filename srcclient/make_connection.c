@@ -29,6 +29,7 @@ static int	make_socket(t_config *config, char const *ip_str)
 {
 	struct protoent		*proto;
 	struct hostent		*host;
+
 	host = NULL;
 	if ((proto = getprotobyname("tcp")) == 0)
 		return (ft_error("Client", "", GPBN_FAIL, 1));
@@ -63,7 +64,7 @@ int			make_connection(t_config *config, char const *ip_str,
 	t_packet			*packet;
 
 	if (!(packet = (t_packet*)malloc(sizeof(t_packet))))
-	return (ft_error("Client", "make_connection()", MALLOC_FAIL, 1));
+		return (ft_error("Client", "make_connection()", MALLOC_FAIL, 1));
 	printf("Connecting to: %s:%s\n", ip_str, cmd_port_str);
 	if (make_socket(config, ip_str))
 		return (1);
@@ -73,14 +74,11 @@ int			make_connection(t_config *config, char const *ip_str,
 	sin.sin_addr.s_addr = config->inet_addr;
 	if (connect(config->socket.cmd, (const struct sockaddr*)&sin, sizeof(sin))
 	< 0)
-	return (ft_error("Client", "make_connection()", CONNECT_ERROR, 1));
+		return (ft_error("Client", "make_connection()", CONNECT_ERROR, 1));
 	if (receive_packet(config, config->socket.cmd, packet, 0) < 0)
 		return (ft_error("Error", "make_co..()", CANT_ESTABLISH_CONNECTION, 1));
 	if (packet->type == T_CLOSE)
-	{
-		ft_putendl(packet->data);
-		return (1);
-	}
+		return (ft_putendl(packet->data));
 	else if (switch_packet_type_client(config, packet, NULL) > 0)
 		return (1);
 	my_free(12, packet);

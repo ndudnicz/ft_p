@@ -31,7 +31,7 @@ int			get_check_local_file(char const *filename)
 	int		fd;
 
 	if (!getcwd(cwd, PATH_MAX))
-		return (ft_error("ERROR", "GET", "GETCWD()", 1));
+		return (ft_error("ERROR", "GET", "getcwd()", 1));
 	path = ft_strjoin_free(ft_strjoin(cwd, "/"), filename, 1, 0);
 	if (!path)
 		return (ft_error("ERROR", "GET", MALLOC_FAIL, 1));

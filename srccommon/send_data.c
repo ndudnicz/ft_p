@@ -37,7 +37,8 @@ static int				ping_pong(t_config *config, t_packet *packet_ping,
 									t_packet *packet_pong)
 {
 	send_packet(config->socket.data, packet_ping);
-	if (receive_packet(config, config->socket.data, packet_pong, 0) < 1 || packet_pong->type == T_CLOSE)
+	if (receive_packet(config, config->socket.data, packet_pong, 0) < 1 ||
+	packet_pong->type == T_CLOSE)
 	{
 		ft_putendl(packet_pong->data);
 		return (1);
