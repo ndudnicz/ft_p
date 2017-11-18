@@ -17,10 +17,10 @@
 #include "user_input.h"
 #include "commands.h"
 
-void	exec_cmd_local(unsigned short cmd)
+void	exec_cmd_local(unsigned short cmd, char const *arg)
 {
 	if ((cmd & ST_MASK) == ST_LLS)
-		lls();
+		lls(arg);
 	else
 		exit(0);
 }

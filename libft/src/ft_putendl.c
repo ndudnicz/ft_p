@@ -13,8 +13,10 @@
 #include "libft.h"
 #include "libftasm.h"
 
-void	ft_putendl(char const *s)
+int		ft_putendl(char const *s)
 {
-	ft_putstr(s);
+	int const	ret = ft_putstr(s) + 1;
+
 	ft_putchar('\n');
+	return (ret);
 }

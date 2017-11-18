@@ -13,8 +13,12 @@
 #include <unistd.h>
 
 #include "config.h"
+#include "libftasm.h"
 
-void	lls(void)
+void	lls(char const *arg)
 {
-	execl(LS_PATH, LS_PATH, "-pa", ".", NULL);
+	if (ft_strlen(arg))
+		execl(LS_PATH, LS_PATH, arg, ".", NULL);
+	else
+		execl(LS_PATH, LS_PATH, "-pa", ".", NULL);
 }

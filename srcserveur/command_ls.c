@@ -40,25 +40,10 @@ static int	valid_arg(char const *arg)
 
 void	ls(t_config *config, char const *arg)
 {
-	// ft_putendl(arg);
-	// ft_putnbr_endl(valid_arg(arg));
 	my_pipe(STDOUT_FILENO, config->socket.cmd);
 	my_pipe(STDERR_FILENO, config->socket.cmd);
 	if (!valid_arg(arg) && ft_strlen(arg))
-	{
-		// ft_putendl("a");
 		execl(LS_PATH, LS_PATH, arg, ".", NULL);
-
-	}
-	// else if (ft_strlen(arg))
-	// {
-	//
-	// 	ft_putendl("b");
-	// 	execl(LS_PATH, LS_PATH, arg, ".", NULL);
-	// }
 	else
-	{
-		// ft_putendl("c");
-		execl(LS_PATH, LS_PATH, "-p", ".", NULL);
-	}
+		execl(LS_PATH, LS_PATH, "-pa", ".", NULL);
 }
