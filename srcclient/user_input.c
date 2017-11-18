@@ -43,7 +43,7 @@ static unsigned short	get_type(char const *str, char const *arg)
 		return (ASK_NEW_DATA_CONNECTION | ST_PUT);
 	else if (!ft_strcmp_nocase("pwd", str) && arg_len == 0)
 		return (ST_PWD);
-	else if (!ft_strcmp_nocase("lls", str) && arg_len == 0)
+	else if (!ft_strcmp_nocase("lls", str))
 		return (ST_LLS);
 	else if (!ft_strcmp_nocase("lcd", str))
 		return (ST_LCD);
