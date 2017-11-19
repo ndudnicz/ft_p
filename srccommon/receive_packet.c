@@ -78,7 +78,7 @@ int			receive_packet(t_config *config, int socket, t_packet *packet,
 		&& ntohs(tmp->size) <= MAX_PACKET_SIZE)
 		{
 			if ((ret2 = recv(socket, config->buf, ntohs(tmp->size), 0)) < 0)
-				return (ft_error("receive_cmd_p..", "recv()", READ_FAIL, -1));
+				return (ft_error("receive_packet()", "recv()", READ_FAIL, -1));
 			config->buf[ret2] = 0;
 			ft_memcpy((char*)packet + ret1, config->buf, ret2);
 			unforge_packet(packet);
