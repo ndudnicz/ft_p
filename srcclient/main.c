@@ -25,7 +25,7 @@
 
 int		usage(char const *bin)
 {
-	printf("Usage: %s [options] <ip> <port>\n", bin);
+	printf("Usage: %s <ip> <port>\n", bin);
 	return (1);
 }
 

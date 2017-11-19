@@ -23,8 +23,10 @@ static int	print_ls(t_config *config, int ret)
 {
 	config->buf[ret] = 0;
 	ret = ft_putstr(config->buf);
+	if (ret < HEADER_SIZE)
+		return (0);
 	while ((ret = recv(config->socket.cmd, config->buf, MAX_PACKET_SIZE - 1, 0))
-	>= 0)
+	> 0)
 	{
 		config->buf[ret] = 0;
 		ft_putstr(config->buf);
