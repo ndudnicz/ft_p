@@ -27,6 +27,9 @@ int		my_setsockopt(int socket)
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &timeout,
 	sizeof(timeout)) < 0)
 		return (ft_error("ERROR", "my_setsockopt()", SETSOCKOPT, 1));
+	if (setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, &timeout,
+	sizeof(timeout)) < 0)
+		return (ft_error("ERROR", "my_setsockopt()", SETSOCKOPT, 1));
 	else if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &enable,
 	sizeof(enable)) < 0)
 		return (ft_error("ERROR", "my_setsockopt()", SETSOCKOPT, 1));
