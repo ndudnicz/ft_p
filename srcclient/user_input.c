@@ -130,6 +130,7 @@ int						user_input_loop(t_config *config, int ret, char *line)
 	input.arg = NULL;
 	while (ft_putstr(PROMPT) && gnl(0, &line) > 0)
 	{
+		input.cmd = 0;
 		if (input.arg)
 			my_free(17, input.arg);
 		if (treat_input(&input, line, 0) == ST_QUIT)

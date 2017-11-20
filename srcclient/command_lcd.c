@@ -30,7 +30,7 @@ int			lcd(t_config *config, char *arg)
 {
 	char		*new_path;
 	char		cwd[PATH_MAX];
-	int const	data_len = ft_strlen(arg);
+	int const	data_len = arg ? ft_strlen(arg) : 0;
 
 	cwd[0] = 0;
 	if (!getcwd(cwd, PATH_MAX))
