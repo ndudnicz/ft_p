@@ -9,7 +9,7 @@ _ft_strcat:
 	call _ft_strlen
 	mov r11, rax
 	; init count
-	;mov rcx, 0
+	; mov rcx, 0
 	xor rcx, rcx
 	call copy
 	mov rax, r10

@@ -2,7 +2,7 @@ global _ft_isinrange
 section .text
 
 ; is rdi in [ rsi, rdx [ ?
-; return 0 if false or something non-negative if true, in rax
+; return 0 if false or 1 if true, in rax
 
 _ft_isinrange:
 	xor rax, rax

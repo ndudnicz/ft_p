@@ -6,9 +6,9 @@ global _ft_putstr_fd
 section .text
 
 _ft_putstr_fd:
-	push rdi
+	; push rdi
 	call _ft_strlen
-	pop rdi
+	; pop rdi
 	push rax
 	xor rsi, rdi    ; swap
 	xor rdi, rsi    ; swap

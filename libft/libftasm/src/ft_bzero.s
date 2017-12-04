@@ -1,5 +1,7 @@
 extern _ft_memset
 
+; void	ft_bzero(char *mem)
+
 global _ft_bzero
 section .text
 

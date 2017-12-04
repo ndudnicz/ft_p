@@ -13,17 +13,22 @@ null:		db "(null)", 10
 section .text
 
 _ft_puts:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 16
 	test rdi, rdi
 	jz null_str
-	push rdi
+	; push rdi
 	call _ft_strlen
-	pop rdi
+	; pop rdi
 	call _ft_putstr
 	lea rsi, [rel endline]
 	mov rdi, STDOUT
 	mov rdx, 1
 	mov rax, MACH_SYSCALL(WRITE)
 	syscall
+	add rsp, 16
+	pop rbp
 	ret
 
 null_str:
@@ -32,4 +37,6 @@ null_str:
 	mov rdx, 7
 	mov rax, MACH_SYSCALL(WRITE)
 	syscall
+	add rsp, 16
+	pop rbp
 	ret

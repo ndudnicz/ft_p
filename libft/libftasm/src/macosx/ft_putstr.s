@@ -8,9 +8,9 @@ global _ft_putstr
 section .text
 
 _ft_putstr:
-	push rdi
+	; push rdi
 	call _ft_strlen
-	pop rdi
+	; pop rdi
 	push rax
 	mov rsi, rdi
 	mov rdi, STDOUT

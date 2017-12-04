@@ -1,6 +1,8 @@
 extern _ft_strlen
 extern _ft_isdigit
 
+; int	ft_atoi(char const *s)
+
 global _ft_atoi
 section .text
 

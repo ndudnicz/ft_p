@@ -14,9 +14,9 @@ section .text
 _ft_puts:
 	test rdi, rdi
 	jz null_str
-	push rdi
+	; push rdi
 	call _ft_strlen
-	pop rdi
+	; pop rdi
 	call _ft_putstr
 	lea rsi, [rel endline]
 	mov rdi, STDOUT

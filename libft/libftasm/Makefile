@@ -1,38 +1,29 @@
 NAME = libfts.a
-
+CC = nasm
 ifeq ($(shell uname -s),Linux)
-	CC := nasm
 	FLAGS := -f elf64
-	HEADER := libftasm_linux.hh
 	SRC :=	ft_puts.s ft_strlen.s ft_bzero.s ft_isalpha.s ft_isdigit.s \
 		ft_isalnum.s ft_isascii.s ft_isprint.s ft_isinrange.s \
 		ft_tolower.s ft_toupper.s ft_strcat.s ft_memcpy.s ft_memset.s \
 		ft_strchr.s ft_atoi.s ft_atol.s ft_putstr.s \
-		ft_putstr_fd.s ft_putchar.s ft_putchar_fd.s ft_strcmp.s ft_strcmp_nocase.s
+		ft_putstr_fd.s ft_putchar.s ft_putchar_fd.s ft_strcmp.s ft_strcmp_nocase.s ft_strclr.s
 	SUB_SRC := linux
 else
-	CC := /Users/ndudnicz/.brew/bin/nasm
 	FLAGS := -f macho64
-	HEADER := libftasm_macosx.hh
 	SRC :=	ft_puts.s ft_strlen.s ft_bzero.s ft_isalpha.s ft_isdigit.s \
 		ft_isalnum.s ft_isascii.s ft_isprint.s ft_isinrange.s \
 		ft_tolower.s ft_toupper.s ft_strcat.s ft_memcpy.s ft_memset.s \
 		ft_strdup.s ft_strchr.s ft_atoi.s ft_atol.s ft_putstr.s \
-		ft_putstr_fd.s ft_putchar.s ft_putchar_fd.s ft_strcmp.s ft_strcmp_nocase.s
+		ft_putstr_fd.s ft_putchar.s ft_putchar_fd.s ft_strcmp.s ft_strcmp_nocase.s ft_strclr.s
 	SUB_SRC := macosx
 endif
-
 CXX = gcc
-
 NAME_TEST = run_tests
-
 SRC_DIR = src
-
 OBJ_DIR = obj
-
 OBJ = $(SRC:%.s=obj/%.o)
 
-all: symlinks $(NAME)
+all: $(NAME)
 
 $(NAME): $(OBJ)
 	ar rc $@ $(OBJ)
@@ -43,11 +34,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 obj:
 	mkdir -p $(OBJ_DIR)
 
-symlinks:
-	@sh configure
-
 test:
-	gcc -o $(NAME_TEST) tests/.tests.c -I includes $(NAME)
+	gcc -o $(NAME_TEST) tests/tests.c -I includes $(NAME)
 	./$(NAME_TEST)
 
 clean:
